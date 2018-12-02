@@ -36,6 +36,7 @@ for i in range(len(phosphorylation)):
 
 
 
+#pass data to network
 
 
 
