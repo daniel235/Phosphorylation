@@ -32,10 +32,17 @@ class Network:
         #classes
         #how to get all data points on graph
         x = []
+        index = 0
         for i in range(len(self.data[3])):
-            x.append(self.data[3][i][1])
-        y = [0, 1]
-        clf = svm.SVC(gamma='scale')
+            #find protein index
+            for j in range(len(self.data[7])):
+                if self.data[3][i][0] == self.data[7][j]:
+                    index = j
+
+            x.append([index, self.data[3][i][1]])
+
+        y = self.data[4]
+        clf = svm.SVC(kernel="poly", gamma='scale')
         print(clf.fit(x, y))
 
 
