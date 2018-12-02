@@ -38,11 +38,12 @@ class Network:
             for j in range(len(self.data[7])):
                 if self.data[3][i][0] == self.data[7][j]:
                     index = j
-
+            print([index, self.data[3][i][1]])
             x.append([index, self.data[3][i][1]])
 
         y = self.data[4]
         clf = svm.SVC(kernel="poly", gamma='scale')
+        print("got to fit ")
         print(clf.fit(x, y))
 
 

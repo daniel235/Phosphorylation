@@ -5,6 +5,8 @@ import tensor
 
 kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
 
+proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
+
 phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
 proteinExpression = pd.read_csv('./data/ProteinExpression_data.txt' ,delimiter="\t")
 #Phosphorylation name
@@ -12,6 +14,9 @@ phosphoType = phosphorylation["Phosphosite"]
 
 proteinExpression = np.array(proteinExpression)
 phosphorylation = np.array(phosphorylation)
+proteinInteraction = np.array(proteinInteraction)
+
+print(proteinInteraction[0])
 
 phosDataX = []
 phosDataY = []
@@ -21,6 +26,9 @@ protExpressY = []
 
 phosClass = []
 protClass = []
+
+
+
 #phosphorylation data separated with xname and x data and added array of corresponding y values
 for i in range(len(phosphorylation)):
     for j in range(1, 19):
