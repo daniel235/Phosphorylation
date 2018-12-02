@@ -1,5 +1,6 @@
 import tensorflow as tf
 from sklearn.cluster import KMeans
+from sklearn import svm
 import numpy as np
 
 
@@ -30,6 +31,9 @@ class Network:
     def cluster_network(self):
         #classes
         k = 10
+        #how to get all data points on graph
+        
+
 
         kmeans = KMeans(n_clusters=k)
         kmeans.fit()

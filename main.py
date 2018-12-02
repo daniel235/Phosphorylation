@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-
+import tensor
 
 kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
 
@@ -37,6 +37,7 @@ for i in range(len(phosphorylation)):
         else:
             phosDataY.append("Luminal")
 
+
 #pass data to network
 #prepare categories
 
@@ -48,6 +49,11 @@ for i in range(len(phosDataX)):
 
 
 print(len(phosClass))
+
+#start network call
+#package data together
+data = [kinaseData, proteinExpression, phosphorylation, phosDataX, phosDataY, protExpressX, protExpressY]
+tensor.Network(data)
 
 
 
