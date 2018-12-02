@@ -25,15 +25,8 @@ protClass = []
 for i in range(len(phosphorylation)):
     for j in range(1, 19):
         phosDataX.append([phosphorylation[i][0], phosphorylation[i][j]])
-        if(i < 8149):
-            if phosphorylation[i + 1][0] != phosphorylation[i][0]:
-                phosClass.append(phosphorylation[i + 1][0])
-
-
         if(i < 4037):
             protExpressX.append([proteinExpression[i][0], proteinExpression[i][j]])
-            if proteinExpression[i][0] not in protClass:
-                protClass.append(phosphorylation[i][0])
             if j < 10:
                 protExpressY.append("Basal")
 
@@ -44,13 +37,17 @@ for i in range(len(phosphorylation)):
         else:
             phosDataY.append("Luminal")
 
-
-print(len(phosClass))
 #pass data to network
 #prepare categories
 
+for i in range(len(phosDataX)):
+    if(i < len(phosDataX) - 1):
+        print(phosDataX[i + 1][0], phosDataX[i][0])
+        if phosDataX[i + 1][0] != phosDataX[i][0]:
+            phosClass.append(phosDataX[i + 1][0])
 
 
+print(len(phosClass))
 
 
 
