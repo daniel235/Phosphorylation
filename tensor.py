@@ -30,13 +30,14 @@ class Network:
 
     def cluster_network(self):
         #classes
-        k = 10
         #how to get all data points on graph
-        
+        x = []
+        for i in range(len(self.data[3])):
+            x.append(self.data[3][i][1])
+        y = [0, 1]
+        clf = svm.SVC(gamma='scale')
+        print(clf.fit(x, y))
 
-
-        kmeans = KMeans(n_clusters=k)
-        kmeans.fit()
 
 
 

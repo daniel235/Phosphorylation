@@ -40,20 +40,26 @@ for i in range(len(phosphorylation)):
 
 #pass data to network
 #prepare categories
+key = ""
+keyTwo = ""
+for i in range(len(phosDataX) - 1):
+    key = phosDataX[i][0]
+    keyTwo = phosDataX[i + 1][0]
+    if key != keyTwo:
+        phosClass.append(keyTwo)
 
-for i in range(len(phosDataX)):
-    if(i < len(phosDataX) - 1):
-        print(phosDataX[i + 1][0], phosDataX[i][0])
-        if phosDataX[i + 1][0] != phosDataX[i][0]:
-            phosClass.append(phosDataX[i + 1][0])
+for i in range(len(protExpressX)):
+    key = protExpressX[i][0]
+    keyTwo = protExpressX[i + 1][0]
+    if key != keyTwo:
+        protExpressX.append(keyTwo)
 
-
-print(len(phosClass))
 
 #start network call
 #package data together
-data = [kinaseData, proteinExpression, phosphorylation, phosDataX, phosDataY, protExpressX, protExpressY]
-tensor.Network(data)
+data = [kinaseData, proteinExpression, phosphorylation, phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass]
+model = tensor.Network(data)
+model.cluster_network()
 
 
 
