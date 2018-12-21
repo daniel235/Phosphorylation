@@ -32,21 +32,36 @@ class Network:
         #classes
         #how to get all data points on graph
         x = []
+        x2 = []
         index = 0
+        index2 = 0
+        attained = False
         for i in range(len(self.data[3])):
             #find protein index
             for j in range(len(self.data[7])):
                 if self.data[3][i][0] == self.data[7][j]:
                     index = j
-            print([index, self.data[3][i][1]])
+                    break
+
             x.append([index, self.data[3][i][1]])
 
+        for i in range(len(self.data[5])):
+            for j in range(len(self.data[8])):
+                if self.data[5][i][0] == self.data[8][j]:
+                    index2 = j
+                    break
+
+            print([index2, self.data[5][i][1]])
+            x2.append([index2, self.data[5][i][1]])
+
+        x = zip(x, x2)
+        x = set(x)
+        x = np.array(x)
+
         y = self.data[4]
-        clf = svm.SVC(kernel="poly", gamma='scale')
+        clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
         print("got to fit ")
         print(clf.fit(x, y))
-
-
 
 
     def train_network(self, layer):
