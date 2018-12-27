@@ -4,8 +4,10 @@ import tensor
 
 
 class Pipe_line:
-    def __init__(self):
+    def find_matching_data(self):
+        #create data object for each line
         pass
+
 
     def get_data(self):
         kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")

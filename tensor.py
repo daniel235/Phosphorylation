@@ -2,7 +2,7 @@ import tensorflow as tf
 from sklearn.cluster import KMeans
 from sklearn import svm
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class Network:
     def __init__(self, data):
@@ -33,35 +33,14 @@ class Network:
         #how to get all data points on graph
         x = []
         x2 = []
-        index = 0
-        index2 = 0
-        attained = False
-        for i in range(len(self.data[3])):
-            #find protein index
-            for j in range(len(self.data[7])):
-                if self.data[3][i][0] == self.data[7][j]:
-                    index = j
-                    break
 
-            x.append([index, self.data[3][i][1]])
-
-        for i in range(len(self.data[5])):
-            for j in range(len(self.data[8])):
-                if self.data[5][i][0] == self.data[8][j]:
-                    index2 = j
-                    break
-
-            print([index2, self.data[5][i][1]])
-            x2.append([index2, self.data[5][i][1]])
-
-        x = zip(x, x2)
-        x = set(x)
-        x = np.array(x)
+        plt.plot([1,2,4], [2,3,5], 'o')
+        plt.show()
 
         y = self.data[4]
         clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
-        print("got to fit ")
-        print(clf.fit(x, y))
+        #print("got to fit ")
+        #print(clf.fit(x, y))
 
 
     def train_network(self, layer):

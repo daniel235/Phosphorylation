@@ -1,15 +1,17 @@
 import numpy as np
 import pandas as pd
 import tensor
-import pipe_line
+import pipe_line as pipe
 
 #grab data
 #package data together
-data = pipe_line.Pipe_line.get_data()
+
+data = pipe.Pipe_line()
+data = data.get_data()
 
 #start network call
 model = tensor.Network(data)
-#model.cluster_network()
+model.cluster_network()
 
 
 
