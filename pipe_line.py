@@ -1,29 +1,43 @@
+import protein
+
 import numpy as np
 import pandas as pd
 import tensor
 
 
 class Pipe_line:
-    def find_matching_data(self):
-        #create data object for each line
-        pass
+    def find_matching_data(self, data):
+        #todo read kinase and protein interaction data
+        kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
+        proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
+        #todo create data object for each line
+        protein_names = []
+        protein_objects = []
+        id = 0
+        for i in range(len(data[0])):
+            if data[0][i][0] not in protein_names:
+                protein_names.append(data[0][i][0])
+                p = protein.Protein(id)
+                p.name(protein_names[i])
+                p.count += 1
+                protein_objects.append(p)
+                id += 1
+
+        #data format(protExpress, phospho, kinase substrate, protein-protein)
+
 
 
     def get_data(self):
-        kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
-
-        proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
-
         phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
         proteinExpression = pd.read_csv('./data/ProteinExpression_data.txt' ,delimiter="\t")
         #Phosphorylation name
         phosphoType = phosphorylation["Phosphosite"]
 
+
+
         proteinExpression = np.array(proteinExpression)
         phosphorylation = np.array(phosphorylation)
-        proteinInteraction = np.array(proteinInteraction)
 
-        print("prot size ", proteinInteraction.shape)
         print("phos size ", phosphorylation.shape)
         print("prot expre size ", proteinExpression.shape)
 

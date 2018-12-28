@@ -3,6 +3,7 @@ class Protein:
         self.id = id
         self.name = None
         self.sites = []
+        self.count = 0
 
     def name(self, name):
         self.name = name
