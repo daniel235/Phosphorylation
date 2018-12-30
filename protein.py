@@ -5,7 +5,7 @@ class Protein:
         self.sites = []
         self.count = 0
 
-    def name(self, name):
+    def name_protein(self, name):
         self.name = name
 
     def get_name(self):

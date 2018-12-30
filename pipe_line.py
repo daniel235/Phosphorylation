@@ -1,4 +1,4 @@
-import protein
+import protein as pr
 
 import numpy as np
 import pandas as pd
@@ -10,21 +10,63 @@ class Pipe_line:
         #todo read kinase and protein interaction data
         kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
         proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
+
+
+        proteinInteraction = np.array(proteinInteraction)
+
         #todo create data object for each line
         protein_names = []
         protein_objects = []
         id = 0
+        p = None
+
         for i in range(len(data[0])):
             if data[0][i][0] not in protein_names:
                 protein_names.append(data[0][i][0])
-                p = protein.Protein(id)
-                p.name(protein_names[i])
+                p = pr.Protein(id)
+                p.name_protein(data[0][i][0])
                 p.count += 1
                 protein_objects.append(p)
                 id += 1
 
-        #data format(protExpress, phospho, kinase substrate, protein-protein)
+        #todo check for protein in kinase data
+        #contains protein name in string
+        substrate = kinaseData["Substrate"]
+        substrate = np.array(substrate)
+        newStr = ""
+        #strip substrate sites
+        for i in range(len(substrate)):
+            for j in range(1, len(substrate[i])):
+                if substrate[i][j] != '-':
+                    newStr += substrate[i][j]
+                else:
+                    substrate[i] = str(newStr)
+                    newStr = ""
+                    break
 
+        #turn np array into array to check for names
+        sub_names = []
+        for i in range(len(substrate)):
+            sub_names.append("'" + substrate[i] + "'")
+
+        for i in range(len(protein_names)):
+            if protein_names[i] in sub_names:
+                protein_objects[i].count += 1
+
+        for i in range(len(proteinInteraction)):
+            print(proteinInteraction[i][0])
+
+
+        interaction_one = proteinInteraction[0]
+        interaction_two = proteinInteraction[1]
+
+        for i in range(len(protein_names)):
+            if protein_names[i] in interaction_one:
+                print("in interaction")
+                protein_objects[i].count += 1
+
+            if protein_names[i] in interaction_two:
+                protein_objects[i].count += 1
 
 
     def get_data(self):
@@ -32,7 +74,6 @@ class Pipe_line:
         proteinExpression = pd.read_csv('./data/ProteinExpression_data.txt' ,delimiter="\t")
         #Phosphorylation name
         phosphoType = phosphorylation["Phosphosite"]
-
 
 
         proteinExpression = np.array(proteinExpression)
