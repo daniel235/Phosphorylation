@@ -20,6 +20,7 @@ class Pipe_line:
         id = 0
         p = None
 
+        #first count check
         for i in range(len(data[0])):
             if data[0][i][0] not in protein_names:
                 protein_names.append(data[0][i][0])
@@ -49,17 +50,26 @@ class Pipe_line:
         for i in range(len(substrate)):
             sub_names.append("'" + substrate[i] + "'")
 
+
+        #second count check
         for i in range(len(protein_names)):
             if protein_names[i] in sub_names:
                 protein_objects[i].count += 1
 
+
+        interaction_one = []
+        interaction_two = []
+
         for i in range(len(proteinInteraction)):
             print(proteinInteraction[i][0])
+            interaction_one.append(proteinInteraction[i][0])
+            interaction_two.append(proteinInteraction[i][1])
 
+        for i in range(len(interaction_one)):
+            interaction_one[i] = "'" + str(interaction_one[i]) + "'"
+            interaction_two[i] = "'" + str(interaction_two[i]) + "'"
 
-        interaction_one = proteinInteraction[0]
-        interaction_two = proteinInteraction[1]
-
+        #third count check
         for i in range(len(protein_names)):
             if protein_names[i] in interaction_one:
                 print("in interaction")
@@ -68,6 +78,10 @@ class Pipe_line:
             if protein_names[i] in interaction_two:
                 protein_objects[i].count += 1
 
+
+        for i in range(len(protein_names)):
+            if protein_objects[i].count == 1:
+                print("name ", protein_objects[i].name, " count ", protein_objects[i].count)
 
     def get_data(self):
         phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
