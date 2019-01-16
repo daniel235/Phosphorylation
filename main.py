@@ -11,13 +11,15 @@ data = pipe_object.get_data()
 
 proteins = []
 d = np.array([data[2], data[0]])
-pipe_object.find_matching_data(d)
 
+
+#array of protein objects
+protein_objects = pipe_object.find_matching_data(d)
 
 
 #start network call
-#model = tensor.Network(data)
-#model.cluster_network()
+model = tensor.Network(data, protein_objects)
+model.cluster_network()
 
 
 

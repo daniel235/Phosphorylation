@@ -11,7 +11,6 @@ class Pipe_line:
         kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
         proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
 
-
         proteinInteraction = np.array(proteinInteraction)
 
         #todo create data object for each line
@@ -61,7 +60,6 @@ class Pipe_line:
         interaction_two = []
 
         for i in range(len(proteinInteraction)):
-            print(proteinInteraction[i][0])
             interaction_one.append(proteinInteraction[i][0])
             interaction_two.append(proteinInteraction[i][1])
 
@@ -72,16 +70,18 @@ class Pipe_line:
         #third count check
         for i in range(len(protein_names)):
             if protein_names[i] in interaction_one:
-                print("in interaction")
                 protein_objects[i].count += 1
 
             if protein_names[i] in interaction_two:
                 protein_objects[i].count += 1
 
 
+        data_base = []
         for i in range(len(protein_names)):
-            if protein_objects[i].count == 1:
-                print("name ", protein_objects[i].name, " count ", protein_objects[i].count)
+            if protein_objects[i].count == 3:
+                data_base.append(protein_objects[i])
+
+        return data_base
 
     def get_data(self):
         phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
@@ -93,9 +93,6 @@ class Pipe_line:
         proteinExpression = np.array(proteinExpression)
         phosphorylation = np.array(phosphorylation)
 
-        print("phos size ", phosphorylation.shape)
-        print("prot expre size ", proteinExpression.shape)
-
         phosDataX = []
         phosDataY = []
 
@@ -104,7 +101,6 @@ class Pipe_line:
 
         phosClass = []
         protClass = []
-
 
 
         #phosphorylation data separated with xname and x data and added array of corresponding y values

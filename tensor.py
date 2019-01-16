@@ -3,10 +3,42 @@ from sklearn.cluster import KMeans
 from sklearn import svm
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+
 
 class Network:
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, data, objects):
+        self.data = np.array(data)
+        self.objects = np.array(objects)
+
+
+    def prepare_data(self, data):
+        #get dimension of data
+        lengths = []
+        for i in range(len(data)):
+            lengths.append(len(data[i]))
+            print(len(data[i]))
+
+        for i in range(len(lengths)):
+            for j in range(lengths[i]):
+                #todo push phosphosites to protein object
+                #strip last hyphen and numbers
+                protein = data[i][j]
+                #if data[i][j] in
+                    #pass
+
+                #todo push expression to protein object
+
+
+
+    def split_data(self):
+        print(self.data[0][0])
+        x = np.array([self.data[0], self.data[2]])
+        y = np.array([self.data[1], self.data[3]])
+        self.prepare_data(x)
+        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
+
+        return X_train, X_test, y_train, y_test
 
     def regression_network(self):
         X = tf.placeholder(dtype="tf.float32", shape=(1, 2))
@@ -31,14 +63,14 @@ class Network:
     def cluster_network(self):
         #classes
         #how to get all data points on graph
-        x = []
-        x2 = []
+        x, x2, y, y2 = self.split_data()
 
-        plt.plot([1,2,4], [2,3,5], 'o')
-        plt.show()
+        #plt.plot(x, y, 'o')
+        #plt.show()
 
-        y = self.data[4]
         clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
+        clf.fit(x, y)
+
         #print("got to fit ")
         #print(clf.fit(x, y))
 
