@@ -7,9 +7,10 @@ from sklearn.model_selection import train_test_split
 
 
 class Network:
-    def __init__(self, data, objects):
+    def __init__(self, data, objects, pipe):
         self.data = np.array(data)
         self.objects = np.array(objects)
+        self.pipe = pipe
 
 
     def prepare_data(self, data):
@@ -21,14 +22,27 @@ class Network:
 
         for i in range(len(lengths)):
             for j in range(lengths[i]):
-                #todo push phosphosites to protein object
-                #strip last hyphen and numbers
-                protein = data[i][j]
-                #if data[i][j] in
-                    #pass
+                if i == 0:
+                    #todo push phosphosites to protein object
+                    #strip last hyphen and numbers
+                    protein = data[i][j][0]
+                    protein = self.pipe.strip_sites(protein)
+                    print("protein", protein)
+                    print(self.objects.tolist())
 
-                #todo push expression to protein object
+                    #get object names in a list
+                    
 
+                    try:
+                        pos = self.objects.tolist().name.index(protein)
+                        print("position ", pos)
+                    except:
+                        print("moving on")
+
+
+                else:
+                    #todo push expression to protein object
+                    pass
 
 
     def split_data(self):

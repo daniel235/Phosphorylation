@@ -136,3 +136,24 @@ class Pipe_line:
                 protClass.append(keyTwo)
 
         return [phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass]
+
+
+    def strip_sites(self, site):
+        # strip substrate sites
+        #pass in single site
+        newStr = ""
+        index = 0
+        print("site ", site)
+        for i in range(1, len(site)):
+            #grab last hyphen
+            if site[i] != '-':
+                newStr += site[i]
+            else:
+                newStr += site[i]
+                index = i
+
+        #replace string up to index
+        newStr = newStr[:index-1]
+
+
+        return newStr

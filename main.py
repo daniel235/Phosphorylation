@@ -18,7 +18,7 @@ protein_objects = pipe_object.find_matching_data(d)
 
 
 #start network call
-model = tensor.Network(data, protein_objects)
+model = tensor.Network(data, protein_objects, pipe_object)
 model.cluster_network()
 
 
