@@ -11,7 +11,7 @@ class Protein:
     def get_name(self):
         return self.name
 
-    def sites(self, site):
+    def add_sites(self, site):
         self.sites.append(site)
 
     def get_sites(self):

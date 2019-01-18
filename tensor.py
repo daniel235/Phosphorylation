@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
+#todo onehot data
+
 
 class Network:
     def __init__(self, data, objects, pipe):
@@ -14,6 +16,12 @@ class Network:
 
 
     def prepare_data(self, data):
+        #get object names in a list  #todo should be done in [find_matching_data]
+        names = []
+        obs = self.objects.tolist()
+        for k in range(len(obs)):
+            names.append(obs[k].name)
+
         #get dimension of data
         lengths = []
         for i in range(len(data)):
@@ -27,18 +35,13 @@ class Network:
                     #strip last hyphen and numbers
                     protein = data[i][j][0]
                     protein = self.pipe.strip_sites(protein)
-                    print("protein", protein)
-                    print(self.objects.tolist())
-
-                    #get object names in a list
-                    
 
                     try:
-                        pos = self.objects.tolist().name.index(protein)
-                        print("position ", pos)
+                        pos = names.index("'" + protein + "'")
+                        self.objects[pos].add_sites(data[i][j][0])
+                        print("sites", self.objects[j].sites)
                     except:
-                        print("moving on")
-
+                        pass
 
                 else:
                     #todo push expression to protein object
@@ -51,7 +54,7 @@ class Network:
         y = np.array([self.data[1], self.data[3]])
         self.prepare_data(x)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
-
+        print(X_train)
         return X_train, X_test, y_train, y_test
 
     def regression_network(self):
@@ -67,18 +70,20 @@ class Network:
         W2 = tf.placeholder(dtype="tf.float32", shape=(1,1))
         b2 = tf.placeholder(dtype="tf.float32", shape=(1,1))
 
-
         logit2 = tf.matmul(X * W2) + b2
         layer2 = tf.nn.relu(logit2)
 
-        softmax = tf.nn.softmax_cross_entropy_with_logits(layer2)
+        loss = tf.reduce_mean(Y - logit2)
+        #multi class -> softmax = tf.nn.softmax_cross_entropy_with_logits(layer2)
+        train = tf.train.GradientDescentOptimizer(learning_rate=.01)
+        train.minimize(loss)
 
 
     def cluster_network(self):
         #classes
         #how to get all data points on graph
         x, x2, y, y2 = self.split_data()
-
+        print(x)
         #plt.plot(x, y, 'o')
         #plt.show()
 
@@ -93,3 +98,26 @@ class Network:
         #parameters
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
         cost = tf.reduce_sum(layer)
+
+
+    def one_hot(self, x, y):
+        taken_names = []
+        y_names = []
+        newX = []
+        newY = []
+        counter = 0
+        pos = 0
+        for i in range(len(x)):
+            if x[i] not in taken_names:
+                taken_names.append(x[i])
+                newX.append(counter)
+            else:
+                pos = taken_names.index(x[i])
+                newX.append(pos)
+
+
+        counter = 0
+        for j in range(len(y)):
+            if y[j] not in y_names:
+                y_names.append(y[j])
+                newY.append(counter)

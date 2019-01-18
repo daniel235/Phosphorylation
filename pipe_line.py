@@ -143,7 +143,6 @@ class Pipe_line:
         #pass in single site
         newStr = ""
         index = 0
-        print("site ", site)
         for i in range(1, len(site)):
             #grab last hyphen
             if site[i] != '-':
