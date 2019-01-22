@@ -21,6 +21,8 @@ class Network:
         pos = 0
         x_counter = 0
         x = []
+        pos_counter = 0
+        pos_of_found_proteins = []
 
         obs = self.objects.tolist()
         for k in range(len(obs)):
@@ -44,6 +46,7 @@ class Network:
                         pos = names.index("'" + protein + "'")
                         if data[i][j][0] not in self.objects[pos].sites:
                             self.objects[pos].add_sites(data[i][j][0])
+                            pos_of_found_proteins.append(pos)
                     except:
                         pass
                 #set x's here
@@ -52,16 +55,25 @@ class Network:
                     try:
                         protein = data[i][j][0]
                         pos = names.index(protein)
-                        self.objects[pos].all_expression += data[i][j][1]
-                        x[x_counter] = [self.objects[pos].expression, self.objects[pos]]
-                        print("expression", self.objects[pos].expression)
+                        if(label[i][j] == "Luminal"):
+                            self.objects[pos].all_l_expression += data[i][j][1]
+                            self.objects[pos].l_expression_count += 1
+                        else:
+                            self.objects[pos].all_b_expression += data[i][j][1]
+                            self.objects[pos].b_expression_count += 1
+                        print("expression", self.objects[pos].l_expression)
+                        print("basal expression ", self.objects[pos].b_expression)
 
                     except:
                         pass
 
 
         #start y data
-
+        for i in range(len(pos_of_found_proteins)):
+            index = pos_of_found_proteins[i]
+            for j in range(len(self.objects[index].sites)):
+                x[x_counter] = [self.objects[index].expression, self.objects[index].sites[j], ]
+                x_counter += 1
 
 
 
