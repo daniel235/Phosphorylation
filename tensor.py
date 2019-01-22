@@ -18,6 +18,7 @@ class Network:
     def prepare_data(self, data):
         #get object names in a list  #todo should be done in [find_matching_data]
         names = []
+        pos = 0
         obs = self.objects.tolist()
         for k in range(len(obs)):
             names.append(obs[k].name)
@@ -38,20 +39,29 @@ class Network:
 
                     try:
                         pos = names.index("'" + protein + "'")
-                        self.objects[pos].add_sites(data[i][j][0])
-                        print("sites", self.objects[j].sites)
+                        if data[i][j][0] not in self.objects[pos].sites:
+                            self.objects[pos].add_sites(data[i][j][0])
                     except:
                         pass
 
                 else:
                     #todo push expression to protein object
-                    pass
+                    try:
+                        protein = data[i][j][0]
+                        pos = names.index(protein)
+                        self.objects[pos].expression += data[i][j][1]
+                        print("expression", self.objects[pos].expression)
+
+                    except:
+                        pass
+
 
 
     def split_data(self):
         print(self.data[0][0])
         x = np.array([self.data[0], self.data[2]])
         y = np.array([self.data[1], self.data[3]])
+        #todo prepare data set returns site data and expression
         self.prepare_data(x)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
         print(X_train)
@@ -82,17 +92,20 @@ class Network:
     def cluster_network(self):
         #classes
         #how to get all data points on graph
-        x, x2, y, y2 = self.split_data()
-        print(x)
+        #x, x2, y, y2 = self.split_data()
+        #print(x)
         #plt.plot(x, y, 'o')
         #plt.show()
+        self.split_data()
+        x = [[1], [2], [3]]
+        y = [1, 2, 3]
 
         clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
         clf.fit(x, y)
+        print("result ", clf.predict([[1]]))
 
         #print("got to fit ")
         #print(clf.fit(x, y))
-
 
     def train_network(self, layer):
         #parameters
@@ -100,6 +113,7 @@ class Network:
         cost = tf.reduce_sum(layer)
 
 
+    #not really one hot
     def one_hot(self, x, y):
         taken_names = []
         y_names = []
@@ -107,17 +121,29 @@ class Network:
         newY = []
         counter = 0
         pos = 0
+
         for i in range(len(x)):
             if x[i] not in taken_names:
                 taken_names.append(x[i])
                 newX.append(counter)
+                #only increment when new item is added to taken names
+                counter += 1
             else:
+                #use the position to mark similar x
                 pos = taken_names.index(x[i])
                 newX.append(pos)
 
-
         counter = 0
+
         for j in range(len(y)):
             if y[j] not in y_names:
                 y_names.append(y[j])
-                newY.append(counter)
+                pos = counter
+                counter += 1
+            else:
+                pos = y_names.index(y[j])
+                newY.append(pos)
+
+            newY.append(pos)
+
+        return newX, newY

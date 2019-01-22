@@ -3,7 +3,10 @@ class Protein:
         self.id = id
         self.name = None
         self.sites = []
+        #used to check if in all 3 datasets
         self.count = 0
+        self.expression_count = 0
+        self.expression = 0
 
     def name_protein(self, name):
         self.name = name
