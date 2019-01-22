@@ -15,10 +15,13 @@ class Network:
         self.pipe = pipe
 
 
-    def prepare_data(self, data):
+    def prepare_data(self, data, label):
         #get object names in a list  #todo should be done in [find_matching_data]
         names = []
         pos = 0
+        x_counter = 0
+        x = []
+
         obs = self.objects.tolist()
         for k in range(len(obs)):
             names.append(obs[k].name)
@@ -43,26 +46,32 @@ class Network:
                             self.objects[pos].add_sites(data[i][j][0])
                     except:
                         pass
-
+                #set x's here
                 else:
                     #todo push expression to protein object
                     try:
                         protein = data[i][j][0]
                         pos = names.index(protein)
-                        self.objects[pos].expression += data[i][j][1]
+                        self.objects[pos].all_expression += data[i][j][1]
+                        x[x_counter] = [self.objects[pos].expression, self.objects[pos]]
                         print("expression", self.objects[pos].expression)
 
                     except:
                         pass
 
 
+        #start y data
+
+
+
+
 
     def split_data(self):
         print(self.data[0][0])
         x = np.array([self.data[0], self.data[2]])
-        y = np.array([self.data[1], self.data[3]])
+        label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
-        self.prepare_data(x)
+        self.prepare_data(x, label)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
         print(X_train)
         return X_train, X_test, y_train, y_test
