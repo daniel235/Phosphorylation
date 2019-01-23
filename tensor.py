@@ -42,13 +42,11 @@ class Network:
 
                     try:
                         pos = names.index("'" + protein + "'")
+                        pos_of_found_proteins.append(pos)
                         if label[i][j] == 'Luminal':
-                            if data[i][j][0] not in self.objects[pos].sites:
-                                self.objects[pos].add_sites(data[i][j][0], lexpression=data[i][j][1])
-                                pos_of_found_proteins.append(pos)
+                            self.objects[pos].add_sites(data[i][j][0], lexpression=data[i][j][1])
                         else:
-                            if data[i][j][0] not in self.objects[pos].sites:
-                                self.objects[pos].add_sites(data[i][j][0], bexpression=data[i][j][1])
+                            self.objects[pos].add_sites(data[i][j][0], bexpression=data[i][j][1])
 
                     except:
                         pass
@@ -77,18 +75,16 @@ class Network:
             obs = self.objects[index]
             for k in range(2):
                 for j in range(len(obs.sites)):
-                    print("in j condition")
                     #format (protein expression / site expression / luminal or basal)
                     if k == 0:
-                        x.append([obs.get_lExpression(), obs.sites[j].get_lExpression(), 0])
+                        x.append([obs.get_lExpression(), obs.sites[j].name, obs.sites[j].get_lExpression(), 0])
                         print("x list ", x[x_counter])
                         x_counter += 1
                     else:
-                        x.append([obs.get_bExpression(), obs.get_bExpression(), 1])
+                        x.append([obs.get_bExpression(), obs.sites[j].name, obs.sites[j].get_bExpression(), 1])
                         print("x list ", x[x_counter])
                         x_counter += 1
 
-            #print(x[x_counter-1])
 
 
     def prepare_y_data(self):

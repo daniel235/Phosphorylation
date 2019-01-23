@@ -22,14 +22,21 @@ class Protein:
 
     def add_sites(self, site, lexpression=None, bexpression=None):
         #create new site
-        s = Sites(site)
-        self.sites.append(s)
-        ob = self.sites[len(self.sites) - 1]
+        if site not in self.sites:
+            s = Sites(site)
+            self.sites.append(s)
+            pos = len(self.sites) - 1
+        else:
+            pos = self.sites.index(site)
+
+
         if lexpression != None:
-            ob.lExpressionSum += lexpression
+            self.sites[pos].lExpressionSum += lexpression
+            self.sites[pos].l_expression_count += 1
 
         elif bexpression != None:
-            ob.bExpressionSum += bexpression
+            self.sites[pos].bExpressionSum += bexpression
+            self.sites[pos].b_expression_count += 1
 
     def get_sites(self):
         return self.sites
