@@ -13,8 +13,6 @@ class Protein:
         self.b_expression_count = 0
         self.lExpressionSum = 0
         self.bExpressionSum = 0
-        self.l_expression = self.lExpressionSum / max(1, self.l_expression_count)
-        self.b_expression = self.bExpressionSum / max(1, self.b_expression_count)
 
     def name_protein(self, name):
         self.name = name
@@ -26,7 +24,7 @@ class Protein:
         #create new site
         s = Sites(site)
         self.sites.append(s)
-        ob = self.sites.pop()
+        ob = self.sites[len(self.sites) - 1]
         if lexpression != None:
             ob.lExpressionSum += lexpression
 

@@ -13,7 +13,7 @@ class Network:
         self.pipe = pipe
 
     #todo preparing for svm
-    def prepare_data(self, data, label):
+    def prepare_x_data(self, data, label):
         #get object names in a list  #todo should be done in [find_matching_data]
         names = []
         pos = 0
@@ -49,7 +49,7 @@ class Network:
                         else:
                             if data[i][j][0] not in self.objects[pos].sites:
                                 self.objects[pos].add_sites(data[i][j][0], bexpression=data[i][j][1])
-                                pos_of_found_proteins.append(pos)
+
                     except:
                         pass
                 #set x's here
@@ -60,13 +60,12 @@ class Network:
                         pos = names.index(protein)
                         if label[i][j] == 'Luminal':
                             self.objects[pos].lExpressionSum += data[i][j][1]
-                            print(data[i][j][1])
                             self.objects[pos].l_expression_count += 1
-                            print("expression", self.objects[pos].get_lExpression())
+
                         else:
                             self.objects[pos].bExpressionSum += data[i][j][1]
                             self.objects[pos].b_expression_count += 1
-                            print("basal expression ", self.objects[pos].get_bExpression())
+
 
                     except:
                         pass
@@ -75,11 +74,25 @@ class Network:
         #start y data
         for i in range(len(pos_of_found_proteins)):
             index = pos_of_found_proteins[i]
-            for j in range(len(self.objects[index].sites)):
-                x[x_counter] = [self.objects[index].expression, self.objects[index].sites[j], ]
-                x_counter += 1
+            obs = self.objects[index]
+            for k in range(2):
+                for j in range(len(obs.sites)):
+                    print("in j condition")
+                    #format (protein expression / site expression / luminal or basal)
+                    if k == 0:
+                        x.append([obs.get_lExpression(), obs.sites[j].get_lExpression(), 0])
+                        print("x list ", x[x_counter])
+                        x_counter += 1
+                    else:
+                        x.append([obs.get_bExpression(), obs.get_bExpression(), 1])
+                        print("x list ", x[x_counter])
+                        x_counter += 1
+
+            #print(x[x_counter-1])
 
 
+    def prepare_y_data(self):
+        pass
 
 
     def split_data(self):
@@ -87,7 +100,7 @@ class Network:
         x = np.array([self.data[0], self.data[2]])
         label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
-        self.prepare_data(x, label)
+        self.prepare_x_data(x, label)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
         print(X_train)
         return X_train, X_test, y_train, y_test
