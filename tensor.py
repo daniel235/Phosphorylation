@@ -5,8 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-#todo onehot data
-
 
 class Network:
     def __init__(self, data, objects, pipe):
@@ -14,7 +12,7 @@ class Network:
         self.objects = np.array(objects)
         self.pipe = pipe
 
-
+    #todo preparing for svm
     def prepare_data(self, data, label):
         #get object names in a list  #todo should be done in [find_matching_data]
         names = []
@@ -55,14 +53,15 @@ class Network:
                     try:
                         protein = data[i][j][0]
                         pos = names.index(protein)
-                        if(label[i][j] == "Luminal"):
-                            self.objects[pos].all_l_expression += data[i][j][1]
+                        if label[i][j] == 'Luminal':
+                            self.objects[pos].lExpressionSum += data[i][j][1]
+                            print(data[i][j][1])
                             self.objects[pos].l_expression_count += 1
+                            print("expression", self.objects[pos].get_lExpression())
                         else:
-                            self.objects[pos].all_b_expression += data[i][j][1]
+                            self.objects[pos].bExpressionSum += data[i][j][1]
                             self.objects[pos].b_expression_count += 1
-                        print("expression", self.objects[pos].l_expression)
-                        print("basal expression ", self.objects[pos].b_expression)
+                            print("basal expression ", self.objects[pos].get_bExpression())
 
                     except:
                         pass
