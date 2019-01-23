@@ -42,9 +42,14 @@ class Network:
 
                     try:
                         pos = names.index("'" + protein + "'")
-                        if data[i][j][0] not in self.objects[pos].sites:
-                            self.objects[pos].add_sites(data[i][j][0])
-                            pos_of_found_proteins.append(pos)
+                        if label[i][j] == 'Luminal':
+                            if data[i][j][0] not in self.objects[pos].sites:
+                                self.objects[pos].add_sites(data[i][j][0], lexpression=data[i][j][1])
+                                pos_of_found_proteins.append(pos)
+                        else:
+                            if data[i][j][0] not in self.objects[pos].sites:
+                                self.objects[pos].add_sites(data[i][j][0], bexpression=data[i][j][1])
+                                pos_of_found_proteins.append(pos)
                     except:
                         pass
                 #set x's here

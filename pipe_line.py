@@ -89,7 +89,6 @@ class Pipe_line:
         #Phosphorylation name
         phosphoType = phosphorylation["Phosphosite"]
 
-
         proteinExpression = np.array(proteinExpression)
         phosphorylation = np.array(phosphorylation)
 
