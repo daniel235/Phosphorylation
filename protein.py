@@ -7,6 +7,7 @@ class Protein:
         self.id = id
         self.name = None
         self.sites = []
+        self.name_of_sites = []
         #used to check if in all 3 datasets
         self.count = 0
         self.l_expression_count = 0
@@ -20,23 +21,28 @@ class Protein:
     def get_name(self):
         return self.name
 
-    def add_sites(self, site, lexpression=None, bexpression=None):
+    def add_sites(self, site, lexp=None, bexpression=None):
         #create new site
-        if site not in self.sites:
+        pos = 0
+        if site not in self.name_of_sites:
             s = Sites(site)
+            self.name_of_sites.append(site)
             self.sites.append(s)
             pos = len(self.sites) - 1
         else:
-            pos = self.sites.index(site)
+            pos = self.name_of_sites.index(site)
 
 
-        if lexpression != None:
-            self.sites[pos].lExpressionSum += lexpression
+        if lexp is not None:
+            self.sites[pos].lExpressionSum += lexp
             self.sites[pos].l_expression_count += 1
 
-        elif bexpression != None:
+        if bexpression != None:
             self.sites[pos].bExpressionSum += bexpression
             self.sites[pos].b_expression_count += 1
+
+
+        return
 
     def get_sites(self):
         return self.sites
@@ -50,7 +56,7 @@ class Protein:
 
 
 class Sites:
-    def __init__(self, name, lexpression=None, bexpression=None):
+    def __init__(self, name):
         self.name = name
         self.lExpressionSum = 0
         self.bExpressionSum = 0

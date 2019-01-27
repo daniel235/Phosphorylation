@@ -42,9 +42,11 @@ class Network:
 
                     try:
                         pos = names.index("'" + protein + "'")
-                        pos_of_found_proteins.append(pos)
+                        if pos not in pos_of_found_proteins:
+                            pos_of_found_proteins.append(pos)
                         if label[i][j] == 'Luminal':
-                            self.objects[pos].add_sites(data[i][j][0], lexpression=data[i][j][1])
+                            self.objects[pos].add_sites(data[i][j][0], lexp=data[i][j][1])
+
                         else:
                             self.objects[pos].add_sites(data[i][j][0], bexpression=data[i][j][1])
 
@@ -64,10 +66,15 @@ class Network:
                             self.objects[pos].bExpressionSum += data[i][j][1]
                             self.objects[pos].b_expression_count += 1
 
-
                     except:
                         pass
 
+
+
+        for i in range(len(pos_of_found_proteins)):
+            for j in range(len(self.objects[pos_of_found_proteins[i]].sites)):
+                holder = self.objects[pos_of_found_proteins[i]]
+                print(holder.sites[j].name, holder.sites[j].get_lExpression(), holder.sites[j].get_bExpression())
 
         #start y data
         for i in range(len(pos_of_found_proteins)):
@@ -78,11 +85,11 @@ class Network:
                     #format (protein expression / site expression / luminal or basal)
                     if k == 0:
                         x.append([obs.get_lExpression(), obs.sites[j].name, obs.sites[j].get_lExpression(), 0])
-                        print("x list ", x[x_counter])
+                        #print("x list ", x[x_counter])
                         x_counter += 1
                     else:
                         x.append([obs.get_bExpression(), obs.sites[j].name, obs.sites[j].get_bExpression(), 1])
-                        print("x list ", x[x_counter])
+                        #print("x list ", x[x_counter])
                         x_counter += 1
 
 
