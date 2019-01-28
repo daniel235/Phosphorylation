@@ -19,6 +19,7 @@ class Pipe_line:
         id = 0
         p = None
 
+
         #first count check
         for i in range(len(data[0])):
             if data[0][i][0] not in protein_names:
@@ -75,7 +76,7 @@ class Pipe_line:
             if protein_names[i] in interaction_two:
                 protein_objects[i].count += 1
 
-
+        #data base are the protein objects that are in all 3 databases
         data_base = []
         for i in range(len(protein_names)):
             if protein_objects[i].count == 3:
@@ -86,11 +87,13 @@ class Pipe_line:
     def get_data(self):
         phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
         proteinExpression = pd.read_csv('./data/ProteinExpression_data.txt' ,delimiter="\t")
+        kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
         #Phosphorylation name
         phosphoType = phosphorylation["Phosphosite"]
 
         proteinExpression = np.array(proteinExpression)
         phosphorylation = np.array(phosphorylation)
+
 
         phosDataX = []
         phosDataY = []
@@ -134,7 +137,8 @@ class Pipe_line:
             if key != keyTwo:
                 protClass.append(keyTwo)
 
-        return [phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass]
+
+        return [phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass, kinaseData]
 
 
     def strip_sites(self, site):

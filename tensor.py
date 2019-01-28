@@ -12,6 +12,24 @@ class Network:
         self.objects = np.array(objects)
         self.pipe = pipe
 
+
+    def prepare_y_data(self, y):
+        #get names of kinase data
+        y_kinase = []
+        kinase = self.data[6]
+        pos = 0
+        substrate = kinase["Substrate"].tolist()
+        for i in range(len(y)):
+            try:
+                if y[i] in substrate:
+                    pos = substrate.index(y[i])
+                    print(pos)
+
+            except:
+                print("passed")
+                pass
+
+
     #todo preparing for svm
     def prepare_x_data(self, data, label):
         #get object names in a list  #todo should be done in [find_matching_data]
@@ -30,7 +48,6 @@ class Network:
         lengths = []
         for i in range(len(data)):
             lengths.append(len(data[i]))
-            print(len(data[i]))
 
         for i in range(len(lengths)):
             for j in range(lengths[i]):
@@ -69,13 +86,10 @@ class Network:
                     except:
                         pass
 
+        #corresponding protein site for x data
+        kinase = self.data[6]
 
-
-        for i in range(len(pos_of_found_proteins)):
-            for j in range(len(self.objects[pos_of_found_proteins[i]].sites)):
-                holder = self.objects[pos_of_found_proteins[i]]
-                print(holder.sites[j].name, holder.sites[j].get_lExpression(), holder.sites[j].get_bExpression())
-
+        y = []
         #start y data
         for i in range(len(pos_of_found_proteins)):
             index = pos_of_found_proteins[i]
@@ -84,18 +98,17 @@ class Network:
                 for j in range(len(obs.sites)):
                     #format (protein expression / site expression / luminal or basal)
                     if k == 0:
-                        x.append([obs.get_lExpression(), obs.sites[j].name, obs.sites[j].get_lExpression(), 0])
-                        #print("x list ", x[x_counter])
+                        x.append([obs.get_lExpression(), obs.sites[j].get_lExpression(), 0])
+                        y.append([obs.sites[j].name])
                         x_counter += 1
                     else:
-                        x.append([obs.get_bExpression(), obs.sites[j].name, obs.sites[j].get_bExpression(), 1])
-                        #print("x list ", x[x_counter])
+                        x.append([obs.get_bExpression(), obs.sites[j].get_bExpression(), 1])
+                        y.append([obs.sites[j].name])
                         x_counter += 1
 
 
+        ys = self.prepare_y_data(y)
 
-    def prepare_y_data(self):
-        pass
 
 
     def split_data(self):
@@ -105,7 +118,6 @@ class Network:
         #todo prepare data set returns site data and expression
         self.prepare_x_data(x, label)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
-        print(X_train)
         return X_train, X_test, y_train, y_test
 
     def regression_network(self):
