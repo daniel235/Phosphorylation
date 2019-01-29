@@ -20,11 +20,11 @@ class Network:
         kinase = self.data[6]
         pos = 0
         substrate = kinase["Substrate"].tolist()
-        print(substrate[451], y[6])
+        print(y)
         for i in range(len(y)):
             try:
                 pos = substrate.index(y[i].upper())
-                print(pos)
+                print("p ", pos)
 
             except:
                 pass

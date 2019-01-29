@@ -73,13 +73,15 @@ class Pipe_line:
             if protein_names[i] in interaction_one:
                 protein_objects[i].count += 1
 
-            if protein_names[i] in interaction_two:
+            elif protein_names[i] in interaction_two:
                 protein_objects[i].count += 1
 
         #data base are the protein objects that are in all 3 databases
         data_base = []
         for i in range(len(protein_names)):
+            print(protein_objects[i].count)
             if protein_objects[i].count == 3:
+                print(protein_objects[i].count)
                 data_base.append(protein_objects[i])
 
         return data_base
