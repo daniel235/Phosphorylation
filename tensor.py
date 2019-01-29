@@ -20,16 +20,15 @@ class Network:
         kinase = self.data[6]
         pos = 0
         substrate = kinase["Substrate"].tolist()
-        print(len(y))
+        print(substrate[451], y[6])
         for i in range(len(y)):
             try:
-                if y[i] in substrate:
-                    pos = substrate.index(y[i])
-                    print(pos)
+                pos = substrate.index(y[i].upper())
+                print(pos)
 
             except:
-                print("passed")
                 pass
+
 
 
     #todo preparing for svm
@@ -101,11 +100,11 @@ class Network:
                     #format (protein expression / site expression / luminal or basal)
                     if k == 0:
                         x.append([obs.get_lExpression(), obs.sites[j].get_lExpression(), 0])
-                        y.append([obs.sites[j].name])
+                        y.append(obs.sites[j].name)
                         x_counter += 1
                     else:
                         x.append([obs.get_bExpression(), obs.sites[j].get_bExpression(), 1])
-                        y.append([obs.sites[j].name])
+                        y.append(obs.sites[j].name)
                         x_counter += 1
 
 
