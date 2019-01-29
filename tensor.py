@@ -15,10 +15,12 @@ class Network:
 
     def prepare_y_data(self, y):
         #get names of kinase data
+        print("in prepare y data")
         y_kinase = []
         kinase = self.data[6]
         pos = 0
         substrate = kinase["Substrate"].tolist()
+        print(len(y))
         for i in range(len(y)):
             try:
                 if y[i] in substrate:
