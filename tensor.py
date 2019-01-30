@@ -175,9 +175,9 @@ class Network:
         wrong = 0
 
 
-        for j in range(2):
-            if j == 1:
-                x_train, x_test, y_train, y_test = self.split_data(1)
+        for j in range(5):
+            if j >= 1:
+                x_train, x_test, y_train, y_test = self.split_data(j)
                 clf.fit(x_train, y_train)
 
             for i in range(len(x_test)):
@@ -192,7 +192,7 @@ class Network:
             print("correct ", correct, " wrong ", wrong)
 
 
-        accuracy = accuracy / len(x_test)
+        accuracy = accuracy / len(x_test * 5)
         print("accuracy ", accuracy)
 
     def train_network(self, layer):
