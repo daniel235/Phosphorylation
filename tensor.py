@@ -15,21 +15,18 @@ class Network:
 
     def prepare_y_data(self, y):
         #get names of kinase data
-        print("in prepare y data")
         y_kinase = []
         x = []
         ys = []
         kinase = self.data[6]
         pos = 0
         substrate = kinase["Substrate"].tolist()
-        print(y)
         for i in range(len(y)):
             try:
                 if y[i] in substrate:
                     pos = substrate.index(y[i].upper())
-                    print("p ", pos)
                     x.append(i)
-                    ys.append(pos)
+                    ys.append(kinase["Kinase"][pos])
 
             except:
                 pass
@@ -125,13 +122,13 @@ class Network:
 
 
 
-    def split_data(self):
+    def split_data(self, randomSeed):
         print(self.data[0][0])
         x = np.array([self.data[0], self.data[2]])
         label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
         x, y = self.prepare_x_data(x, label)
-        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
+        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=randomSeed)
         return X_train, X_test, y_train, y_test
 
     def regression_network(self):
@@ -163,16 +160,40 @@ class Network:
         #print(x)
         #plt.plot(x, y, 'o')
         #plt.show()
-        x_train, x_test, y_train, y_test = self.split_data()
+        x_train, x_test, y_train, y_test = self.split_data(0)
         x = [[1], [2], [3]]
         y = [1, 2, 3]
 
         clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
         clf.fit(x_train, y_train)
+        print(x_test[0], y_test[0])
         print("result ", clf.predict([x_test[0]]))
 
-        #print("got to fit ")
-        #print(clf.fit(x, y))
+        #get accuracy
+        accuracy = 0
+        correct = 0
+        wrong = 0
+
+
+        for j in range(2):
+            if j == 1:
+                x_train, x_test, y_train, y_test = self.split_data(1)
+                clf.fit(x_train, y_train)
+
+            for i in range(len(x_test)):
+                if clf.predict([x_test[i]]) == y_test[i]:
+                    accuracy += 1
+                    correct += 1
+                    print("correct")
+
+                else:
+                    wrong += 1
+
+            print("correct ", correct, " wrong ", wrong)
+
+
+        accuracy = accuracy / len(x_test)
+        print("accuracy ", accuracy)
 
     def train_network(self, layer):
         #parameters

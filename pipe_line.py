@@ -79,7 +79,6 @@ class Pipe_line:
         #data base are the protein objects that are in all 3 databases
         data_base = []
         for i in range(len(protein_names)):
-            print(protein_objects[i].count)
             if protein_objects[i].count == 3:
                 data_base.append(protein_objects[i])
 
