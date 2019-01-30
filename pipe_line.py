@@ -81,7 +81,6 @@ class Pipe_line:
         for i in range(len(protein_names)):
             print(protein_objects[i].count)
             if protein_objects[i].count == 3:
-                print(protein_objects[i].count)
                 data_base.append(protein_objects[i])
 
         return data_base

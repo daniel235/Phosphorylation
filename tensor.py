@@ -17,18 +17,25 @@ class Network:
         #get names of kinase data
         print("in prepare y data")
         y_kinase = []
+        x = []
+        ys = []
         kinase = self.data[6]
         pos = 0
         substrate = kinase["Substrate"].tolist()
         print(y)
         for i in range(len(y)):
             try:
-                pos = substrate.index(y[i].upper())
-                print("p ", pos)
+                if y[i] in substrate:
+                    pos = substrate.index(y[i].upper())
+                    print("p ", pos)
+                    x.append(i)
+                    ys.append(pos)
 
             except:
                 pass
 
+
+        return x, ys
 
 
     #todo preparing for svm
@@ -91,6 +98,7 @@ class Network:
         kinase = self.data[6]
 
         y = []
+        newX = []
         #start y data
         for i in range(len(pos_of_found_proteins)):
             index = pos_of_found_proteins[i]
@@ -108,7 +116,12 @@ class Network:
                         x_counter += 1
 
 
-        ys = self.prepare_y_data(y)
+        xr, ys = self.prepare_y_data(y)
+
+        for i in range(len(xr)):
+            newX.append(x[xr[i]])
+
+        return newX, ys
 
 
 
@@ -117,7 +130,7 @@ class Network:
         x = np.array([self.data[0], self.data[2]])
         label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
-        self.prepare_x_data(x, label)
+        x, y = self.prepare_x_data(x, label)
         X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
         return X_train, X_test, y_train, y_test
 
@@ -150,13 +163,13 @@ class Network:
         #print(x)
         #plt.plot(x, y, 'o')
         #plt.show()
-        self.split_data()
+        x_train, x_test, y_train, y_test = self.split_data()
         x = [[1], [2], [3]]
         y = [1, 2, 3]
 
         clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
-        clf.fit(x, y)
-        print("result ", clf.predict([[1]]))
+        clf.fit(x_train, y_train)
+        print("result ", clf.predict([x_test[0]]))
 
         #print("got to fit ")
         #print(clf.fit(x, y))
