@@ -8,6 +8,7 @@ from sklearn.svm import SVC
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import KFold
 import pandas as pd
+from mpl_toolkits.mplot3d import Axes3D
 
 
 class Network:
@@ -128,7 +129,7 @@ class Network:
 
 
 
-    def split_data(self, randomSeed):
+    def split_data(self):
         print(self.data[0][0])
         x = np.array([self.data[0], self.data[2]])
         label = np.array([self.data[1], self.data[3]])
@@ -163,8 +164,27 @@ class Network:
             ytrainData = []
             ytestData = []
 
-        #X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=randomSeed, shuffle=True)
         return three_fold
+
+
+    def plot_data(self, x, y):
+        plt.plot(x, y, 'o')
+        plt.show()
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection="3d")
+        xs = []
+        ys = []
+        zs = y
+        for i in range(len(x)):
+            xs.append(x[i][0])
+            ys.append(x[i][1])
+
+        ax.set_xlabel("Protein Expression")
+        ax.set_ylabel("Site Expression")
+        
+        ax.scatter(xs, ys, zs)
+        plt.show()
 
     def regression_network(self):
         X = tf.placeholder(dtype="tf.float32", shape=(1, 2))
@@ -189,18 +209,12 @@ class Network:
 
 
     def cluster_network(self):
-        #classes
-        #how to get all data points on graph
-        #x, x2, y, y2 = self.split_data()
-        #print(x)
-        #plt.plot(x, y, 'o')
-        #plt.show()
-        data = self.split_data(0)
+        data = self.split_data()
 
         accuracy = 0
         #first svm
         clf = SVC(kernel="poly", gamma='scale', verbose=1)
-        for i in range(len(data)):
+        '''for i in range(len(data)):
             for j in range(len(data[i][0])):
                 clf.fit(data[i][0], data[i][1])
 
@@ -212,6 +226,9 @@ class Network:
 
             print("accuracy ", i, (accuracy / len(data[i][2])))
             accuracy = 0
+'''
+
+        self.plot_data(data[0][0], data[0][1])
 
 
 
