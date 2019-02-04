@@ -4,6 +4,10 @@ from sklearn import svm
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import KFold
+import pandas as pd
 
 
 class Network:
@@ -104,17 +108,19 @@ class Network:
                 for j in range(len(obs.sites)):
                     #format (protein expression / site expression / luminal or basal)
                     if k == 0:
-                        x.append([obs.get_lExpression(), obs.sites[j].get_lExpression(), 0])
+                        x.append([obs.get_lExpression(), obs.sites[j].get_lExpression()])
                         y.append(obs.sites[j].name)
                         x_counter += 1
                     else:
-                        x.append([obs.get_bExpression(), obs.sites[j].get_bExpression(), 1])
+                        x.append([obs.get_bExpression(), obs.sites[j].get_bExpression()])
                         y.append(obs.sites[j].name)
                         x_counter += 1
 
 
         xr, ys = self.prepare_y_data(y)
 
+
+        #updating x data set with protein sites only found in the kinase substrate data
         for i in range(len(xr)):
             newX.append(x[xr[i]])
 
@@ -128,8 +134,37 @@ class Network:
         label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
         x, y = self.prepare_x_data(x, label)
-        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=randomSeed)
-        return X_train, X_test, y_train, y_test
+        kfold = KFold(3, True, 1)
+        three_fold = []
+        xtestData = []
+        xtrainData = []
+        ytrainData = []
+        ytestData = []
+
+        labels, uniques = pd.factorize(y)
+
+
+        labels = labels.tolist()
+        uniques = uniques.tolist()
+
+        for train, test in kfold.split(x):
+            for i in train:
+                xtrainData.append(x[i])
+                ytrainData.append(labels[labels.index(uniques.index(y[i]))])
+
+            for j in test:
+                xtestData.append(x[j])
+                ytestData.append(labels[labels.index(uniques.index(y[j]))])
+
+
+            three_fold.append([xtrainData, ytrainData, xtestData, ytestData])
+            xtrainData = []
+            xtestData = []
+            ytrainData = []
+            ytestData = []
+
+        #X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=randomSeed, shuffle=True)
+        return three_fold
 
     def regression_network(self):
         X = tf.placeholder(dtype="tf.float32", shape=(1, 2))
@@ -160,40 +195,32 @@ class Network:
         #print(x)
         #plt.plot(x, y, 'o')
         #plt.show()
-        x_train, x_test, y_train, y_test = self.split_data(0)
-        x = [[1], [2], [3]]
-        y = [1, 2, 3]
+        data = self.split_data(0)
 
-        clf = svm.SVC(kernel="poly", gamma='scale', verbose=1)
-        clf.fit(x_train, y_train)
-        print(x_test[0], y_test[0])
-        print("result ", clf.predict([x_test[0]]))
+        accuracy = 0
+        #first svm
+        clf = SVC(kernel="poly", gamma='scale', verbose=1)
+        for i in range(len(data)):
+            for j in range(len(data[i][0])):
+                clf.fit(data[i][0], data[i][1])
+
+        for i in range(len(data)):
+            for j in range(len(data[i][2])):
+                if clf.predict([data[i][2][j]]) == data[i][3][j]:
+                    accuracy += 1
+
+            print("accuracy ", i, (accuracy / len(data[i][2])))
+
+
+        #second svm
+        svm = Pipeline([("scaler")])
+
 
         #get accuracy
         accuracy = 0
         correct = 0
         wrong = 0
 
-
-        for j in range(5):
-            if j >= 1:
-                x_train, x_test, y_train, y_test = self.split_data(j)
-                clf.fit(x_train, y_train)
-
-            for i in range(len(x_test)):
-                if clf.predict([x_test[i]]) == y_test[i]:
-                    accuracy += 1
-                    correct += 1
-                    print("correct")
-
-                else:
-                    wrong += 1
-
-            print("correct ", correct, " wrong ", wrong)
-
-
-        accuracy = accuracy / len(x_test * 5)
-        print("accuracy ", accuracy)
 
     def train_network(self, layer):
         #parameters
