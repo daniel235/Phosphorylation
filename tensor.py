@@ -208,12 +208,11 @@ class Network:
             for j in range(len(data[i][2])):
                 if clf.predict([data[i][2][j]]) == data[i][3][j]:
                     accuracy += 1
+                    #print("X ", data[i][2][j], "y ", data[i][3][j])
 
             print("accuracy ", i, (accuracy / len(data[i][2])))
+            accuracy = 0
 
-
-        #second svm
-        svm = Pipeline([("scaler")])
 
 
         #get accuracy
