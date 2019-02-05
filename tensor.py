@@ -168,21 +168,19 @@ class Network:
 
 
     def plot_data(self, x, y):
-        plt.plot(x, y, 'o')
-        plt.show()
-
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
         xs = []
         ys = []
         zs = y
+
         for i in range(len(x)):
             xs.append(x[i][0])
             ys.append(x[i][1])
 
         ax.set_xlabel("Protein Expression")
         ax.set_ylabel("Site Expression")
-        
+
         ax.scatter(xs, ys, zs)
         plt.show()
 
