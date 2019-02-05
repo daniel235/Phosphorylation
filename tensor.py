@@ -210,21 +210,21 @@ class Network:
         data = self.split_data()
 
         accuracy = 0
+        #todo separate luminal and basal svm
         #first svm
         clf = SVC(kernel="poly", gamma='scale', verbose=1)
-        '''for i in range(len(data)):
-            for j in range(len(data[i][0])):
-                clf.fit(data[i][0], data[i][1])
+        for i in range(len(data)):
+            clf.fit(data[i][0], data[i][1])
 
         for i in range(len(data)):
             for j in range(len(data[i][2])):
                 if clf.predict([data[i][2][j]]) == data[i][3][j]:
                     accuracy += 1
-                    #print("X ", data[i][2][j], "y ", data[i][3][j])
+
 
             print("accuracy ", i, (accuracy / len(data[i][2])))
             accuracy = 0
-'''
+
 
         self.plot_data(data[0][0], data[0][1])
 
