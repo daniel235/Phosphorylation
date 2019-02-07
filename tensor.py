@@ -260,7 +260,7 @@ class Network:
         #todo separate luminal and basal svm
         #todo mod numbers to get different data sets
         #luminal svm
-        clf = SVC(kernel="poly", gamma='scale', verbose=1)
+        clf = SVC(kernel="rbf", gamma='scale', verbose=1)
         for i in range(len(luminal_data)):
             clf.fit(luminal_data[i][0], luminal_data[i][1])
 
@@ -316,37 +316,3 @@ class Network:
         cost = tf.reduce_sum(layer)
 
 
-    #not really one hot
-    def one_hot(self, x, y):
-        taken_names = []
-        y_names = []
-        newX = []
-        newY = []
-        counter = 0
-        pos = 0
-
-        for i in range(len(x)):
-            if x[i] not in taken_names:
-                taken_names.append(x[i])
-                newX.append(counter)
-                #only increment when new item is added to taken names
-                counter += 1
-            else:
-                #use the position to mark similar x
-                pos = taken_names.index(x[i])
-                newX.append(pos)
-
-        counter = 0
-
-        for j in range(len(y)):
-            if y[j] not in y_names:
-                y_names.append(y[j])
-                pos = counter
-                counter += 1
-            else:
-                pos = y_names.index(y[j])
-                newY.append(pos)
-
-            newY.append(pos)
-
-        return newX, newY
