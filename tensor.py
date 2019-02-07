@@ -271,6 +271,10 @@ class Network:
 
 
             print("luminal accuracy ", i, (accuracy / len(luminal_data[i][2])))
+            #save accuracy
+            with open("./results/results.txt", "a") as file:
+                file.write("Luminal Accuracy " + str(accuracy / len(luminal_data[i][2])) + "\n")
+
             accuracy = 0
 
 
@@ -286,7 +290,13 @@ class Network:
                     accuracy += 1
 
 
+
             print("basal accuracy ", i, (accuracy / len(basal_data[i][2])))
+            with open("./results/results.txt", "a") as file:
+                file.write("Basal Accuracy " + str(accuracy / len(basal_data[i][2])) + "\n")
+                if i == 2:
+                    file.write("\n")
+            #save accuracy
             accuracy = 0
 
 
