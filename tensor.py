@@ -101,6 +101,11 @@ class Network:
 
         y = []
         newX = []
+        LuminalX = []
+        BasalX = []
+        ly = []
+        by = []
+
         #start y data
         for i in range(len(pos_of_found_proteins)):
             index = pos_of_found_proteins[i]
@@ -122,10 +127,24 @@ class Network:
 
 
         #updating x data set with protein sites only found in the kinase substrate data
+        #need to grab even mods to luminal
         for i in range(len(xr)):
-            newX.append(x[xr[i]])
+            if i % 2 == 0:
+                LuminalX.append(x[xr[i]])
+                ly.append(ys[i])
+            else:
+                BasalX.append(x[xr[i]])
+                by.append(ys[i])
 
-        return newX, ys
+
+        type_ys = []
+        newX.append(LuminalX)
+        newX.append(BasalX)
+        type_ys.append(ly)
+        type_ys.append(by)
+
+
+        return newX, type_ys, ys
 
 
 
@@ -134,37 +153,65 @@ class Network:
         x = np.array([self.data[0], self.data[2]])
         label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
-        x, y = self.prepare_x_data(x, label)
+        x, type_y, y = self.prepare_x_data(x, label)
+        #luminalx / basal x
+        lx = x[0]
+        bx = x[1]
+        ly = type_y[0]
+        by = type_y[1]
+
+        #cross validation
         kfold = KFold(3, True, 1)
-        three_fold = []
+        Luminal_three_fold = []
+        Basal_three_fold = []
         xtestData = []
         xtrainData = []
         ytrainData = []
         ytestData = []
 
+        #one hot y data as sparse matrix
         labels, uniques = pd.factorize(y)
 
 
         labels = labels.tolist()
         uniques = uniques.tolist()
 
-        for train, test in kfold.split(x):
+        #creating train and test data to pass to svm
+        #Luminal Data
+        for train, test in kfold.split(lx):
             for i in train:
-                xtrainData.append(x[i])
-                ytrainData.append(labels[labels.index(uniques.index(y[i]))])
+                xtrainData.append(lx[i])
+                ytrainData.append(labels[labels.index(uniques.index(ly[i]))])
 
             for j in test:
-                xtestData.append(x[j])
-                ytestData.append(labels[labels.index(uniques.index(y[j]))])
+                xtestData.append(lx[j])
+                ytestData.append(labels[labels.index(uniques.index(ly[j]))])
 
 
-            three_fold.append([xtrainData, ytrainData, xtestData, ytestData])
+            Luminal_three_fold.append([xtrainData, ytrainData, xtestData, ytestData])
             xtrainData = []
             xtestData = []
             ytrainData = []
             ytestData = []
 
-        return three_fold
+        #Basal Data
+        for train, test in kfold.split(bx):
+            for i in train:
+                xtrainData.append(bx[i])
+                ytrainData.append(labels[labels.index(uniques.index(by[i]))])
+
+            for j in test:
+                xtestData.append(bx[j])
+                ytestData.append(labels[labels.index(uniques.index(by[j]))])
+
+
+            Basal_three_fold.append([xtrainData, ytrainData, xtestData, ytestData])
+            xtrainData = []
+            xtestData = []
+            ytrainData = []
+            ytestData = []
+
+        return Luminal_three_fold, Basal_three_fold
 
 
     def plot_data(self, x, y):
@@ -207,26 +254,43 @@ class Network:
 
 
     def cluster_network(self):
-        data = self.split_data()
+        luminal_data, basal_data = self.split_data()
 
         accuracy = 0
         #todo separate luminal and basal svm
-        #first svm
+        #todo mod numbers to get different data sets
+        #luminal svm
         clf = SVC(kernel="poly", gamma='scale', verbose=1)
-        for i in range(len(data)):
-            clf.fit(data[i][0], data[i][1])
+        for i in range(len(luminal_data)):
+            clf.fit(luminal_data[i][0], luminal_data[i][1])
 
-        for i in range(len(data)):
-            for j in range(len(data[i][2])):
-                if clf.predict([data[i][2][j]]) == data[i][3][j]:
+        for i in range(len(luminal_data)):
+            for j in range(len(luminal_data[i][2])):
+                if clf.predict([luminal_data[i][2][j]]) == luminal_data[i][3][j]:
                     accuracy += 1
 
 
-            print("accuracy ", i, (accuracy / len(data[i][2])))
+            print("luminal accuracy ", i, (accuracy / len(luminal_data[i][2])))
             accuracy = 0
 
 
-        self.plot_data(data[0][0], data[0][1])
+        self.plot_data(luminal_data[0][0], luminal_data[0][1])
+
+        #basal svm
+        for i in range(len(basal_data)):
+            clf.fit(basal_data[i][0], basal_data[i][1])
+
+        for i in range(len(basal_data)):
+            for j in range(len(basal_data[i][2])):
+                if clf.predict([basal_data[i][2][j]]) == basal_data[i][3][j]:
+                    accuracy += 1
+
+
+            print("basal accuracy ", i, (accuracy / len(basal_data[i][2])))
+            accuracy = 0
+
+
+        self.plot_data(luminal_data[0][0], luminal_data[0][1])
 
 
 
