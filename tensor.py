@@ -302,12 +302,17 @@ class Network:
 
         self.plot_data(luminal_data[0][0], luminal_data[0][1])
 
-
-
         #get accuracy
         accuracy = 0
         correct = 0
         wrong = 0
+
+    def pipe_line_svm(self, data):
+        clf = svm.SVC(kernel="Linear")
+        pipeline = Pipeline(['svc', clf])
+        pipeline.fit(data[0], data[1])
+
+
 
 
     def train_network(self, layer):
