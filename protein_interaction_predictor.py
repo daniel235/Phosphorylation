@@ -1,10 +1,35 @@
 import numpy as np
 import pandas as pd
+import pygame
+
+
+class protein_node():
+    def __init__(self, name):
+        self.name = name
+        self.protein_edges = []
+
 
 class protein_interaction_net():
     def __init__(self, objects):
         self.protein_objects = objects
-        self.protein_interaction_data = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
+        self.protein_interaction_data = np.array(pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t"))
+        self.nodes = []
 
+    #might create gui for protein network
+    def create_gui(self):
+        pass
 
+    #add edge
+    def add_edge(self, node_object, edge):
+        #edge has to go both ways (no duplicates)!
+        node_object.protein_edges.append(edge)
+
+    #create network
+    def network(self):
+        for i in range(len(self.protein_interaction_data)):
+            pass
+
+    def create_node(self, name):
+        n = protein_node(name)
+        self.nodes.append(n)
 
