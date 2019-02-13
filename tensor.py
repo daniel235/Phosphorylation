@@ -240,19 +240,38 @@ class Network:
         W1 = tf.placeholder(shape=(2, 1), type="tf.float32")
 
         logit1 = tf.matmul(X * W1) + b
-        layer1 = tf.nn.relu(logit1)
+        layer1 = tf.nn.sigmoid(logit1)
 
         W2 = tf.placeholder(dtype="tf.float32", shape=(1,1))
         b2 = tf.placeholder(dtype="tf.float32", shape=(1,1))
 
-        logit2 = tf.matmul(X * W2) + b2
+        logit2 = tf.matmul(layer1 * W2) + b2
         layer2 = tf.nn.relu(logit2)
 
-        loss = tf.reduce_mean(Y - logit2)
+        #layer 3
+        W3 = tf.placeholder(dtyype="tf.float32", shape=(1,1))
+        b3 = tf.placeholder(dtype="tf.float32", shape=(1,1))
+
+        logit3 = tf.matmul(layer2 * W3) + b3
+        layer3 = tf.nn.elu(logit3)
+
+        #output layer
+        W4 = tf.placeholder(dtype="tf.float32", shape=(1, 52))
+        b4 = tf.placeholder(dtype="tf.float32", shape=(1, 52))
+
+
+        logit4 = tf.matmul(layer3 * W4) + b4
+        layer4 = tf.nn.softmax(logit4)
+
+        loss = tf.reduce_mean(Y - tf.argmax(layer4))
+        print(loss)
         #multi class -> softmax = tf.nn.softmax_cross_entropy_with_logits(layer2)
         train = tf.train.GradientDescentOptimizer(learning_rate=.01)
         train.minimize(loss)
 
+        with tf.Session() as sess:
+            tf.global_variables_initializer()
+            sess.run(train)
 
     def cluster_network(self, results=False):
         luminal_data, basal_data = self.split_data()
