@@ -19,7 +19,7 @@ protein_objects = pipe_object.find_matching_data(d)
 
 #protein interaction network
 pInteract = protein_interaction.protein_interaction_net(protein_objects)
-pInteract.filter_data()
+pInteract.network()
 
 
 #start network call
