@@ -231,7 +231,8 @@ class Network:
         ax.scatter(xs, ys, zs)
         plt.show()
 
-    def regression_network(self):
+
+    def softmax_classification_network(self):
         X = tf.placeholder(dtype="tf.float32", shape=(1, 2))
         b = tf.placeholder(dtype="tf.float32", shape=(1,1))
         Y = tf.placeholder(dtype="tf.int32", shape=(1,1))
