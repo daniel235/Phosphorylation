@@ -233,8 +233,8 @@ class Network:
 
 
     def softmax_classification_network(self):
-        X = tf.placeholder(dtype="tf.float32", shape=(1, 2))
-        b = tf.placeholder(dtype="tf.float32", shape=(1,1))
+        X = tf.placeholder(dtype="tf.float32", shape=(None, 2))
+        b = tf.placeholder(dtype="tf.float32", shape=(None, 1))
         Y = tf.placeholder(dtype="tf.int32", shape=(1,1))
 
         W1 = tf.placeholder(shape=(2, 1), type="tf.float32")
@@ -263,15 +263,18 @@ class Network:
         logit4 = tf.matmul(layer3 * W4) + b4
         layer4 = tf.nn.softmax(logit4)
 
+        #grab data
+
+
         loss = tf.reduce_mean(Y - tf.argmax(layer4))
         print(loss)
         #multi class -> softmax = tf.nn.softmax_cross_entropy_with_logits(layer2)
         train = tf.train.GradientDescentOptimizer(learning_rate=.01)
-        train.minimize(loss)
+        trainer = train.minimize(loss)
 
         with tf.Session() as sess:
             tf.global_variables_initializer()
-            sess.run(train)
+            sess.run(trainer, feed_dict={X: xData, Y: yData})
 
     def cluster_network(self, results=False):
         luminal_data, basal_data = self.split_data()
@@ -280,7 +283,7 @@ class Network:
         #todo separate luminal and basal svm
         #todo mod numbers to get different data sets
         #luminal svm
-        clf = SVC(kernel="rbf", gamma='scale', verbose=1)
+        clf = SVC(kernel="poly", gamma='scale', verbose=1)
         for i in range(len(luminal_data)):
             clf.fit(luminal_data[i][0], luminal_data[i][1])
 
@@ -343,4 +346,9 @@ class Network:
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
         cost = tf.reduce_sum(layer)
 
+
+    def convert_data_for_softmax_network(self):
+        pass
+        #shape for x -> (None, 2)
+        #shape for y -> (1, 1)
 
