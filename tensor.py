@@ -366,19 +366,19 @@ class Network:
 
     def regression_network(self):
         xLen = len(self.luminal_trainX)
-        x = tf.placeholder(dtype="tf.float32", shape=[None, 2], name="input")
-        y= tf.placeholder(dtype="tf.float32", shape=[None, 1], name="output")
+        x = tf.placeholder(dtype=tf.float32, shape=[2], name="input")
+        y= tf.placeholder(dtype=tf.float32, shape=[1], name="output")
 
 
         #coefficients
-        W = tf.Variable(name="slope")
-        b = tf.Variable(name="bias")
+        W = tf.Variable(initial_value=tf.random_normal(shape=[1]), name="slope")
+        b = tf.Variable(initial_value=tf.random_normal(shape=[1]), name="bias")
 
 
         learning_rate = 0.01
         training_epochs = 1000
 
-        y_pred = tf.add(tf.multiply(x * W), b)
+        y_pred = tf.add(tf.multiply(x, W), b)
 
 
         #mean squared error
@@ -390,7 +390,7 @@ class Network:
 
         init = tf.global_variables_initializer()
 
-        with tf.Session as sess:
+        with tf.Session() as sess:
             sess.run(init)
 
             for epoch in range(training_epochs):
