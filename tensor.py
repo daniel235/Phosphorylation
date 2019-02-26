@@ -16,8 +16,10 @@ class Network:
         self.data = np.array(data)
         self.objects = np.array(objects)
         self.pipe = pipe
-        self.trainX = None
-        self.trainY = None
+        self.luminal_trainX = None
+        self.luminal_trainY = None
+        self.basal_trainX = None
+        self.basal_trainY = None
 
 
     def prepare_y_data(self, y):
@@ -145,8 +147,10 @@ class Network:
         type_ys.append(ly)
         type_ys.append(by)
 
-        self.trainX = newX
-        self.trainY = type_ys
+        self.luminal_trainX = newX[0]
+        self.luminal_trainY = type_ys[0]
+        self.basal_trainX = newX[1]
+        self.basal_trainY = type_ys[1]
         return newX, type_ys, ys
 
 
@@ -361,6 +365,7 @@ class Network:
         #least squares approach
 
     def regression_network(self):
+        xLen = len(self.luminal_trainX)
         x = tf.placeholder(dtype="tf.float32", shape=[None, 2], name="input")
         y= tf.placeholder(dtype="tf.float32", shape=[None, 1], name="output")
 
@@ -370,4 +375,37 @@ class Network:
         b = tf.Variable(name="bias")
 
 
+        learning_rate = 0.01
+        training_epochs = 1000
+
+        y_pred = tf.add(tf.multiply(x * W), b)
+
+
+        #mean squared error
+        cost = tf.reduce_sum(tf.pow(y_pred - y, 2)) / (2 * xLen)
+
+
+        #gradient descent optimizer
+        optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+
+        init = tf.global_variables_initializer()
+
+        with tf.Session as sess:
+            sess.run(init)
+
+            for epoch in range(training_epochs):
+                for _x, _y in zip(self.luminal_trainX, self.luminal_trainY):
+                    sess.run(optimizer, feed_dict={x: _x, y: _y})
+
+                if (epoch + 1) % 50 == 0:
+                    c = sess.run(cost, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
+                    print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))
+
+
+
+            training_cost = sess.run(cost, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
+            Weight = sess.run(W)
+            bias = sess.run(b)
+
+            print(training_cost, Weight, bias)
 

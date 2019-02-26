@@ -19,12 +19,17 @@ protein_objects = pipe_object.find_matching_data(d)
 
 #protein interaction network
 pInteract = protein_interaction.protein_interaction_net(protein_objects)
-pInteract.network()
+#pInteract.network()
+
+
 
 
 #start network call
-#model = tensor.Network(data, protein_objects, pipe_object)
+model = tensor.Network(data, protein_objects, pipe_object)
 #model.cluster_network()
+
+model.split_data()
+model.regression_network()
 
 
 
