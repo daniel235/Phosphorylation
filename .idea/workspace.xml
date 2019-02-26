@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ad292031-b363-4d83-b089-142f981a8ed9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cancer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phosphorylation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/results.txt" beforeDir="false" afterPath="$PROJECT_DIR$/results/results.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/tensor.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
@@ -34,71 +31,91 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tensor.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="266" lean-forward="true" selection-start-line="266" selection-end-line="266" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="19" lean-forward="true" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/protein_interaction_predictor.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="41" column="45" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="45" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/results/results.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="36" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/Kinase_Substrates.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="2313" column="27" lean-forward="true" selection-start-line="2313" selection-start-column="27" selection-end-line="2313" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/Protein_Protein_Interaction.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401895">
-              <caret line="26793" column="12" selection-start-line="26793" selection-start-column="12" selection-end-line="26793" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tensor.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="633">
+                  <caret line="369" column="36" lean-forward="true" selection-start-line="369" selection-start-column="36" selection-end-line="369" selection-end-column="36" />
+                  <folding>
+                    <element signature="e#0#23#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="255">
+                  <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+                  <folding>
+                    <element signature="e#0#18#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/protein_interaction_predictor.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="585">
+                  <caret line="41" column="45" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="45" />
+                  <folding>
+                    <element signature="e#0#18#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/results/results.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="255">
+                  <caret line="17" column="36" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/data/Kinase_Substrates.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="34695">
+                  <caret line="2313" column="27" selection-start-line="2313" selection-start-column="27" selection-end-line="2313" selection-end-column="27" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/data/Protein_Protein_Interaction.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="401895">
+                  <caret line="26793" column="12" selection-start-line="26793" selection-start-column="12" selection-end-line="26793" selection-end-column="12" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="315">
+                  <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+                  <folding>
+                    <element signature="e#0#18#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -126,10 +143,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-12" />
-    <option name="width" value="1149" />
-    <option name="height" value="1455" />
+    <option name="y" value="-12" />
+    <option name="width" value="2280" />
+    <option name="height" value="1527" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -213,17 +231,22 @@
       <workItem from="1550178586494" duration="1904000" />
       <workItem from="1550453661373" duration="7559000" />
       <workItem from="1550467651627" duration="1691000" />
+      <workItem from="1550523992546" duration="2187000" />
+      <workItem from="1550722394260" duration="2226000" />
+      <workItem from="1550817492536" duration="259000" />
+      <workItem from="1551130863993" duration="1524000" />
+      <workItem from="1551212630415" duration="1229000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25031000" />
+    <option name="totallyTimeSpent" value="32456000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="765" height="969" extended-state="0" />
+    <frame x="-7" y="-7" width="1519" height="977" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1929078" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.102810144" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -297,17 +320,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/Protein_Protein_Interaction.txt">
+    <entry file="file://$PROJECT_DIR$/protein_interaction_predictor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401895">
-          <caret line="26793" column="12" selection-start-line="26793" selection-start-column="12" selection-end-line="26793" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/Kinase_Substrates.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="2313" column="27" lean-forward="true" selection-start-line="2313" selection-start-column="27" selection-end-line="2313" selection-end-column="27" />
+        <state relative-caret-position="585">
+          <caret line="41" column="45" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -318,20 +337,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protein_interaction_predictor.py">
+    <entry file="file://$PROJECT_DIR$/data/Kinase_Substrates.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="45" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="34695">
+          <caret line="2313" column="27" selection-start-line="2313" selection-start-column="27" selection-end-line="2313" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/Protein_Protein_Interaction.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="401895">
+          <caret line="26793" column="12" selection-start-line="26793" selection-start-column="12" selection-end-line="26793" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="19" lean-forward="true" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+        <state relative-caret-position="255">
+          <caret line="21" column="19" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -340,8 +363,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tensor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="266" lean-forward="true" selection-start-line="266" selection-end-line="266" />
+        <state relative-caret-position="633">
+          <caret line="369" column="36" lean-forward="true" selection-start-line="369" selection-start-column="36" selection-end-line="369" selection-end-column="36" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>

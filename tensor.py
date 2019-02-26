@@ -16,6 +16,8 @@ class Network:
         self.data = np.array(data)
         self.objects = np.array(objects)
         self.pipe = pipe
+        self.trainX = None
+        self.trainY = None
 
 
     def prepare_y_data(self, y):
@@ -143,7 +145,8 @@ class Network:
         type_ys.append(ly)
         type_ys.append(by)
 
-
+        self.trainX = newX
+        self.trainY = type_ys
         return newX, type_ys, ys
 
 
@@ -274,7 +277,7 @@ class Network:
 
         with tf.Session() as sess:
             tf.global_variables_initializer()
-            sess.run(trainer, feed_dict={X: xData, Y: yData})
+            #sess.run(trainer, feed_dict={X: xData, Y: yData})
 
     def cluster_network(self, results=False):
         luminal_data, basal_data = self.split_data()
@@ -339,8 +342,6 @@ class Network:
         pipeline.fit(data[0], data[1])
 
 
-
-
     def train_network(self, layer):
         #parameters
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
@@ -351,4 +352,22 @@ class Network:
         pass
         #shape for x -> (None, 2)
         #shape for y -> (1, 1)
+
+
+    #function for getting impact of different parameters
+    def parameter_effects(self):
+        #regression network
+        pass
+        #least squares approach
+
+    def regression_network(self):
+        x = tf.placeholder(dtype="tf.float32", shape=[None, 2], name="input")
+        y= tf.placeholder(dtype="tf.float32", shape=[None, 1], name="output")
+
+
+        #coefficients
+        W = tf.Variable(name="slope")
+        b = tf.Variable(name="bias")
+
+
 
