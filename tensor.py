@@ -147,10 +147,7 @@ class Network:
         type_ys.append(ly)
         type_ys.append(by)
 
-        self.luminal_trainX = newX[0]
-        self.luminal_trainY = type_ys[0]
-        self.basal_trainX = newX[1]
-        self.basal_trainY = type_ys[1]
+
         return newX, type_ys, ys
 
 
@@ -179,6 +176,7 @@ class Network:
         #one hot y data as sparse matrix
         labels, uniques = pd.factorize(y)
 
+        one_check = True
 
         labels = labels.tolist()
         uniques = uniques.tolist()
@@ -196,10 +194,19 @@ class Network:
 
 
             Luminal_three_fold.append([xtrainData, ytrainData, xtestData, ytestData])
+
+            #set data here (y is converted to integer)
+            if one_check:
+                self.luminal_trainX = xtrainData
+                self.luminal_trainY = ytrainData
+                one_check = False
+
             xtrainData = []
             xtestData = []
             ytrainData = []
             ytestData = []
+
+        one_check = True
 
         #Basal Data
         for train, test in kfold.split(bx):
@@ -213,6 +220,12 @@ class Network:
 
 
             Basal_three_fold.append([xtrainData, ytrainData, xtestData, ytestData])
+
+            if one_check:
+                self.basal_trainX = xtrainData
+                self.basal_trainY = ytrainData
+                one_check = False
+
             xtrainData = []
             xtestData = []
             ytrainData = []
@@ -366,20 +379,24 @@ class Network:
 
     def regression_network(self):
         xLen = len(self.luminal_trainX)
-        x = tf.placeholder(dtype=tf.float32, shape=[2], name="input")
-        y= tf.placeholder(dtype=tf.float32, shape=[1], name="output")
+        x = tf.placeholder(dtype=tf.float32, name="input")
+        y= tf.placeholder(dtype=tf.float32, name="output")
 
 
         #coefficients
-        W = tf.Variable(initial_value=tf.random_normal(shape=[1]), name="slope")
-        b = tf.Variable(initial_value=tf.random_normal(shape=[1]), name="bias")
+        W = tf.Variable(initial_value=np.random.randn(), name="slope")
+        b = tf.Variable(initial_value=np.random.randn(), name="bias")
 
 
-        learning_rate = 0.01
-        training_epochs = 1000
+        learning_rate = 0.05
+        training_epochs = 10000
 
         y_pred = tf.add(tf.multiply(x, W), b)
 
+        self.luminal_trainY = np.array(self.luminal_trainY)
+        self.luminal_trainY = self.luminal_trainY.reshape((103, 1))
+
+        #self.luminal_trainY.astype(float)
 
         #mean squared error
         cost = tf.reduce_sum(tf.pow(y_pred - y, 2)) / (2 * xLen)
@@ -394,8 +411,10 @@ class Network:
             sess.run(init)
 
             for epoch in range(training_epochs):
-                for _x, _y in zip(self.luminal_trainX, self.luminal_trainY):
-                    sess.run(optimizer, feed_dict={x: _x, y: _y})
+                #for _x, _y in zip(self.luminal_trainX, self.luminal_trainY):
+                    #sess.run(optimizer, feed_dict={x: _x, y: float(_y)})
+
+                sess.run(optimizer, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
 
                 if (epoch + 1) % 50 == 0:
                     c = sess.run(cost, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
@@ -409,3 +428,9 @@ class Network:
 
             print(training_cost, Weight, bias)
 
+
+        #plot data
+        guess = (Weight * self.luminal_trainX) + bias
+        plt.plot(self.luminal_trainX, self.luminal_trainY, 'ro')
+        plt.plot(self.luminal_trainX, guess)
+        plt.show()
