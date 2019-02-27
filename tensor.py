@@ -429,8 +429,20 @@ class Network:
             print(training_cost, Weight, bias)
 
 
-        #plot data
-        guess = (Weight * self.luminal_trainX) + bias
-        plt.plot(self.luminal_trainX, self.luminal_trainY, 'ro')
-        plt.plot(self.luminal_trainX, guess)
-        plt.show()
+            #############printing all tests ###############
+            print(bias)
+
+
+
+
+            #plot data
+            print(type(Weight))
+            Weight = int(Weight)
+            bias = float(bias)
+            guess = []
+            for i in range(len(self.luminal_trainX)):
+                guess.append((Weight * self.luminal_trainX[i]) + bias)
+
+            plt.plot(self.luminal_trainX, self.luminal_trainY, 'ro')
+            plt.plot(self.luminal_trainX, guess)
+            plt.show()
