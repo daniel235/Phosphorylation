@@ -379,19 +379,30 @@ class Network:
 
     def regression_network(self):
         xLen = len(self.luminal_trainX)
+        print(self.luminal_trainX[0])
+        xdata = np.array(self.luminal_trainX)
+        #xdata = np.reshape(xdata, (2,103))
+        xdata = xdata.transpose()
+
+        print(xdata.shape)
+
+
         x = tf.placeholder(dtype=tf.float32, name="input")
         y= tf.placeholder(dtype=tf.float32, name="output")
 
 
         #coefficients
-        W = tf.Variable(initial_value=np.random.randn(), name="slope")
-        b = tf.Variable(initial_value=np.random.randn(), name="bias")
+        W = tf.Variable(initial_value=np.random.randn(103,1), name="slope", dtype=tf.float32)
+        b = tf.Variable(initial_value=np.random.randn(103,1), name="bias", dtype=tf.float32)
 
 
-        learning_rate = 0.05
+        learning_rate = 0.01
         training_epochs = 10000
 
-        y_pred = tf.add(tf.multiply(x, W), b)
+
+        #multiplication should be -> (132, 2) * (2, 2) / reshape x to (2, 132) weight should be (132, 1)  outcome would be (2, 1)
+        y_pred = tf.add(tf.matmul(x, W), b)
+
 
         self.luminal_trainY = np.array(self.luminal_trainY)
         self.luminal_trainY = self.luminal_trainY.reshape((103, 1))
@@ -414,15 +425,16 @@ class Network:
                 #for _x, _y in zip(self.luminal_trainX, self.luminal_trainY):
                     #sess.run(optimizer, feed_dict={x: _x, y: float(_y)})
 
-                sess.run(optimizer, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
+                sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})
+
 
                 if (epoch + 1) % 50 == 0:
-                    c = sess.run(cost, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
+                    c = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
                     print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))
 
 
 
-            training_cost = sess.run(cost, feed_dict={x: self.luminal_trainX, y: self.luminal_trainY})
+            training_cost = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
             Weight = sess.run(W)
             bias = sess.run(b)
 
@@ -433,10 +445,8 @@ class Network:
             print(bias)
 
 
-
-
             #plot data
-            print(type(Weight))
+            '''print(type(Weight))
             Weight = int(Weight)
             bias = float(bias)
             guess = []
@@ -445,4 +455,4 @@ class Network:
 
             plt.plot(self.luminal_trainX, self.luminal_trainY, 'ro')
             plt.plot(self.luminal_trainX, guess)
-            plt.show()
+            plt.show()'''
