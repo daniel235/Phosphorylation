@@ -29,7 +29,7 @@ model = tensor.Network(data, protein_objects, pipe_object)
 #model.cluster_network()
 
 model.split_data()
-model.regression_network()
+model.regression_network(epochs=10000)
 
 
 

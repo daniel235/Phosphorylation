@@ -377,7 +377,7 @@ class Network:
         pass
         #least squares approach
 
-    def regression_network(self):
+    def regression_network(self, learningRate=None, epochs=None):
         xLen = len(self.luminal_trainX)
         print(self.luminal_trainX[0])
         xdata = np.array(self.luminal_trainX)
@@ -392,12 +392,18 @@ class Network:
 
 
         #coefficients
-        W = tf.Variable(initial_value=np.random.randn(2,1), name="slope", dtype=tf.float32)
-        b = tf.Variable(initial_value=np.random.randn(1,1), name="bias", dtype=tf.float32)
-
+        W = tf.Variable(initial_value=np.random.uniform(size=(2,1)), name="slope", dtype=tf.float32)
+        b = tf.Variable(initial_value=np.random.uniform(size=(1,1)), name="bias", dtype=tf.float32)
 
         learning_rate = 0.01
-        training_epochs = 10000
+        if learningRate != None:
+            learning_rate = learningRate
+
+
+        training_epochs = 2000
+        if epochs != None:
+            training_epochs = epochs
+
 
 
         #multiplication should be -> (132, 2) * (2, 2) / reshape x to (2, 132) weight should be (132, 1)  outcome would be (2, 1)
@@ -418,7 +424,9 @@ class Network:
 
         init = tf.global_variables_initializer()
 
+        accuracy = 0
 
+        print(len(xdata))
 
         with tf.Session() as sess:
             sess.run(init)
@@ -430,13 +438,17 @@ class Network:
 
                 #sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})
 
-                '''if (epoch + 1) % 50 == 0:
+                if (epoch + 1) % 50 == 0:
                     for _x, _y in zip(xdata, self.luminal_trainY):
+                        _x = np.reshape(_x, (1, 2))
                         c = sess.run(cost, feed_dict={x: _x, y: _y})
+                        accuracy += c
 
                         #c = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
-                        print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))'''
+                        print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))
 
+                    accuracy = accuracy / len(xdata)
+                    print("accuracy ", (1 - accuracy))
 
 
             #training_cost = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
