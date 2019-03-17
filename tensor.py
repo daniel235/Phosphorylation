@@ -387,7 +387,7 @@ class Network:
         print(xdata.shape)
 
 
-        x = tf.placeholder(dtype=tf.float32, name="input")
+        x = tf.placeholder(dtype=tf.float32, name="input", shape=(1,2))
         y= tf.placeholder(dtype=tf.float32, name="output")
 
 
@@ -418,11 +418,14 @@ class Network:
 
         init = tf.global_variables_initializer()
 
+
+
         with tf.Session() as sess:
             sess.run(init)
 
             for epoch in range(training_epochs):
                 for _x, _y in zip(xdata, self.luminal_trainY):
+                    _x = np.reshape(_x, (1, 2))
                     sess.run(optimizer, feed_dict={x: _x, y: _y})
 
                 #sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})

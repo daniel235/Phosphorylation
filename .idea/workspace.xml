@@ -16,7 +16,7 @@
     <SUITE FILE_PATH="coverage/Phosphorylation$main.coverage" NAME="main Coverage Results" MODIFIED="1549982755516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cancer$main.coverage" NAME="main Coverage Results" MODIFIED="1550080557031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/phosphorylation$tensor.coverage" NAME="tensor Coverage Results" MODIFIED="1552586877844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/phosphorylation$main.coverage" NAME="main Coverage Results" MODIFIED="1552781945822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/phosphorylation$main.coverage" NAME="main Coverage Results" MODIFIED="1552792965126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -37,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tensor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="404" lean-forward="true" selection-start-line="404" selection-end-line="404" />
+            <state relative-caret-position="246">
+              <caret line="427" column="47" lean-forward="true" selection-start-line="427" selection-start-column="47" selection-end-line="427" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -101,8 +101,8 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-11" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1137" />
     <option name="width" value="1130" />
     <option name="height" value="1454" />
   </component>
@@ -225,23 +225,23 @@
       <workItem from="1552426793150" duration="4261000" />
       <workItem from="1552586265511" duration="1885000" />
       <workItem from="1552775579696" duration="1417000" />
-      <workItem from="1552777207358" duration="6627000" />
+      <workItem from="1552777207358" duration="8970000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75641000" />
+    <option name="totallyTimeSpent" value="77984000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="753" height="969" extended-state="0" />
+    <frame x="-7" y="-7" width="1519" height="977" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25108224" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11925977" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.41577062" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.29704142" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -319,8 +319,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tensor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="404" lean-forward="true" selection-start-line="404" selection-end-line="404" />
+        <state relative-caret-position="246">
+          <caret line="427" column="47" lean-forward="true" selection-start-line="427" selection-start-column="47" selection-end-line="427" selection-end-column="47" />
         </state>
       </provider>
     </entry>
