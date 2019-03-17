@@ -382,7 +382,7 @@ class Network:
         print(self.luminal_trainX[0])
         xdata = np.array(self.luminal_trainX)
         #xdata = np.reshape(xdata, (2,103))
-        xdata = xdata.transpose()
+        #xdata = xdata.transpose()
 
         print(xdata.shape)
 
@@ -392,8 +392,8 @@ class Network:
 
 
         #coefficients
-        W = tf.Variable(initial_value=np.random.randn(103,1), name="slope", dtype=tf.float32)
-        b = tf.Variable(initial_value=np.random.randn(103,1), name="bias", dtype=tf.float32)
+        W = tf.Variable(initial_value=np.random.randn(2,1), name="slope", dtype=tf.float32)
+        b = tf.Variable(initial_value=np.random.randn(1,1), name="bias", dtype=tf.float32)
 
 
         learning_rate = 0.01
@@ -422,23 +422,25 @@ class Network:
             sess.run(init)
 
             for epoch in range(training_epochs):
-                #for _x, _y in zip(self.luminal_trainX, self.luminal_trainY):
-                    #sess.run(optimizer, feed_dict={x: _x, y: float(_y)})
+                for _x, _y in zip(xdata, self.luminal_trainY):
+                    sess.run(optimizer, feed_dict={x: _x, y: _y})
 
-                sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})
+                #sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})
+
+                '''if (epoch + 1) % 50 == 0:
+                    for _x, _y in zip(xdata, self.luminal_trainY):
+                        c = sess.run(cost, feed_dict={x: _x, y: _y})
+
+                        #c = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
+                        print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))'''
 
 
-                if (epoch + 1) % 50 == 0:
-                    c = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
-                    print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))
 
-
-
-            training_cost = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
+            #training_cost = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
             Weight = sess.run(W)
             bias = sess.run(b)
 
-            print(training_cost, Weight, bias)
+            #print(training_cost, Weight, bias)
 
 
             #############printing all tests ###############

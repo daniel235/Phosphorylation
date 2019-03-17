@@ -16,7 +16,7 @@
     <SUITE FILE_PATH="coverage/Phosphorylation$main.coverage" NAME="main Coverage Results" MODIFIED="1549982755516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cancer$main.coverage" NAME="main Coverage Results" MODIFIED="1550080557031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/phosphorylation$tensor.coverage" NAME="tensor Coverage Results" MODIFIED="1552586877844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/phosphorylation$main.coverage" NAME="main Coverage Results" MODIFIED="1552775705918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/phosphorylation$main.coverage" NAME="main Coverage Results" MODIFIED="1552781945822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -34,20 +34,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tensor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="399" column="31" lean-forward="true" selection-start-line="399" selection-start-column="31" selection-end-line="399" selection-end-column="31" />
+            <state relative-caret-position="90">
+              <caret line="404" lean-forward="true" selection-start-line="404" selection-end-line="404" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="255">
+              <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -96,22 +96,22 @@
         <option value="$PROJECT_DIR$/protein.py" />
         <option value="$PROJECT_DIR$/protein_interaction_predictor.py" />
         <option value="$PROJECT_DIR$/results/results.txt" />
-        <option value="$PROJECT_DIR$/tensor.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/tensor.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2491" />
-    <option name="y" value="60" />
-    <option name="width" value="1292" />
-    <option name="height" value="726" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-11" />
+    <option name="width" value="1130" />
+    <option name="height" value="1454" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -123,7 +123,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -225,21 +224,24 @@
       <workItem from="1552080483730" duration="769000" />
       <workItem from="1552426793150" duration="4261000" />
       <workItem from="1552586265511" duration="1885000" />
+      <workItem from="1552775579696" duration="1417000" />
+      <workItem from="1552777207358" duration="6627000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67597000" />
+    <option name="totallyTimeSpent" value="75641000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="1" width="1292" height="725" extended-state="0" />
+    <frame x="-7" y="0" width="753" height="969" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13717532" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25108224" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.53794265" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.41577062" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -308,6 +310,30 @@
     <entry file="file://$USER_HOME$/AppData/Local/conda/conda/envs/tensorflow/Lib/site-packages/tensorflow/python/client/session.py" />
     <entry file="file://$PROJECT_DIR$/protein_interaction_predictor.py" />
     <entry file="file://$PROJECT_DIR$/results/results.txt" />
+    <entry file="file://$USER_HOME$/AppData/Local/conda/conda/envs/tensorflow/Lib/site-packages/tensorflow/python/framework/ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="3154" selection-start-line="3154" selection-end-line="3154" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tensor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="404" lean-forward="true" selection-start-line="404" selection-end-line="404" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/Kinase_Substrates.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34695">
@@ -319,30 +345,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401895">
           <caret line="26793" column="12" selection-start-line="26793" selection-start-column="12" selection-end-line="26793" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/conda/conda/envs/tensorflow/Lib/site-packages/tensorflow/python/framework/ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="3154" selection-start-line="3154" selection-end-line="3154" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tensor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="399" column="31" lean-forward="true" selection-start-line="399" selection-start-column="31" selection-end-line="399" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
