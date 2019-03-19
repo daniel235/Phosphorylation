@@ -27,11 +27,8 @@ class Network:
         #get names of kinase data
         x, ys = [], []
 
-        #import kinase data
-        kinase_data = self.data[6]
-
         #create substrate list
-        substrate = kinase_data["Substrate"].tolist()
+        substrate = self.data[6]["Substrate"].tolist()
 
         #for each substrate site name determine which has a defined kinase
         for i in range(len(y)):
@@ -40,11 +37,10 @@ class Network:
                 if y[i] in substrate:
                     pos = substrate.index(y[i].upper())
                     x.append(i)
-                    ys.append(kinase_data["Kinase"][pos])
+                    ys.append(self.data[6]["Kinase"][pos])
 
             except:
                 pass
-
 
         return x, ys
 
@@ -102,9 +98,6 @@ class Network:
                     except:
                         pass
 
-        #corresponding protein site for x data
-        kinase = self.data[6]
-
         y = []
         newX = []
         LuminalX = []
@@ -154,7 +147,6 @@ class Network:
 
 
     def split_data(self):
-        print(self.data[0][0])
         x = np.array([self.data[0], self.data[2]])
         label = np.array([self.data[1], self.data[3]])
         #todo prepare data set returns site data and expression
@@ -349,10 +341,6 @@ class Network:
 
         self.plot_data(luminal_data[0][0], luminal_data[0][1])
 
-        #get accuracy
-        accuracy = 0
-        correct = 0
-        wrong = 0
 
     def pipe_line_svm(self, data):
         clf = svm.SVC(kernel="Linear")
@@ -366,26 +354,12 @@ class Network:
         cost = tf.reduce_sum(layer)
 
 
-    def convert_data_for_softmax_network(self):
-        pass
-        #shape for x -> (None, 2)
-        #shape for y -> (1, 1)
-
-
-    #function for getting impact of different parameters
-    def parameter_effects(self):
-        #regression network
-        pass
-        #least squares approach
 
     def regression_network(self, learningRate=None, epochs=None):
         xLen = len(self.luminal_trainX)
         print(self.luminal_trainX[0])
         xdata = np.array(self.luminal_trainX)
-        #xdata = np.reshape(xdata, (2,103))
-        #xdata = xdata.transpose()
-
-        print(xdata.shape)
+        ydata = self.luminal_trainY
 
 
         x = tf.placeholder(dtype=tf.float32, name="input", shape=(1,2))
@@ -423,40 +397,45 @@ class Network:
 
         accuracy = 0
 
+        ###########  Cross-Fold Data (5x) ##############
+
+        X_train, X_test, y_train, y_test = train_test_split(xdata, ydata, test_size=0.3)
+        kf = KFold(n_splits=5)
+        for train, test in kf.split(xdata):
+            pass
+
+
         ###########  Train Network  ##############
 
         with tf.Session() as sess:
             sess.run(init)
 
-            for epoch in range(training_epochs):
-                for _x, _y in zip(xdata, self.luminal_trainY):
-                    _x = np.reshape(_x, (1, 2))
-                    sess.run(optimizer, feed_dict={x: _x, y: _y})
-
-                #sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})
-
-                if (epoch + 1) % 50 == 0:
-                    for _x, _y in zip(xdata, self.luminal_trainY):
+            for train, test in kf.split(xdata):
+                for epoch in range(training_epochs):
+                    for _x, _y in zip(train, ydata):
                         _x = np.reshape(_x, (1, 2))
-                        c = sess.run(cost, feed_dict={x: _x, y: _y})
-                        accuracy += c
+                        sess.run(optimizer, feed_dict={x: _x, y: _y})
 
-                        #c = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
-                        print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))
+                    #sess.run(optimizer, feed_dict={x: xdata, y: self.luminal_trainY})
 
-                    accuracy = accuracy / len(xdata)
-                    print("accuracy ", (1 - accuracy))
+                    if (epoch + 1) % 50 == 0:
+                        for _x, _y in zip(xdata, ydata):
+                            _x = np.reshape(_x, (1, 2))
+                            c = sess.run(cost, feed_dict={x: _x, y: _y})
+                            accuracy += c
+
+                            #c = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
+                            print("epoch", epoch, " cost ", c, " W ", sess.run(W), " b ", sess.run(b))
+
+                        accuracy = accuracy / len(xdata)
+                        print("accuracy ", (1 - accuracy))
 
 
-            #training_cost = sess.run(cost, feed_dict={x: xdata, y: self.luminal_trainY})
             Weight = sess.run(W)
             bias = sess.run(b)
 
-            #print(training_cost, Weight, bias)
-
 
             #############printing all tests ###############
-
 
             #plot data
             '''guess = []
