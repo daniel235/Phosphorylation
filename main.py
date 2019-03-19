@@ -28,8 +28,8 @@ pInteract = protein_interaction.protein_interaction_net(protein_objects)
 model = tensor.Network(data, protein_objects, pipe_object)
 #model.cluster_network()
 
-model.split_data()
-model.regression_network(epochs=10000)
+#model.split_data()
+model.regression_network()
 
 
 

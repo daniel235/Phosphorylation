@@ -20,22 +20,27 @@ class Network:
         self.luminal_trainY = None
         self.basal_trainX = None
         self.basal_trainY = None
+        self.split_data()
 
 
     def prepare_y_data(self, y):
         #get names of kinase data
-        y_kinase = []
-        x = []
-        ys = []
-        kinase = self.data[6]
-        pos = 0
-        substrate = kinase["Substrate"].tolist()
+        x, ys = [], []
+
+        #import kinase data
+        kinase_data = self.data[6]
+
+        #create substrate list
+        substrate = kinase_data["Substrate"].tolist()
+
+        #for each substrate site name determine which has a defined kinase
         for i in range(len(y)):
+            #if substrate is in kinase file
             try:
                 if y[i] in substrate:
                     pos = substrate.index(y[i].upper())
                     x.append(i)
-                    ys.append(kinase["Kinase"][pos])
+                    ys.append(kinase_data["Kinase"][pos])
 
             except:
                 pass
@@ -46,12 +51,10 @@ class Network:
 
     #todo preparing for svm
     def prepare_x_data(self, data, label):
-        #get object names in a list  #todo should be done in [find_matching_data]
+        #get object names in a list
         names = []
-        pos = 0
         x_counter = 0
         x = []
-        pos_counter = 0
         pos_of_found_proteins = []
 
         obs = self.objects.tolist()
@@ -66,7 +69,6 @@ class Network:
         for i in range(len(lengths)):
             for j in range(lengths[i]):
                 if i == 0:
-                    #todo push phosphosites to protein object
                     #strip last hyphen and numbers
                     protein = data[i][j][0]
                     protein = self.pipe.strip_sites(protein)
@@ -149,7 +151,6 @@ class Network:
 
 
         return newX, type_ys, ys
-
 
 
     def split_data(self):
@@ -400,10 +401,9 @@ class Network:
             learning_rate = learningRate
 
 
-        training_epochs = 2000
+        training_epochs = 500
         if epochs != None:
             training_epochs = epochs
-
 
 
         #multiplication should be -> (132, 2) * (2, 2) / reshape x to (2, 132) weight should be (132, 1)  outcome would be (2, 1)
@@ -413,11 +413,8 @@ class Network:
         self.luminal_trainY = np.array(self.luminal_trainY)
         self.luminal_trainY = self.luminal_trainY.reshape((103, 1))
 
-        #self.luminal_trainY.astype(float)
-
         #mean squared error
         cost = tf.reduce_sum(tf.pow(y_pred - y, 2)) / (2 * xLen)
-
 
         #gradient descent optimizer
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
@@ -426,7 +423,7 @@ class Network:
 
         accuracy = 0
 
-        print(len(xdata))
+        ###########  Train Network  ##############
 
         with tf.Session() as sess:
             sess.run(init)
@@ -459,14 +456,10 @@ class Network:
 
 
             #############printing all tests ###############
-            print(bias)
 
 
             #plot data
-            '''print(type(Weight))
-            Weight = int(Weight)
-            bias = float(bias)
-            guess = []
+            '''guess = []
             for i in range(len(self.luminal_trainX)):
                 guess.append((Weight * self.luminal_trainX[i]) + bias)
 
