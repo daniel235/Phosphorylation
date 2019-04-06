@@ -6,19 +6,21 @@ import tensor
 
 
 class Pipe_line:
-    def find_matching_data(self, data):
-        #todo read kinase and protein interaction data
-        kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
-        proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
+    def __init__(self):
+        self.kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
+        self.proteinInteraction = pd.read_csv('./data/Protein_Protein_Interaction.txt', delimiter="\t")
+        self.phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
+        self.proteinExpression = pd.read_csv('./data/ProteinExpression_data.txt' ,delimiter="\t")
+        
 
-        proteinInteraction = np.array(proteinInteraction)
+    def find_matching_data(self, data):
+        proteinInteraction = np.array(self.proteinInteraction)
 
         #todo create data object for each line
         protein_names = []
         protein_objects = []
         id = 0
         p = None
-
 
         #first count check
         for i in range(len(data[0])):
@@ -30,9 +32,8 @@ class Pipe_line:
                 protein_objects.append(p)
                 id += 1
 
-        #todo check for protein in kinase data
         #contains protein name in string
-        substrate = kinaseData["Substrate"]
+        substrate = self.kinaseData["Substrate"]
         substrate = np.array(substrate)
         newStr = ""
         #strip substrate sites
@@ -84,26 +85,26 @@ class Pipe_line:
 
         return data_base
 
+    #function to retrieve data to be used in other files
     def get_data(self):
-        phosphorylation = pd.read_csv('./data/phosphorylation_data.txt', delimiter="\t")
-        proteinExpression = pd.read_csv('./data/ProteinExpression_data.txt' ,delimiter="\t")
-        kinaseData = pd.read_csv('./data/Kinase_Substrates.txt', delimiter="\t")
-        #Phosphorylation name
-        phosphoType = phosphorylation["Phosphosite"]
+        #Phosphosite name
+        phosphoType = self.phosphorylation["Phosphosite"]
 
-        proteinExpression = np.array(proteinExpression)
-        phosphorylation = np.array(phosphorylation)
+        #convert data into workable numpy arrays
+        proteinExpression = np.array(self.proteinExpression)
+        phosphorylation = np.array(self.phosphorylation)
 
-
+        #phoshporylation data 
         phosDataX = []
         phosDataY = []
 
+        #protein Expression 
         protExpressX = []
         protExpressY = []
 
+        
         phosClass = []
         protClass = []
-
 
         #phosphorylation data separated with xname and x data and added array of corresponding y values
         for i in range(len(phosphorylation)):
@@ -138,8 +139,12 @@ class Pipe_line:
                 protClass.append(keyTwo)
 
 
-        return [phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass, kinaseData]
+        return [phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass, self.kinaseData]
 
+
+    def grab_substrates(self):
+        pass
+    
 
     def strip_sites(self, site):
         # strip substrate sites
