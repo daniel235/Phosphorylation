@@ -2,7 +2,7 @@ import protein as pr
 
 import numpy as np
 import pandas as pd
-import tensor
+import network
 
 
 class Pipe_line:
@@ -22,6 +22,7 @@ class Pipe_line:
         id = 0
         p = None
 
+        #check if protein is in phosphorylation/gene expression/and is a kinase substrate
         #first count check
         for i in range(len(data[0])):
             if data[0][i][0] not in protein_names:
@@ -87,9 +88,6 @@ class Pipe_line:
 
     #function to retrieve data to be used in other files
     def get_data(self):
-        #Phosphosite name
-        phosphoType = self.phosphorylation["Phosphosite"]
-
         #convert data into workable numpy arrays
         proteinExpression = np.array(self.proteinExpression)
         phosphorylation = np.array(self.phosphorylation)
@@ -102,7 +100,6 @@ class Pipe_line:
         protExpressX = []
         protExpressY = []
 
-        
         phosClass = []
         protClass = []
 
@@ -138,12 +135,24 @@ class Pipe_line:
             if key != keyTwo:
                 protClass.append(keyTwo)
 
-
         return [phosDataX, phosDataY, protExpressX, protExpressY, phosClass, protClass, self.kinaseData]
 
 
-    def grab_substrates(self):
-        pass
+    #pass in kinase argument and return it's substrates from the 
+    #phosphorylation data and expression data
+    def grab_substrates(self, kinase):
+        #load kinase indexes
+
+        #transform kinase to string to match database kinases
+        kinase = "'" + kinase + "'"
+        kinaseColumn = self.kinaseData["Kinase"]
+        list_of_substrates = []
+        for i in range(len(kinaseColumn)): 
+            if(kinaseColumn[i] == kinase):
+                #add to substrate array
+                list_of_substrates.append(self.kinaseData["Substrate"][i])
+
+        return list_of_substrates
     
 
     def strip_sites(self, site):
