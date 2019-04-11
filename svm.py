@@ -2,7 +2,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC, NuSVC
-
+import numpy as np
 import pipe_line as pipe 
 
 
@@ -10,31 +10,22 @@ class SVM:
     #?class to classify phosphosites to kinases
     #?using svm classifier
     def __init__(self):
-        self.pipe_object = pipe.Pipe_line()
-
-    #grab training data from all databases
-    def get_basal_training_data(self):
-        phosphosite_data = np.array(self.pipe_object.phosphorylation)
-        dataPoints = []
-        
-        for count in range(len(phosphosite_data)):
-            for i in range(18):
-
-
-    #leave out test set
-    def get_basal_testing_data(self):
         pass
 
-    def get_luminal_training_data(self):
-        pass
-
-    def get_luminal_testing_data(self):
-        pass
-
-
-    def run_svm(self):
+    def run_svm(self, test=False):
         svm = NuSVC(decision_function_shape="ovr", verbose=True)
-        svm.fit()
+        #?test svm
+        if(test):
+            #create sample data (3 classes)
+            x = [[1,2],[1,3],[1,4],[1,1],[5,1],[5,2],[5,3],[5,4],[7,5],[7,9],[6,8],[7,4]]
+            y = [1,1,1,1,2,2,2,2,3,3,3,3]
+            svm.fit(x,y)
+            pred = svm.predict([[8,2]])
+            print(pred)
+        else:
+            #load data
+            pass
+
     
     #graphing phosphorylation data by different colors
     def graph_data_by_kinases(self):
