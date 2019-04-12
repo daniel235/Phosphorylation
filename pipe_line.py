@@ -123,6 +123,7 @@ class Pipe_line:
         #prepare categories
         key = ""
         keyTwo = ""
+        
         for i in range(len(phosDataX) - 1):
             key = phosDataX[i][0]
             keyTwo = phosDataX[i + 1][0]
@@ -154,6 +155,14 @@ class Pipe_line:
 
         return list_of_substrates
     
+    def find_kinase(self, psite):
+        k = self.kinaseData["Substrate"].tolist()
+        try:
+            ksubIndex = k.index("'" + psite + "'")
+        except:
+            ksubIndex = False
+
+        return ksubIndex
 
     def strip_sites(self, site):
         # strip substrate sites
