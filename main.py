@@ -1,8 +1,11 @@
 import numpy as np
 import pandas as pd
-import tensor
+import network
 import pipe_line as pipe
 import protein_interaction_predictor as protein_interaction
+import svm
+import cluster_data as cd
+import knn as k
 
 #grab data
 #package data together
@@ -13,22 +16,28 @@ data = pipe_object.get_data()
 proteins = []
 d = np.array([data[2], data[0]])
 
-
 #array of protein objects
 protein_objects = pipe_object.find_matching_data(d)
 
+pipe_object.grab_substrates('EIF2AK1')
+
+
+startCluster = cd.ClusterData()
+
+knn = k.Knn_cluster()
+knn.run_knn()
+
+'''
 #protein interaction network
 pInteract = protein_interaction.protein_interaction_net(protein_objects)
 #pInteract.network()
-
-
-
 
 #start network call
 model = tensor.Network(data, protein_objects, pipe_object)
 #model.cluster_network()
 
-model.regression_network()
+#call regression network to estimate paramters
+model.regression_network()'''
 
 
 

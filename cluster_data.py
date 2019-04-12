@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.utils import shuffle
 import pipe_line as pipe
+import math
 
 
 class ClusterData:
@@ -29,10 +30,11 @@ class ClusterData:
  
         #shuffle data 
         basal_dataPoints, luminal_dataPoints = shuffle(basal_dataPoints, luminal_dataPoints)
-        self.trainBasal = basal_dataPoints[0:(len(basal_dataPoints)*.7)]
-        self.testBasal = basal_dataPoints[(len(basal_dataPoints)*.7):]
-        self.trainLuminal = luminal_dataPoints[0:(len(luminal_dataPoints)*.7)]
-        self.testLuminal = luminal_dataPoints[(len(luminal_dataPoints)*.7):]
+        trainTestRatio = math.floor(len(basal_dataPoints) * .7)
+        self.trainBasal = basal_dataPoints[0:trainTestRatio]
+        self.testBasal = basal_dataPoints[trainTestRatio:]
+        self.trainLuminal = luminal_dataPoints[0:trainTestRatio]
+        self.testLuminal = luminal_dataPoints[trainTestRatio:]
 
         return basal_dataPoints, luminal_dataPoints
 
