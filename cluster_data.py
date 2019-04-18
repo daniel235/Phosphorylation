@@ -2,9 +2,26 @@ import numpy as np
 from sklearn.utils import shuffle
 import pipe_line as pipe
 import math
+from scipy.stats import stats
+from astropy import stats
 
 
 class ClusterData:
+    '''This class creates the prepared data for the knn and also hierarchy clustering
+    functions.  
+
+    All functions are separated by underscores
+
+    returns datasets for basal and luminal types.
+
+    Also creates the y data to test against data.
+
+    Automatically separates data into train and test set
+    
+    Returns:
+        prepared data for clustering algorithms as class properties -> (self.trainBasal)
+    '''
+
     def __init__(self):
         self.basal_data = None
         self.pipe_object = pipe.Pipe_line()
@@ -52,6 +69,8 @@ class ClusterData:
         for psite in self.trainBasal:
             index = self.pipe_object.find_kinase(psite)
 
+    #correlation kmeans
+
 
     ########### Luminal Functions #############
     #leave out test set
@@ -65,3 +84,10 @@ class ClusterData:
     def get_y_luminal_data(self):
         pass
     
+    def get_luminal_correlation(self):
+        pass
+
+
+    #!bicor function data
+    def get_basal_bicor_correlation_matrix(self):
+        psiteTable = self.get_basal_training_data()

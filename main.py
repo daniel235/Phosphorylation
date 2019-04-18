@@ -5,7 +5,7 @@ import pipe_line as pipe
 import protein_interaction_predictor as protein_interaction
 import svm
 import cluster_data as cd
-import knn as k
+import kmeans as k
 
 #grab data
 #package data together
@@ -24,8 +24,8 @@ pipe_object.grab_substrates('EIF2AK1')
 
 startCluster = cd.ClusterData()
 
-knn = k.Knn_cluster()
-knn.run_knn()
+kmeans = k.Kmeans_cluster()
+kmeans.run_kmeans()
 
 '''
 #protein interaction network
