@@ -25,10 +25,12 @@ class ClusterData:
     def __init__(self):
         self.basal_data = None
         self.pipe_object = pipe.Pipe_line()
+        self.basal_pVector = []
+        self.luminal_pVector = []
         self.trainBasal, self.trainLuminal = self.get_training_data()
         self.testBasal = None
         self.testLuminal = None
-        
+
     #grab training data from phosphosite database
     def get_training_data(self):
         phosphosite_data = np.array(self.pipe_object.phosphorylation)
@@ -38,13 +40,20 @@ class ClusterData:
         #grab dimension of data
         for count in range(len(phosphosite_data)):
             p = phosphosite_data[count]
+            temp = []
+            temp2 = []
             for i in range(1, 19):
                 if i <= 9:
                     #adding name of psite and phosphorylation data
                     basal_dataPoints.append([p[0],p[i]])
+                    temp.append(p[i])
                 else:
                     luminal_dataPoints.append([p[0], p[i]])
+                    temp2.append(p[i])
  
+            self.basal_pVector.append(temp)
+            self.luminal_pVector.append(temp2)
+
         #shuffle data 
         basal_dataPoints, luminal_dataPoints = shuffle(basal_dataPoints, luminal_dataPoints)
         trainTestRatio = math.floor(len(basal_dataPoints) * .7)
@@ -90,4 +99,21 @@ class ClusterData:
 
     #!bicor function data
     def get_basal_bicor_correlation_matrix(self):
-        psiteTable = self.get_basal_training_data()
+        luminal_data = self.luminal_pVector
+        basal_data = self.basal_pVector
+        bcors = []
+
+        for i in range(len(basal_data)):
+            print(i)
+            for j in range(i + 1, len(basal_data)):
+                if(i != j):
+                    bcors.append(stats.biweight_midcorrelation(self.basal_pVector[i], self.basal_pVector[j]))
+
+        print(bcors)
+
+        
+
+
+        
+
+

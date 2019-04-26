@@ -1,7 +1,11 @@
 from sklearn.cluster import KMeans
 import numpy as np
 import cluster_data as cd
-import jenkspy
+from google.cloud import storage
+from oauth2client.service_account import ServiceAccountCredentials
+import os
+
+
 
 #parameters 
 class Kmeans_cluster:
@@ -30,20 +34,20 @@ class Kmeans_cluster:
 
         self.kmeans(xCol)
 
-    #jenks algorithm
-    def JenksAlgo(self, x):
-        breaks = jenkspy.jenks_breaks(x, nb_class=self.clusters)
-        print(breaks)
+    def send_file(self):
+        credentials_dict = {
+            'type' : 'service_account'
+            'client_id': os.environ['BACKUP_CLIENT_ID'],
+            'client_email': os.environ['BACKUP_CLIENT_EMAIL'],
+            'private_key_id': os.environ['BACKUP_PRIVATE_KEY_ID'],
+            'private_key': os.environ['BACKUP_PRIVATE_KEY'],
+        }
 
-    def runJenks(self):
-        x = self.startCluster.get_basal_training_data()
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict)
 
-        xCol = []
-        #get phosphorylation column data
-        for i in range(len(x)):
-            xCol.append(x[i][1])
-
-
-        self.JenksAlgo(xCol)
+        client = storage.Client(credentials=credentials, project='myproject')
+        bucket = client.get_bucket('mybucket')
+        blob = bucket.blob('myfile')
+        blob.upload_from_filename('myfile')
 
 

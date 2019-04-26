@@ -6,9 +6,22 @@ import protein_interaction_predictor as protein_interaction
 import svm
 import cluster_data as cd
 import kmeans as k
+from google.cloud import storage
 
 #grab data
 #package data together
+
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
+    """Uploads a file to the bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+
+    print('File {} uploaded to {}.'.format(
+        source_file_name,
+        destination_blob_name))
 
 pipe_object = pipe.Pipe_line()
 data = pipe_object.get_data()
@@ -23,9 +36,9 @@ pipe_object.grab_substrates('EIF2AK1')
 
 
 startCluster = cd.ClusterData()
-
+startCluster.get_basal_bicor_correlation_matrix()
 kmeans = k.Kmeans_cluster()
-kmeans.run_kmeans()
+#kmeans.run_kmeans()
 
 '''
 #protein interaction network
@@ -39,5 +52,26 @@ model = tensor.Network(data, protein_objects, pipe_object)
 #call regression network to estimate paramters
 model.regression_network()'''
 
+def query_stackoverflow():
+    client = bigquery.Client()
+    query_job = client.query("""
+        SELECT
+          CONCAT(
+            'https://stackoverflow.com/questions/',
+            CAST(id as STRING)) as url,
+          view_count
+        FROM `bigquery-public-data.stackoverflow.posts_questions`
+        WHERE tags like '%google-bigquery%'
+        ORDER BY view_count DESC
+        LIMIT 10""")
+
+    results = query_job.result()  # Waits for job to complete.
+
+    for row in results:
+        print("{} : {} views".format(row.url, row.view_count))
+
+
+if __name__ == '__main__':
+    query_stackoverflow()
 
 
