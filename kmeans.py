@@ -36,7 +36,7 @@ class Kmeans_cluster:
 
     def send_file(self):
         credentials_dict = {
-            'type' : 'service_account'
+            'type' : 'service_account',
             'client_id': os.environ['BACKUP_CLIENT_ID'],
             'client_email': os.environ['BACKUP_CLIENT_EMAIL'],
             'private_key_id': os.environ['BACKUP_PRIVATE_KEY_ID'],
