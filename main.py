@@ -37,6 +37,7 @@ pipe_object.grab_substrates('EIF2AK1')
 
 startCluster = cd.ClusterData()
 startCluster.get_basal_bicor_correlation_matrix()
+k.send_file()
 kmeans = k.Kmeans_cluster()
 #kmeans.run_kmeans()
 

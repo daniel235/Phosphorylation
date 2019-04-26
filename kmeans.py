@@ -6,7 +6,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 
 
-
 #parameters 
 class Kmeans_cluster:
     def __init__(self):

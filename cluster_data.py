@@ -4,6 +4,7 @@ import pipe_line as pipe
 import math
 from scipy.stats import stats
 from astropy import stats
+import pickle
 
 
 class ClusterData:
@@ -110,6 +111,19 @@ class ClusterData:
                     bcors.append(stats.biweight_midcorrelation(self.basal_pVector[i], self.basal_pVector[j]))
 
         print(bcors)
+
+        #write bcors to pickle
+        fileName = "./pickles/bcorPickle"
+        fileObject = open(fileName, 'wb')
+
+        pickle.dump(bcors, fileObject)
+
+        #close file
+        fileObject.close()
+
+
+
+
 
         
 
