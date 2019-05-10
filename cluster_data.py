@@ -5,6 +5,7 @@ import math
 from scipy.stats import stats
 from astropy import stats
 import pickle
+import os
 
 
 class ClusterData:
@@ -94,33 +95,42 @@ class ClusterData:
     def get_y_luminal_data(self):
         pass
     
-    def get_luminal_correlation(self):
-        pass
-
 
     #!bicor function data
     def get_basal_bicor_correlation_matrix(self):
         luminal_data = self.luminal_pVector
         basal_data = self.basal_pVector
-        bcors = []
-
-        for i in range(len(basal_data)):
-            print(i)
-            for j in range(i + 1, len(basal_data)):
-                if(i != j):
-                    bcors.append(stats.biweight_midcorrelation(self.basal_pVector[i], self.basal_pVector[j]))
-
-        print(bcors)
-
-        #write bcors to pickle
+        #check for bcor value
         fileName = "./pickles/bcorPickle"
-        fileObject = open(fileName, 'wb')
+        '''if(os.stat(fileName).st_size != 0):
+            fileObject = open(fileName, 'r')
+            bcors = pickle.load(fileObject)
+        else:
+            for i in range(len(basal_data)):
+                print(i)
+                for j in range(i + 1, len(basal_data)):
+                    if(i != j):
+                        #bcors.append(stats.biweight_midcorrelation(self.basal_pVector[i], self.basal_pVector[j]))
+                        
 
-        pickle.dump(bcors, fileObject)
+            #write bcors to pickle
+            fileObject = open(fileName, 'wb')
 
-        #close file
-        fileObject.close()
+            pickle.dump(bcors, fileObject)
 
+            #close file
+            fileObject.close()
+        
+        '''
+        #pearson correlation
+        pearson = np.triu(np.corrcoef(basal_data))
+        
+        print(np.shape(pearson))
+        return pearson
+
+    #!bicor function data
+    def get_luminal_correlation_matrix(self):
+        pass
 
 
 
