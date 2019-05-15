@@ -19,34 +19,11 @@ class Kmeans_cluster:
 
     def run_kmeans(self):
         #grab training data
-        x = self.startCluster.get_basal_training_data()
-        xCol = []
-        #get phosphorylation column data
-        for i in range(len(x)):
-            xCol.append(x[i][1])
+        x = self.startCluster.get_basal_bicor_correlation_matrix()
+        shape = np.shape(x)
+        #grab indices of upper triangle 
+        xIndices = np.triu_indices(shape[0], shape[1])
+        
+    
 
-        #reshape data
-        xCol = np.array(xCol)
-        print(xCol)
-        xCol = xCol.reshape((-1,1))
-        print(xCol)
-
-        self.kmeans(xCol)
-
-    def send_file(self):
-        credentials_dict = {
-            'type' : 'service_account',
-            'client_id': os.environ['BACKUP_CLIENT_ID'],
-            'client_email': os.environ['BACKUP_CLIENT_EMAIL'],
-            'private_key_id': os.environ['BACKUP_PRIVATE_KEY_ID'],
-            'private_key': os.environ['BACKUP_PRIVATE_KEY'],
-        }
-
-        credentials = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict)
-
-        client = storage.Client(credentials=credentials, project='myproject')
-        bucket = client.get_bucket('mybucket')
-        blob = bucket.blob('myfile')
-        blob.upload_from_filename('myfile')
-
-
+    

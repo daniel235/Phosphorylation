@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.utils import shuffle
 import pipe_line as pipe
 import math
+import pandas as pd
 from scipy.stats import stats
 from astropy import stats
 import pickle
@@ -19,6 +20,8 @@ class ClusterData:
     Also creates the y data to test against data.
 
     Automatically separates data into train and test set
+
+    
     
     Returns:
         prepared data for clustering algorithms as class properties -> (self.trainBasal)
@@ -32,6 +35,8 @@ class ClusterData:
         self.trainBasal, self.trainLuminal = self.get_training_data()
         self.testBasal = None
         self.testLuminal = None
+        self.strongKinase = None
+        self.weakKinase = None
 
     #grab training data from phosphosite database
     def get_training_data(self):
@@ -98,30 +103,25 @@ class ClusterData:
 
     #!bicor function data
     def get_basal_bicor_correlation_matrix(self):
-        luminal_data = self.luminal_pVector
         basal_data = self.basal_pVector
         #check for bcor value
         fileName = "./pickles/bcorPickle"
-        '''if(os.stat(fileName).st_size != 0):
+        if(os.stat(fileName).st_size != 0):
             fileObject = open(fileName, 'r')
-            bcors = pickle.load(fileObject)
+            pearson = pickle.load(fileObject)
         else:
-            for i in range(len(basal_data)):
-                print(i)
-                for j in range(i + 1, len(basal_data)):
-                    if(i != j):
-                        #bcors.append(stats.biweight_midcorrelation(self.basal_pVector[i], self.basal_pVector[j]))
-                        
+            #pearson correlation
+            pearson = np.triu(np.corrcoef(basal_data))
 
             #write bcors to pickle
             fileObject = open(fileName, 'wb')
 
-            pickle.dump(bcors, fileObject)
+            pickle.dump(pearson, fileObject)
 
             #close file
             fileObject.close()
         
-        '''
+        
         #pearson correlation
         pearson = np.triu(np.corrcoef(basal_data))
         
@@ -130,9 +130,29 @@ class ClusterData:
 
     #!bicor function data
     def get_luminal_correlation_matrix(self):
-        pass
+        luminal_data = self.luminal_pVector
 
+        pearson = np.triu(np.corrcoef(luminal_data))
 
+        return pearson
+
+    #set number of substrates to put kinases in rich/poor class
+    def set_arbitrary_kinase_class(self, n):
+        kinaseDict = {}
+        kinaseData = pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t")
+        
+        #set numbers of 
+        for i in range(len(kinaseData)):
+            keys = kinaseData["Kinase"][i]
+            if keys in kinaseDict: 
+                kinaseDict[keys] += 1
+
+            else:
+                kinaseDict[keys] = 1
+
+        
+
+        print(kinaseDict)
 
 
         
