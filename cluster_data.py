@@ -35,8 +35,8 @@ class ClusterData:
         self.trainBasal, self.trainLuminal = self.get_training_data()
         self.testBasal = None
         self.testLuminal = None
-        self.strongKinase = None
-        self.weakKinase = None
+        self.strongKinase = []
+        self.weakKinase = []
 
     #grab training data from phosphosite database
     def get_training_data(self):
@@ -109,6 +109,7 @@ class ClusterData:
         if(os.stat(fileName).st_size != 0):
             fileObject = open(fileName, 'r')
             pearson = pickle.load(fileObject)
+            fileObject.close()
         else:
             #pearson correlation
             pearson = np.triu(np.corrcoef(basal_data))
@@ -121,9 +122,6 @@ class ClusterData:
             #close file
             fileObject.close()
         
-        
-        #pearson correlation
-        pearson = np.triu(np.corrcoef(basal_data))
         
         print(np.shape(pearson))
         return pearson
@@ -139,6 +137,7 @@ class ClusterData:
     #set number of substrates to put kinases in rich/poor class
     def set_arbitrary_kinase_class(self, n):
         kinaseDict = {}
+        names = []
         kinaseData = pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t")
         
         #set numbers of 
@@ -149,10 +148,20 @@ class ClusterData:
 
             else:
                 kinaseDict[keys] = 1
+                names.append(keys)
 
-        
-
+    
         print(kinaseDict)
+
+        #separate kinases
+        for i in range(len(kinaseDict)):
+            if kinaseDict[names[i]] > n:
+                self.strongKinase.append(names[i])
+                print("strong ", names[i])
+            else:
+                self.weakKinase.append(names[i])
+                print("weak ", names[i])
+
 
 
         
