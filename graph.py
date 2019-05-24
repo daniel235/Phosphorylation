@@ -1,6 +1,6 @@
 import pandas as pd
 
-
+#create graph data for cytoscape
 class Graph:
     '''
         This class creates the graph using the weight of edges
@@ -53,11 +53,25 @@ class Graph:
         return edge
 
 
+    def connectGraph(self):
+        nodesStillNeeded = self.kinaseNodesNames
+        for i in range(len(nodesStillNeeded)):
+            if not nodesStillNeeded:
+                return 
+            #create edge between nodes neighbors 
+            #grab node
+            index = self.kinaseNodesNames.index(nodesStillNeeded[i])
+            node = self.kinaseNodes[index]
+
+            for j in node.neighbors:
+                pass
+
+
 
     def createGraph(self):
         for i in range(len(self.kinaseData)):
             #grab substrate object
-            s = self.kinaseData[i][1]
+            s = self.kinaseData["Substrate"][i]
             s = self.grabEdge(s)
 
             #check if kinase in nodes
@@ -78,10 +92,10 @@ class Graph:
                 else:
                     node.neighbors[subNodes[i]] = 1
 
+        self.connectGraph()
+
                 
         
-
-
 
 class Node:
     def __init__(self, name):
@@ -90,13 +104,13 @@ class Node:
         self.neighbors = {}
 
     def add(self, substrate):
-        edge = Edge(substrate)
+        edge = SubEdge(substrate)
         self.edges.append(edge)
 
             
         
 
-class Edge:
+class SubEdge:
     def __init__(self, name):
         self.name = name
         self.nodes = []
@@ -104,3 +118,12 @@ class Edge:
     #add node object 
     def addNode(self, node):
         self.nodes.append(node)
+
+
+class Edge:
+    def __init__(self, node1, node2):
+        self.pair = (node1, node2)
+        self.weight = 0
+
+
+

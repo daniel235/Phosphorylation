@@ -6,6 +6,7 @@ import protein_interaction_predictor as protein_interaction
 import svm
 import cluster_data as cd
 import kmeans as k
+import graph 
 
 #grab data
 #package data together
@@ -21,9 +22,11 @@ protein_objects = pipe_object.find_matching_data(d)
 
 pipe_object.grab_substrates('EIF2AK1')
 
+graphs = graph.Graph()
+graphs.createGraph()
 
-startCluster = cd.ClusterData()
-startCluster.set_arbitrary_kinase_class(3)
+#startCluster = cd.ClusterData()
+#startCluster.set_arbitrary_kinase_class(3)
 #startCluster.get_basal_bicor_correlation_matrix()
 #k.send_file()
 #kmeans = k.Kmeans_cluster()
