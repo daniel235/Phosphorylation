@@ -78,7 +78,7 @@ class Graph:
                     e.weight = value 
 
                     #write to file
-                    f.write(e.pair[0].name + " " + str(e.weight) + " " + e.pair[1].name)
+                    f.write(e.pair[0].name + " " + str(e.weight) + " " + e.pair[1].name + "\n")
 
                     #remove from to do list / assuming neighbors are node objects(not sure)
                     #nodesStillNeeded.remove(neigh.name)
