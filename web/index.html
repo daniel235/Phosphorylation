@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            #cy {
-                width: 100%;
-            }
-        </style>
         <script
             src="https://code.jquery.com/jquery-3.4.1.js"
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
             crossorigin="anonymous"></script>
+        <script data-main="scripts/main" src="./js/require.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.6.2/cytoscape.min.js"></script>
-        <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
         <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.5.0/cytoscape-dagre.js"></script>
         <script src="./js/networks.js"></script>
         <script src="./js/styles.js"></script>
 
     </head>
+    <style>
+            #cy {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+            }
+    </style>
     <body>
         <div id="cy">
         </div>

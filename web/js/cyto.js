@@ -1,3 +1,5 @@
+requirejs();
+
 
 var cy = cytoscape({
     container: document.getElementById('cy'),
@@ -24,7 +26,6 @@ var cy = cytoscape({
     autounselectify: false,
 
     layout: 'dagre',
-
 });
 
 
