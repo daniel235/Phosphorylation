@@ -36,7 +36,7 @@ class Graph:
         self.edgeNames.append(substrate)
 
         #create edge
-        e = Edge(substrate)
+        e = SubEdge(substrate)
         self.edges.append(e)
 
         return e 
@@ -55,24 +55,44 @@ class Graph:
 
     def connectGraph(self):
         nodesStillNeeded = self.kinaseNodesNames
-        for i in range(len(nodesStillNeeded)):
-            if not nodesStillNeeded:
-                return 
-            #create edge between nodes neighbors 
-            #grab node
-            index = self.kinaseNodesNames.index(nodesStillNeeded[i])
-            node = self.kinaseNodes[index]
 
-            for j in node.neighbors:
-                pass
+        #create sif file
+        filename = "./graph.sif"
+        with open(filename, 'a') as f:
+            for i in range(len(nodesStillNeeded)):
+                if not nodesStillNeeded:
+                    return 
+                #create edge between nodes neighbors 
+                #grab node
+                index = self.kinaseNodesNames.index(nodesStillNeeded[i])
+                node = self.kinaseNodes[index]
+                newLen = len(nodesStillNeeded)
+
+                print("before loop")
+                print(node.name)
+                print(len(node.neighbors))
+                for neigh, value in node.neighbors.items():
+                    print(neigh)
+                    #add edges 
+                    e = Edge(node, neigh)
+                    e.weight = value 
+
+                    #write to file
+                    f.write(e.pair[0].name + " " + str(e.weight) + " " + e.pair[1].name)
+
+                    #remove from to do list / assuming neighbors are node objects(not sure)
+                    #nodesStillNeeded.remove(neigh.name)
 
 
-
+    
     def createGraph(self):
         for i in range(len(self.kinaseData)):
             #grab substrate object
             s = self.kinaseData["Substrate"][i]
+            print("substrate " + s)
             s = self.grabEdge(s)
+            print(s.nodes)
+
 
             #check if kinase in nodes
             if self.kinaseData["Kinase"][i] in self.kinaseNodesNames:
@@ -82,16 +102,20 @@ class Graph:
             else:
                 node = self.createNode(self.kinaseData["Kinase"][i])
 
+
+            #add node to this sub edge
+            s.nodes.append(node)
             #grab nodes associated with this substrate
             subNodes = s.nodes
 
             #create neighbors or add neighbors to this node
             for i in range(len(subNodes)):
-                if subNodes[i] in node.neighbors:
+                if subNodes[i] in node.neighbors:  
                     node.neighbors[subNodes[i]] += 1
                 else:
                     node.neighbors[subNodes[i]] = 1
 
+        print("connect graph now")
         self.connectGraph()
 
                 
