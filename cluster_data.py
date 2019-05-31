@@ -5,6 +5,7 @@ import math
 import pandas as pd
 from scipy.stats import stats
 from astropy import stats
+from sklearn.decomposition import PCA
 import pickle
 import os
 
@@ -107,9 +108,9 @@ class ClusterData:
         #check for bcor value
         fileName = "./pickles/bcorPickle"
         if(os.stat(fileName).st_size != 0):
-            fileObject = open(fileName, 'r')
-            pearson = pickle.load(fileObject)
-            fileObject.close()
+            with open(fileName, 'rb') as f:
+                pearson = pickle.load(f)
+           
         else:
             #pearson correlation
             pearson = np.triu(np.corrcoef(basal_data))
@@ -163,8 +164,35 @@ class ClusterData:
                 print("weak ", names[i])
 
 
+    def pca(self, corrMatr):
+        #svd(single value decomposition) of correlation matrix
+        u, s, vh = np.linalg.svd(corrMatr)
+        print(u.shape)
+        print(s.shape)
+        print(vh.shape)
+        print(s)
 
-        
+        #get rank cutoff for data dimension
+        r = 2
+
+        pca = PCA(n_components=r)
+
+        pcs = pca.fit_transform(corrMatr)
+        pcDf = pd.DataFrame(data=pcs, columns=['principal component 1', 'principal component 2'])
+        print(pcDf)
+
+        return u, s, vh
+
+    def sampleCorrelationMatrix(self):
+        temp = []
+        for i in range(5):
+            temp.append(self.basal_pVector[i])
+
+        temp = np.corrcoef(temp)
+        print(temp)
+        self.pca(temp)
+
+
 
 
         
