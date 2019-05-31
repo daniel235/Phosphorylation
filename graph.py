@@ -110,7 +110,7 @@ class Graph:
 
             #create neighbors or add neighbors to this node
             for i in range(len(subNodes)):
-                if subNodes[i] in node.neighbors:  
+                if subNodes[i] in node.neighbors and subNodes[i] != node:
                     node.neighbors[subNodes[i]] += 1
                 else:
                     node.neighbors[subNodes[i]] = 1
@@ -148,6 +148,4 @@ class Edge:
     def __init__(self, node1, node2):
         self.pair = (node1, node2)
         self.weight = 0
-
-
 
