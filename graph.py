@@ -57,7 +57,7 @@ class Graph:
         nodesStillNeeded = self.kinaseNodesNames
 
         #create sif file
-        filename = "./graph.sif"
+        filename = "./graphMod.sif"
         with open(filename, 'a') as f:
             for i in range(len(nodesStillNeeded)):
                 if not nodesStillNeeded:
@@ -78,12 +78,14 @@ class Graph:
                     e.weight = value 
 
                     #write to file
-                    f.write(e.pair[0].name + " " + str(e.weight) + " " + e.pair[1].name + "\n")
+                    if(e.weight != 1):
+                        f.write(e.pair[0].name + " " + e.pair[1].name + " " + str(e.weight) + "\n")
 
                     #remove from to do list / assuming neighbors are node objects(not sure)
                     #nodesStillNeeded.remove(neigh.name)
 
-
+        #!todo cutoff
+        #plot histogram of kinase to cutoff
     
     def createGraph(self):
         for i in range(len(self.kinaseData)):

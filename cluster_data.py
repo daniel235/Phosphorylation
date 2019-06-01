@@ -38,6 +38,8 @@ class ClusterData:
         self.testLuminal = None
         self.strongKinase = []
         self.weakKinase = []
+        self.kinaseFile = "./data/Kinase_Substrates.txt"
+        self.kinaseData = pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t")
 
     #grab training data from phosphosite database
     def get_training_data(self):
@@ -121,7 +123,7 @@ class ClusterData:
             pickle.dump(pearson, fileObject)
 
             #close file
-            fileObject.close()
+            fileObject.cl23ose()
         
         
         print(np.shape(pearson))
@@ -191,6 +193,17 @@ class ClusterData:
         temp = np.corrcoef(temp)
         print(temp)
         self.pca(temp)
+
+    #?grab substrates of kinase passed in
+    def grab_substrates(self, kinase):
+        substrate_matrix = []
+        for i in range(len(self.kinaseData["Kinase"])):
+            if(self.kinaseData["Kinase"][i] == kinase):
+                sub = self.kinaseData["Substrate"][i]
+                
+
+    def get_kinase_substrate_matrixes(self):
+        pass
 
 
 

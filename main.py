@@ -22,12 +22,12 @@ protein_objects = pipe_object.find_matching_data(d)
 
 pipe_object.grab_substrates('EIF2AK1')
 
-#graphs = graph.Graph()
-#graphs.createGraph()
+graphs = graph.Graph()
+graphs.createGraph()
 
-startCluster = cd.ClusterData()
+#startCluster = cd.ClusterData()
 #startCluster.set_arbitrary_kinase_class(3)
-startCluster.sampleCorrelationMatrix()
+#startCluster.sampleCorrelationMatrix()
 #bicor = startCluster.get_basal_bicor_correlation_matrix()
 #startCluster.pca(bicor)
 #k.send_file()
