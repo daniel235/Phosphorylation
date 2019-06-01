@@ -185,21 +185,23 @@ class ClusterData:
 
         return u, s, vh
 
-    def sampleCorrelationMatrix(self):
-        temp = []
-        for i in range(5):
-            temp.append(self.basal_pVector[i])
-
-        temp = np.corrcoef(temp)
-        print(temp)
-        self.pca(temp)
-
     #?grab substrates of kinase passed in
-    def grab_substrates(self, kinase):
+    def grab_substrates(self, kinase, fileOrdered=False):
         substrate_matrix = []
+        substrate_names = []
+        start = False
         for i in range(len(self.kinaseData["Kinase"])):
             if(self.kinaseData["Kinase"][i] == kinase):
-                sub = self.kinaseData["Substrate"][i]
+                start = True
+                substrate_names.append(self.kinaseData["Substrate"][i])
+
+            #this should stop loop once kinase name is passed (since its alphabetical)
+            elif(start and fileOrdered):
+                break
+
+        #find substrate in phoshporylation data
+
+
                 
 
     def get_kinase_substrate_matrixes(self):
