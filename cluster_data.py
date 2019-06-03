@@ -38,8 +38,8 @@ class ClusterData:
         self.testLuminal = None
         self.strongKinase = []
         self.weakKinase = []
-        self.kinaseFile = "./data/Kinase_Substrates.txt"
-        self.kinaseData = pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t")
+        self.kinaseData = np.array(pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t"))
+        self.phosphorylationData = np.array(pd.read_csv("./data/phosphorylation_data.txt", delimiter="\t"))
 
     #grab training data from phosphosite database
     def get_training_data(self):
@@ -186,20 +186,60 @@ class ClusterData:
         return u, s, vh
 
     #?grab substrates of kinase passed in
-    def grab_substrates(self, kinase, fileOrdered=False):
+    def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
         substrate_matrix = []
         substrate_names = []
         start = False
-        for i in range(len(self.kinaseData["Kinase"])):
-            if(self.kinaseData["Kinase"][i] == kinase):
+        mid = int(len(self.phosphorylationData) / 2)
+        current = mid
+        prevMid = 0
+        print(mid)
+        for i in range(len(self.kinaseData)):
+            if self.kinaseData[i][0] == kinase:
                 start = True
-                substrate_names.append(self.kinaseData["Substrate"][i])
+                substrate_names.append(self.kinaseData[i][1])
+                substrate = self.kinaseData[i][1]
+                print("wanted " + substrate)
+                #find substrate in phosphorylation data
+                #binary search the data
+                if PhosDataOrdered:
+                    mins = 0
+                    currentChar = 1
+                    while(mid > 0 and prevMid != mid):
+                        index = self.phosphorylationData[int(current)][0]
+                        print("current substrate " + index)
+                        if substrate != index:
+                            prevMid = mid
+                            mid = int(mid / 2)
+                            
+                            if substrate > index:
+                                #set index to half of mid + mid
+                                mins = current
+                                current = int(mid + mins)
+                                print("higher ", current, " mid ", mid, " min ", mins)
 
+
+                            else:
+                                current = int(mid + mins)
+                                print("lower" + str(current))
+                
+                        
+                        #found substrate
+                        else:
+                            print("found " + substrate + " " + index)
+                            break
+                
+                #brute force 
+                else:
+                    pass
+
+
+                
             #this should stop loop once kinase name is passed (since its alphabetical)
-            elif(start and fileOrdered):
+            elif(start and kinaseFileOrdered and self.kinaseData[i][0] != kinase):
                 break
 
-        #find substrate in phoshporylation data
+        return substrate_names
 
 
                 

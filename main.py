@@ -11,21 +11,12 @@ import graph
 #grab data
 #package data together
 
-pipe_object = pipe.Pipe_line()
-data = pipe_object.get_data()
-
-proteins = []
-d = np.array([data[2], data[0]])
-
-#array of protein objects
-protein_objects = pipe_object.find_matching_data(d)
-
-pipe_object.grab_substrates('EIF2AK1')
 
 #graphs = graph.Graph()
 #graphs.createGraph()
 
-#startCluster = cd.ClusterData()
+startCluster = cd.ClusterData()
+startCluster.grab_substrates("'EIF2AK1'", True, True)
 #startCluster.set_arbitrary_kinase_class(3)
 #startCluster.sampleCorrelationMatrix()
 #bicor = startCluster.get_basal_bicor_correlation_matrix()
