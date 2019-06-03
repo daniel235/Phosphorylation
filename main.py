@@ -16,7 +16,7 @@ import graph
 #graphs.createGraph()
 
 startCluster = cd.ClusterData()
-startCluster.grab_substrates("'EIF2AK1'", True, True)
+startCluster.grab_substrates("'CDK1'", True, True)
 #startCluster.set_arbitrary_kinase_class(3)
 #startCluster.sampleCorrelationMatrix()
 #bicor = startCluster.get_basal_bicor_correlation_matrix()
