@@ -185,6 +185,18 @@ class ClusterData:
 
         return u, s, vh
 
+    def count_substrates(self, kinase, ordered=False):
+        start = False
+        subCount = 0
+        indexRange = []
+        for i in range(len(self.kinaseData)):
+            if self.kinaseData[i][0] == kinase:
+                start = True
+
+            #this should stop loop once kinase name is passed (since its alphabetical)
+            elif(start and ordered and self.kinaseData[i][0] != kinase):
+                break
+                
     #?grab substrates of kinase passed in
     def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
         substrate_matrix = []
@@ -205,46 +217,41 @@ class ClusterData:
                 #binary search the data
                 if PhosDataOrdered:
                     mins = 0
-                    currentChar = 1
                     while(mid > 0 and prevMid != mid):
                         #if not found
                         if prevMid == mid:
                             break
 
+                        #substrate at current index
                         index = self.phosphorylationData[int(current)][0]
-                        if index == 'MAP4-S787':
-                            print("got index ", index , " ", substrate)
-
-                        if substrate == "'MAP4-S787'":
-                            print("current ", current)
                         
+                        #didn't find substrate
                         if substrate != index:
                             prevMid = mid
                             mid = int(mid / 2)
                             
+                            #move to top portion of list
                             if substrate > index:
                                 #set index to half of mid + mid
                                 mins = current
                                 current = int(mid + mins)
 
-
+                            #move to bottom portion of list
                             else:
                                 current = int(mid + mins)
                 
                         #found substrate
                         else:
                             #add substrate to names and add it's data row to matrix
-                            print("found " + substrate + " " + index)
                             substrate_names.append(substrate)
                             data = []
-                            for i in range(len(self.phosphorylationData[current])):
+                            for i in range(1, len(self.phosphorylationData[current])):
                                 data.append(self.phosphorylationData[current][i])
 
                             substrate_matrix.append(data)
-                            print(substrate_matrix)
                             break
                 
-                #brute force 
+                #brute force search the data
                 else:
                     pass
 
@@ -252,17 +259,21 @@ class ClusterData:
                 
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and kinaseFileOrdered and self.kinaseData[i][0] != kinase):
-                print("break")
                 break
 
-        return substrate_names
+        return substrate_names, substrate_matrix
 
 
                 
 
-    def get_kinase_substrate_matrixes(self):
-        pass
+    def get_kinase_substrate_matrixes(self, threshold):
+        kinase_matrixes = []
+        substrate_threshold = threshold
+        kinases = list(set(self.kinaseData[:,0]))
+        for i in range(len(kinases)):
+            self.grab_substrates(kinases[i], True, True)
 
+        print(kinases)
 
 
 
