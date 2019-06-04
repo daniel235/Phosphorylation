@@ -188,22 +188,29 @@ class ClusterData:
     def count_substrates(self, kinase, ordered=False):
         start = False
         subCount = 0
-        indexRange = []
+        indexRange = {"start": 0, "end": 0}
         for i in range(len(self.kinaseData)):
             if self.kinaseData[i][0] == kinase:
-                start = True
+                if not start:
+                    indexRange["start"] = i
+                    start = True
 
+                subCount += 1
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and ordered and self.kinaseData[i][0] != kinase):
+                indexRange["end"] = i
                 break
+
+        
+        return subCount, indexRange
                 
     #?grab substrates of kinase passed in
-    def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
+    def grab_substrates(self, kinase, start, end, kinaseFileOrdered=False, PhosDataOrdered=False):
         substrate_matrix = []
         substrate_names = []
         start = False
     
-        for i in range(len(self.kinaseData)):
+        for i in range(start, end):
             if self.kinaseData[i][0] == kinase:
                 #?logic controllers
                 mid = int(len(self.phosphorylationData) / 2)
@@ -211,7 +218,6 @@ class ClusterData:
                 start = True
                 prevMid = 0
                 substrate = self.kinaseData[i][1]
-                print("sub ", substrate)
             
                 #find substrate in phosphorylation data
                 #binary search the data
@@ -265,15 +271,27 @@ class ClusterData:
 
 
                 
-
+    #returns kinase matrix dictionary
     def get_kinase_substrate_matrixes(self, threshold):
-        kinase_matrixes = []
-        substrate_threshold = threshold
+        kinase_matrixes = {}
+        substrates = {}
+        names = []
+        data = []
+
         kinases = list(set(self.kinaseData[:,0]))
         for i in range(len(kinases)):
-            self.grab_substrates(kinases[i], True, True)
+            count, ranges = self.count_substrates(kinases[i], ordered=True)
+            substrates = {}
+            if count >= threshold:
+                names, data = self.grab_substrates(kinases[i], ranges["start"], ranges["end"], True, True)
+                for i in range(len(names)):
+                    if len(names) > threshold:
+                        substrates[names[i]] = data[i]
+                    
+                kinase_matrixes[kinases[i]] = substrates
 
-        print(kinases)
+        print(kinase_matrixes)
+        return kinase_matrixes
 
 
 
