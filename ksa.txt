@@ -1,21 +1,21 @@
-<built-in method keys of dict object at 0x0000018274F22360> 12 
-<built-in method keys of dict object at 0x0000018274F22360> 12 
-<built-in method keys of dict object at 0x0000018274F22360> 12 
-<built-in method keys of dict object at 0x0000018274F22360> 12 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
-<built-in method keys of dict object at 0x0000018274F22558> 11 
+'EIF2AK3' ["'ELL-S309'", "'ULK1-S758'", "'OXSR1-S339'", "'ULK1-S638'", "'MAF1-S68'"] 
+'STK11' ["'ELL-S309'", "'ULK1-S758'", "'OXSR1-S339'", "'ULK1-S638'", "'MAF1-S68'"] 
+'MARK1' ["'ELL-S309'", "'ULK1-S758'", "'OXSR1-S339'", "'ULK1-S638'", "'MAF1-S68'"] 
+'PIK3CA' ["'ELL-S309'", "'ULK1-S758'", "'OXSR1-S339'", "'ULK1-S638'", "'MAF1-S68'"] 
+'HCK' ["'ELL-S309'", "'ULK1-S758'", "'OXSR1-S339'", "'ULK1-S638'", "'MAF1-S68'"] 
+'MAPKAPK5' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'PRKG1' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'BRSK1' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'MAP3K6' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'STK39' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'MAPKAPK3' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'CDKL5' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'ACVRL1' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'GSK3B' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'PRKDC' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'PDK3' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'MAP4K3' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'MAPK8' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'TEK' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'PIKFYVE' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 
+'STK26' ["'IREB2-S157'", "'MAP4-S696'", "'PKN2-S535'", "'RCC1-S11'", "'STMN1-S25'", "'SCML2-S511'", "'HMGN5-T31'", "'CDC23-T562'", "'BRCA1-S1191'", "'AAK1-T389'", "'KAT7-T88'", "'BUB1B-S670'", "'EFHD2-S74'", "'NUP98-S606'", "'SCML2-S590'", "'FOXK2-S428'", "'KIF11-T926'", "'LATS1-S613'", "'TPX2-S738'", "'TOP2A-S1213'", "'MAP4-S787'"] 

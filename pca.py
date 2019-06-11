@@ -9,7 +9,7 @@ import graph
 
 #grab kinase matrixes
 def getMatrix():
-    myMatrix, subLength = cluster_data.ClusterData().get_kinase_substrate_matrixes(3)
+    myMatrix, subLength = cluster_data.ClusterData().get_kinase_substrate_matrixes(1)
     return myMatrix, subLength
 
 #plot histogram count of number of substrates
@@ -49,13 +49,12 @@ def visualizeDataApp():
     #todo only getting two kinases?
     #write to file
     with open('ksa.txt', 'w+') as f:
-        for kinase in matrix.values():
+        for kinase, bucket in matrix.items():
             sub = []
-            for substrate in kinase.keys():
+            for substrate in bucket:
                 sub.append(substrate)
-                
-            print(kinase, len(sub))
-            f.write(F'{kinase.keys} {len(substrate)} \n')
+            
+            f.write(F'{kinase} {sub} \n')
 
 
 

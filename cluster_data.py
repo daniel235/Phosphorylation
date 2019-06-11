@@ -205,9 +205,8 @@ class ClusterData:
         substrate_matrix = []
         substrate_names = []
         start = False
-
+        count = 0
         for i in range(len(self.kinaseData)):
-            count = 0
             if self.kinaseData[i][0] == kinase:
                 #?logic controllers
                 mid = int(len(self.phosphorylationData) / 2)
@@ -254,13 +253,15 @@ class ClusterData:
 
                             substrate_matrix.append(data)
                             break
+                        
+            
 
                 
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and kinaseFileOrdered and self.kinaseData[i][0] != kinase):
                 break
 
-        
+        print(kinase, " substrate count ", count)
         return substrate_names, substrate_matrix
 
                 
