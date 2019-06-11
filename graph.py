@@ -1,5 +1,5 @@
 import pandas as pd
-
+import cluster_data
 #create graph data for cytoscape
 class Graph:
     '''
@@ -120,8 +120,16 @@ class Graph:
         print("connect graph now")
         self.connectGraph()
 
-                
+
+    def createKinaseClassHistograms(self, n):
+        c = cluster_data.ClusterData()
+        c.set_arbitrary_kinase_class(n)
+        wKinase = c.weakKinase
+        rKinase = c.strongKinase
         
+        return wKinase, rKinase
+
+
 
 class Node:
     def __init__(self, name):

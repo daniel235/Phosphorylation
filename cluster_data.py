@@ -38,8 +38,10 @@ class ClusterData:
         self.testLuminal = None
         self.strongKinase = []
         self.weakKinase = []
+        self.kinaseCounts = []
         self.kinaseData = np.array(pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t"))
         self.phosphorylationData = np.array(pd.read_csv("./data/phosphorylation_data.txt", delimiter="\t"))
+        
 
     #grab training data from phosphosite database
     def get_training_data(self):
@@ -123,7 +125,7 @@ class ClusterData:
             pickle.dump(pearson, fileObject)
 
             #close file
-            fileObject.cl23ose()
+            fileObject.close()
         
         
         print(np.shape(pearson))
@@ -152,19 +154,15 @@ class ClusterData:
             else:
                 kinaseDict[keys] = 1
                 names.append(keys)
-
     
-        print(kinaseDict)
-
         #separate kinases
         for i in range(len(kinaseDict)):
             if kinaseDict[names[i]] > n:
                 self.strongKinase.append(names[i])
-                print("strong ", names[i])
             else:
                 self.weakKinase.append(names[i])
-                print("weak ", names[i])
-
+                
+    
 
     def pca(self, corrMatr):
         #svd(single value decomposition) of correlation matrix
@@ -188,29 +186,28 @@ class ClusterData:
     def count_substrates(self, kinase, ordered=False):
         start = False
         subCount = 0
-        indexRange = {"start": 0, "end": 0}
-        for i in range(len(self.kinaseData)):
+
+        for i in range(len(self.kinaseData)): 
             if self.kinaseData[i][0] == kinase:
                 if not start:
-                    indexRange["start"] = i
                     start = True
-
+                    
                 subCount += 1
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and ordered and self.kinaseData[i][0] != kinase):
-                indexRange["end"] = i
                 break
 
-        
-        return subCount, indexRange
+
+        return subCount
                 
     #?grab substrates of kinase passed in
-    def grab_substrates(self, kinase, start, end, kinaseFileOrdered=False, PhosDataOrdered=False):
+    def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
         substrate_matrix = []
         substrate_names = []
         start = False
-    
-        for i in range(start, end):
+
+        for i in range(len(self.kinaseData)):
+            count = 0
             if self.kinaseData[i][0] == kinase:
                 #?logic controllers
                 mid = int(len(self.phosphorylationData) / 2)
@@ -248,6 +245,7 @@ class ClusterData:
                 
                         #found substrate
                         else:
+                            count += 1
                             #add substrate to names and add it's data row to matrix
                             substrate_names.append(substrate)
                             data = []
@@ -256,19 +254,14 @@ class ClusterData:
 
                             substrate_matrix.append(data)
                             break
-                
-                #brute force search the data
-                else:
-                    pass
-
 
                 
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and kinaseFileOrdered and self.kinaseData[i][0] != kinase):
                 break
 
+        
         return substrate_names, substrate_matrix
-
 
                 
     #returns kinase matrix dictionary
@@ -277,22 +270,22 @@ class ClusterData:
         substrates = {}
         names = []
         data = []
+        substratesLength = []
 
         kinases = list(set(self.kinaseData[:,0]))
         for i in range(len(kinases)):
-            count, ranges = self.count_substrates(kinases[i], ordered=True)
+            count = self.count_substrates(kinases[i], ordered=False)
             substrates = {}
             if count >= threshold:
-                names, data = self.grab_substrates(kinases[i], ranges["start"], ranges["end"], True, True)
+                names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=True)
                 for i in range(len(names)):
                     if len(names) > threshold:
+                        substratesLength.append(len(names[i]))
                         substrates[names[i]] = data[i]
-                    
-                kinase_matrixes[kinases[i]] = substrates
+                        kinase_matrixes[kinases[i]] = substrates
 
-        print(kinase_matrixes)
-        return kinase_matrixes
-
+        
+        return kinase_matrixes, substratesLength
 
 
         
