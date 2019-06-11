@@ -54,8 +54,10 @@ def visualizeDataApp():
             for substrate in bucket:
                 sub.append(substrate)
             
-            f.write(F'{kinase} {sub} \n')
+            f.write(F'{kinase} {sub}')
 
 
+def printData():
+    print(cluster_data.ClusterData().phosphositePlusKinaseData)
 
-visualizeDataApp()
+printData()

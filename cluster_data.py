@@ -3,6 +3,7 @@ from sklearn.utils import shuffle
 import pipe_line as pipe
 import math
 import pandas as pd
+import xlrd 
 from scipy.stats import stats
 from astropy import stats
 from sklearn.decomposition import PCA
@@ -41,6 +42,9 @@ class ClusterData:
         self.kinaseCounts = []
         self.kinaseData = np.array(pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t"))
         self.phosphorylationData = np.array(pd.read_csv("./data/phosphorylation_data.txt", delimiter="\t"))
+        self.breastCancerData = pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", skiprows=2, dtype=object)
+        #self.breastCancerData = xlrd.open_workbook("./data/BreastCancerData.xlsx", encoding_override="cp1252").sheet_by_name("data")
+        self.phosphositePlusKinaseData = pd.read_csv("./data/KSA_human.txt", delim_whitespace=True)
         
 
     #grab training data from phosphosite database
