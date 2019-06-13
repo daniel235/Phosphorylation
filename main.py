@@ -15,8 +15,8 @@ import graph
 #graphs = graph.Graph()
 #graphs.createGraph()
 
-startCluster = cd.ClusterData()
-startCluster.get_kinase_substrate_matrixes(3)
+#startCluster = cd.ClusterData()
+#startCluster.get_kinase_substrate_matrixes(3)
 #startCluster.grab_substrates("'CDK1'", True, True)
 #startCluster.set_arbitrary_kinase_class(3)
 #startCluster.sampleCorrelationMatrix()
@@ -31,11 +31,11 @@ startCluster.get_kinase_substrate_matrixes(3)
 pInteract = protein_interaction.protein_interaction_net(protein_objects)
 #pInteract.network()
 
-#start network call
+#start network call'''
 model = tensor.Network(data, protein_objects, pipe_object)
-#model.cluster_network()
+model.cluster_network()
 
 #call regression network to estimate paramters
-model.regression_network()'''
+model.regression_network()
 
 

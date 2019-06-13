@@ -58,6 +58,7 @@ def visualizeDataApp():
 
 
 def printData():
-    print(cluster_data.ClusterData().phosphositePlusKinaseData)
+    dataframe = cluster_data.ClusterData().breastCancerData
+
 
 printData()

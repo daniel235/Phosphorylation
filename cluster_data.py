@@ -42,11 +42,20 @@ class ClusterData:
         self.kinaseCounts = []
         self.kinaseData = np.array(pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t"))
         self.phosphorylationData = np.array(pd.read_csv("./data/phosphorylation_data.txt", delimiter="\t"))
-        self.breastCancerData = pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", skiprows=2, dtype=object)
+        self.breastCancerData = pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", dtype=object)
         #self.breastCancerData = xlrd.open_workbook("./data/BreastCancerData.xlsx", encoding_override="cp1252").sheet_by_name("data")
-        self.phosphositePlusKinaseData = pd.read_csv("./data/KSA_human.txt", delim_whitespace=True)
+        self.phosphositePlusKinaseData = np.array(pd.read_csv("./data/KSA_human.txt", delim_whitespace=True))
+        self.clean_data()
         
-
+    #clean breast cancer data
+    def clean_data(self):
+        #set unique kinases
+        #strip na's
+        #strip columns
+        unique_kinases = self.phosphositePlusKinaseData[:,0]
+        print(unique_kinases)
+        
+        
     #grab training data from phosphosite database
     def get_training_data(self):
         phosphosite_data = np.array(self.pipe_object.phosphorylation)
@@ -259,8 +268,6 @@ class ClusterData:
                             break
                         
             
-
-                
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and kinaseFileOrdered and self.kinaseData[i][0] != kinase):
                 break
@@ -277,7 +284,9 @@ class ClusterData:
         data = []
         substratesLength = []
 
-        kinases = list(set(self.kinaseData[:,0]))
+        #kinases = list(set(self.kinaseData[:,0]))
+        #new kinase data
+        kinases = list(set(self.phosphositePlusKinaseData[:,0]))
         for i in range(len(kinases)):
             count = self.count_substrates(kinases[i], ordered=False)
             substrates = {}
