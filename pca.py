@@ -9,7 +9,7 @@ import graph
 
 #grab kinase matrixes
 def getMatrix():
-    myMatrix, subLength = cluster_data.ClusterData().get_kinase_substrate_matrixes(1)
+    myMatrix, subLength = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx").get_kinase_substrate_matrixes(1)
     return myMatrix, subLength
 
 #plot histogram count of number of substrates
@@ -58,7 +58,8 @@ def visualizeDataApp():
 
 
 def printData():
-    dataframe = cluster_data.ClusterData().breastCancerData
-
+    dataCenter = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx")
+    matrix, length = dataCenter.get_kinase_substrate_matrixes(2)
+    print(matrix)
 
 printData()

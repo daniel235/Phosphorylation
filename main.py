@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
 import network
-import pipe_line as pipe
-import protein_interaction_predictor as protein_interaction
-import svm
 import cluster_data as cd
 import kmeans as k
 import graph 
