@@ -15,8 +15,8 @@ def getMatrix():
 #plot histogram count of number of substrates
 def plotHistogram(n):
     matrix, subLength = getMatrix()
-    weak, rich = graph.Graph().createKinaseClassHistograms(n)
-    bucket = []
+    #weak, rich = graph.Graph().createKinaseClassHistograms(n)
+    #bucket = []
     #plt.hist(rich, bins='auto')
     #plt.show()
     
@@ -24,7 +24,6 @@ def plotHistogram(n):
     for kinase in matrix.values():
         bucket = []
         for substrate in kinase.values():
-            print(len(substrate))
             bucket.append(substrate)
 
         
@@ -32,7 +31,8 @@ def plotHistogram(n):
         principalComponents.append(pc)
         bucket = []
 
-    #print(principalComponents, "\n")
+    for pc in principalComponents:
+        print(pc, "\n")
 
 def getPcaVectors(matrix):
     pca = PCA(n_components=1)
@@ -62,4 +62,7 @@ def printData():
     matrix, length = dataCenter.get_kinase_substrate_matrixes(2)
     print(matrix)
 
-printData()
+
+#printData()
+visualizeDataApp()
+plotHistogram(2)

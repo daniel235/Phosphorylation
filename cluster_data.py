@@ -45,6 +45,23 @@ class ClusterData:
         self.unique_kinases = None
         self.clean_data()
         
+    def replace_with_average(self):
+        #for every element in array with na replace with average
+        #first get average of row
+        for i in range(len(self.breastCancerData)):
+            indexes = []
+            average = 0
+            
+            for j in range(2, len(self.breastCancerData[i])):
+                if np.isnan(self.breastCancerData[i,j]):
+                    indexes.append(j)
+                else:
+                    average += self.breastCancerData[i,j]
+
+            for k in indexes:
+                self.breastCancerData[i,k] = average
+
+
     #clean breast cancer data and create 
     #kinase matrix and phosphosite matrix
     def clean_data(self):
@@ -66,6 +83,9 @@ class ClusterData:
             #strip last letter
             self.breastCancerData[i,0] = (self.breastCancerData[i,0])[0:-2]
            
+        #fix Na's here
+        self.replace_with_average()
+
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])):
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
@@ -163,7 +183,7 @@ class ClusterData:
                             #add substrate to names and add it's data row to matrix
                             substrate_names.append(substrate)
                             data = []
-                            for i in range(1, len(self.breastCancerData[current])):
+                            for i in range(2, len(self.breastCancerData[current])):
                                 data.append(self.breastCancerData[current][i])
 
                             substrate_matrix.append(data)
