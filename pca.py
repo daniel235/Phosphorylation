@@ -9,12 +9,12 @@ import graph
 
 #grab kinase matrixes
 def getMatrix():
-    myMatrix, subLength = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx").get_kinase_substrate_matrixes(1)
-    return myMatrix, subLength
+    myMatrix = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx").get_kinase_substrate_matrixes(2)
+    return myMatrix
 
 #plot histogram count of number of substrates
 def plotHistogram(n):
-    matrix, subLength = getMatrix()
+    matrix = getMatrix()
     #weak, rich = graph.Graph().createKinaseClassHistograms(n)
     #bucket = []
     #plt.hist(rich, bins='auto')
@@ -44,25 +44,25 @@ def getPcaVectors(matrix):
 def visualizeDataApp():
     #create kinase and substrate association
     #matrix is dictionary
-    matrix, s = getMatrix()
-
+    matrix = getMatrix()
+    
     #todo only getting two kinases?
     #write to file
     with open('ksa.txt', 'w+') as f:
         for kinase, bucket in matrix.items():
             sub = []
-            for substrate in bucket:
+
+            for substrate, data in bucket.items():
                 sub.append(substrate)
-            
-            f.write(F'{kinase} {sub}')
+
+            f.write(F'{kinase} {sub}' + "\n")
 
 
 def printData():
     dataCenter = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx")
-    matrix, length = dataCenter.get_kinase_substrate_matrixes(2)
-    print(matrix)
-
-
+    matrix = dataCenter.get_kinase_substrate_matrixes(2)
+    
+    
 #printData()
-visualizeDataApp()
+#visualizeDataApp()
 plotHistogram(2)

@@ -92,6 +92,7 @@ class ClusterData:
         
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]
 
+        #self.print_data()
 
     #set number of substrates to put kinases in rich/poor class
     def set_arbitrary_kinase_class(self, n):
@@ -116,13 +117,19 @@ class ClusterData:
             else:
                 self.weakKinase.append(names[i])
                 
+    
+    #print lists
+    def print_data(self):
+        print(self.breastCancerData[:100,])
+        print(self.phosphositePlusKinaseData[:100,])
+        print(self.unique_kinases[:10])
   
     #todo modularize functions
     def count_substrates(self, kinase, ordered=False):
         start = False
         subCount = 0
 
-        for i in range(len(self.kinaseData)): 
+        for i in range(len(self.phosphositePlusKinaseData)): 
             if self.phosphositePlusKinaseData[i][0] == kinase:
                 if not start:
                     start = True
@@ -178,7 +185,6 @@ class ClusterData:
                 
                         #found substrate
                         else:
-                            print("found substrate")
                             count += 1
                             #add substrate to names and add it's data row to matrix
                             substrate_names.append(substrate)
@@ -194,12 +200,16 @@ class ClusterData:
             elif(start and kinaseFileOrdered and self.phosphositePlusKinaseData[i][0] != kinase):
                 break
 
-        print(kinase, " substrate count ", count)
+        #print(kinase, " substrate count ", count)
+        #print(kinase, substrate_names)
+        if kinase == "AURKA":
+            print("This is AURKA ", substrate_matrix)
+
         return substrate_names, substrate_matrix
 
                 
-    #returns kinase matrix dictionary
-    def get_kinase_substrate_matrixes(self, threshold):
+    #returns kinase matrix dictionary // Kinase is for testing purposes
+    def get_kinase_substrate_matrixes(self, threshold, kinase=None):
         kinase_matrixes = {}
         substrates = {}
         names = []
@@ -208,22 +218,28 @@ class ClusterData:
 
         #kinases = list(set(self.kinaseData[:,0]))
         #new kinase data
-        kinases = self.unique_kinases
-        for i in range(len(kinases)):
-            count = self.count_substrates(kinases[i], ordered=False)
-            substrates = {}
-            if count >= threshold:
-                names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=True)
-                for i in range(len(names)):
+        kinases = np.array(self.unique_kinases)
+        #todo hierarcharl clustering
+        
+      
+        with open("ksa2.txt", 'w+') as f:
+            for i in range(len(kinases)):
+                count = self.count_substrates(kinases[i], ordered=False)
+                substrates = {}
+                names = []
+                if count >= threshold: 
+                    names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=True)
+                    if kinases[i] == "AURKA":
+                        print("This is AURKA ", data)
                     if len(names) > threshold:
-                        substratesLength.append(len(names[i]))
-                        substrates[names[i]] = data[i]
-                        kinase_matrixes[kinases[i]] = substrates
+                        for j in range(len(names)):
+                            substrates[names[j]] = data[j]
+                            kinase_matrixes[kinases[i]] = substrates
+                            
 
-        
-        return kinase_matrixes, substratesLength
+                        f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
 
+        return kinase_matrixes
 
-        
 
 
