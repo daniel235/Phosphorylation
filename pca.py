@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+from numpy import linalg
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import cluster_data
@@ -13,34 +14,44 @@ def getMatrix():
     return myMatrix
 
 #plot histogram count of number of substrates
-def plotHistogram(n):
+def getSVDdata():
     matrix = getMatrix()
-    #weak, rich = graph.Graph().createKinaseClassHistograms(n)
-    #bucket = []
-    #plt.hist(rich, bins='auto')
-    #plt.show()
-    
-    principalComponents = []
-    for kinase in matrix.values():
-        bucket = []
-        for substrate in kinase.values():
-            bucket.append(substrate)
+
+    with open("svd.txt", 'w+') as f: 
+        f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
+        f.write("X = U(SIG)V*\n\n")
+        f.write("X shape (nxm)\n\n")
+        f.write("U shape (nxn)\n\n")
+        f.write("(SIG) shape (nx1)\n\n")
+        f.write("V shape (nxm)\n\n")
 
         
-        pc = getPcaVectors(bucket)
-        principalComponents.append(pc)
-        bucket = []
+        for kinase, data in matrix.items():
+            bucket = []
+            for substrate in data.values():
+                bucket.append(substrate)
 
-    for pc in principalComponents:
-        print(pc, "\n")
+            #pc = getPcaVectors(bucket)
+            u, s, vt = getSVD(bucket)
+            f.write("Kinase " + str(kinase) + "\n" + "Singular Vector U \n" + str(u) + "\n" + "Singular Values \n" + str(s) + "\n" + "Singular Vector V (transpose) \n" + str(vt) + "\n\n")
+            
+
 
 def getPcaVectors(matrix):
-    pca = PCA(n_components=1)
+    pca = PCA(n_components=2)
     matrix = StandardScaler().fit_transform(matrix)
     pcs = pca.fit_transform(matrix)
-    pcDf = pd.DataFrame(data=pcs, columns=['principal component 1'])
+    pcDf = pd.DataFrame(data=pcs, columns=['principal component 1', 'principal component 2'])
     return pcDf
     
+def getSVD(matrix):
+    u, s, vt = linalg.svd(matrix, full_matrices=False)
+    print("U ", u)
+    print("s ", s)
+    print("V ", vt)
+    return u, s, vt
+
+
 def visualizeDataApp():
     #create kinase and substrate association
     #matrix is dictionary
@@ -65,4 +76,4 @@ def printData():
     
 #printData()
 #visualizeDataApp()
-plotHistogram(2)
+getSVDdata()
