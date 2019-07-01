@@ -200,11 +200,6 @@ class ClusterData:
             elif(start and kinaseFileOrdered and self.phosphositePlusKinaseData[i][0] != kinase):
                 break
 
-        #print(kinase, " substrate count ", count)
-        #print(kinase, substrate_names)
-        if kinase == "AURKA":
-            print("This is AURKA ", substrate_matrix)
-
         return substrate_names, substrate_matrix
 
                 
@@ -229,8 +224,6 @@ class ClusterData:
                 names = []
                 if count >= threshold: 
                     names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=True)
-                    if kinases[i] == "AURKA":
-                        print("This is AURKA ", data)
                     if len(names) > threshold:
                         for j in range(len(names)):
                             substrates[names[j]] = data[j]

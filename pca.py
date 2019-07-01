@@ -32,10 +32,14 @@ def getSVDdata():
                 bucket.append(substrate)
 
             #pc = getPcaVectors(bucket)
+            #bucket = np.transpose(np.array(bucket))
             u, s, vt = getSVD(bucket)
+
+            if kinase == "AURKA":
+                getVarianceVector(kinase, bucket)
+
             f.write("Kinase " + str(kinase) + "\n" + "Singular Vector U \n" + str(u) + "\n" + "Singular Values \n" + str(s) + "\n" + "Singular Vector V (transpose) \n" + str(vt) + "\n\n")
             
-
 
 def getPcaVectors(matrix):
     pca = PCA(n_components=2)
@@ -46,10 +50,32 @@ def getPcaVectors(matrix):
     
 def getSVD(matrix):
     u, s, vt = linalg.svd(matrix, full_matrices=False)
-    print("U ", u)
-    print("s ", s)
-    print("V ", vt)
     return u, s, vt
+
+def getVarianceVector(kinase, matrix):
+    #transpose matrix
+    matrix = np.transpose(matrix)
+    pcs = getPcaVectors(matrix)
+    u, s, vt = getSVD(matrix)
+    
+    #get first 2 columns of    (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
+    v = np.transpose(vt)
+    v = v[:,:1]
+    print(v)
+    print(matrix)
+    vec = np.matmul(matrix, v)
+    print(vec)
+    for i in range(len(vec)):
+        print("vec ", i , vec[i])
+        plt.plot(vec[i,0], vec[i, 1], 'o')
+
+    plt.ylabel("pc2")
+    plt.xlabel("pc1")
+    plt.show()
+
+
+def compareVectors(pcaMatrix, svdMatrix):
+    pass
 
 
 def visualizeDataApp():
