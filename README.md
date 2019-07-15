@@ -30,15 +30,3 @@ phosphorylated)
 phosphate compound to the protein. But each kinase has specific property that will be able to
 phosphorylate specific group of proteins. In this data set, which protein (i.e. kinase)
 phosphorylate specific part of which protein (i.e. substrate) has been reported.
-Challenge:
-Given all these data, can you find interesting pattern in the data? The following are some examples:
-- Can you find specific pattern/feature that distinguish basal from luminal?
-- Can you find any relationship among these data? For example can you say proteins that are
-interacting are more likely to expressed highly together? Can you say proteins that are interacting
-are more likely to phosphorylate together? Can you say the sites that are on the same protein are
-more likely to phosphorylate together? How can you show these relationships? How can you
-assess the significance of these relationships?
-- Can you cluster the kinases or the substrates of kinases in a meaningful way to find some pattern
-in their expression or phosphorylation?
-- Can you identify subset of phosphorylated site or proteins that distinguish basal from luminal?
-How can you assess the significance of this relationship?

@@ -26,6 +26,7 @@ class Hierarchical:
         if method == "pca":
             #get kinase svd feature 
             self.kinaseFeatures = pca.getSVDdata(self.kinaseFile, self.dataFile)
+            print(self.kinaseFeatures)
             with open("kFeat.txt", 'w+') as f:
                 for kinase, vector in self.kinaseFeatures.items():
                     self.X.append(vector)

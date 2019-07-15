@@ -19,7 +19,7 @@ def getMatrix(kinase, data):
 def getSVDdata(kinase, data):
     kinaseFeature = {}
     matrix = getMatrix(kinase, data)
-
+    
     with open("svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
         f.write("X = U(SIG)V*\n\n")

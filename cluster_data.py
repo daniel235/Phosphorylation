@@ -47,19 +47,24 @@ class ClusterData:
         self.unique_kinases = None
         self.colNames = None
         self.clean_data()
+        self.phosDataOrdered = False
         
     def replace_with_average(self):
         #for every element in array with na replace with average
         #first get average of row
-        for i in range(len(self.CancerData)):
+        for i in range(len(self.CancerData[:,1])):
             indexes = []
             average = 0
-            
+            non_empty = 0
+
             for j in range(2, len(self.CancerData[i])):
                 if np.isnan(self.CancerData[i,j]):
                     indexes.append(j)
                 else:
                     average += self.CancerData[i,j]
+                    non_empty += 1
+
+            average = average / max(1, non_empty)
 
             for k in indexes:
                 self.CancerData[i,k] = average
@@ -90,18 +95,41 @@ class ClusterData:
         self.unique_kinases = unique_kinase_temp
         
         #print(self.phosphositePlusKinaseData[:,1])
-        df = clean.cleanMatrix(self.pfile, "data")
-        df.omit_columns([1,5,9])
+        sheet_name = input("What is your sheet name for phosphorylation data?")
+        inputs = input("Is your phosphorylation data ordered(yes/no)?")
+        if inputs == "yes":
+            self.phosDataOrdered = True
 
-        self.CancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
+        df = clean.cleanMatrix(self.pfile, sheet_name)
+        input_column = input("Which column(s) is your psite in?(separate by space if more than 1)")
+        index = []
+        for i in range(len(input_column)):
+            if input_column[i] != ' ':
+                index.append(int(input_column[i]))
+        
+
+        df.set_gene_site_column(index, True)
+        index = []
+        omit_column = input("what column(s) do i omit?(separate by space)")
+        for i in range(len(omit_column)):
+            if omit_column[i] != ' ':
+                index.append(int(omit_column[i]))
+
+        df.omit_columns(index)
+
+        ''' self.CancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
         #join first two columns
         for i in range(len(self.CancerData[:,0])):
             self.CancerData[i,0] = str(self.CancerData[i,0]) + '-' +  str(self.CancerData[i, 1])
             #strip last letter
             self.CancerData[i,0] = (self.CancerData[i,0])[0:-2]
-           
+        '''
+        self.CancerData = df.data
+        print(self.CancerData)
         #fix Na's here
         self.replace_with_average()
+        print(self.CancerData[2000])
+
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])):
@@ -133,12 +161,7 @@ class ClusterData:
             else:
                 self.weakKinase.append(names[i])
                 
-    
-    #print lists
-    def print_data(self):
-        print(self.CancerData[:100,])
-        print(self.phosphositePlusKinaseData[:100,])
-        print(self.unique_kinases[:10])
+
   
     #todo modularize functions
     def count_substrates(self, kinase, ordered=False):
@@ -184,6 +207,9 @@ class ClusterData:
 
                         #substrate at current index
                         index = self.CancerData[int(current), 0]
+                        if type(index) == float:
+                            break
+
                         #didn't find substrate
                         if substrate != index:
                             prevMid = mid
@@ -201,6 +227,7 @@ class ClusterData:
                 
                         #found substrate
                         else:
+                            print("found")
                             count += 1
                             #add substrate to names and add it's data row to matrix
                             substrate_names.append(substrate)
@@ -210,8 +237,26 @@ class ClusterData:
 
                             substrate_matrix.append(data)
                             break
+
+                #brute force data
+                else:
+                    for i in range(len(self.CancerData[:,0])):
+                        index = self.CancerData[i, 0]
+                        if type(index) == float:
+                            break
+
+                        #didn't find substrate
+                        if substrate == index:
+                            print('match')
+                            substrate_names.append(substrate)
+                            data = []
+                            for j in range(2, len(self.CancerData[i])):
+                                data.append(self.CancerData[j])
+
+                            substrate_matrix.append(data)
+                            break
+
                         
-            
             #this should stop loop once kinase name is passed (since its alphabetical)
             elif(start and kinaseFileOrdered and self.phosphositePlusKinaseData[i][0] != kinase):
                 break
@@ -225,7 +270,7 @@ class ClusterData:
         substrates = {}
         names = []
         data = []
-        substratesLength = []
+        
 
         #kinases = list(set(self.kinaseData[:,0]))
         #new kinase data
@@ -239,7 +284,7 @@ class ClusterData:
                 substrates = {}
                 names = []
                 if count >= threshold: 
-                    names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=True)
+                    names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=self.phosDataOrdered)
                     if len(names) > threshold:
                         for j in range(len(names)):
                             substrates[names[j]] = data[j]
