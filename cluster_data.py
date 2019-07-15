@@ -10,6 +10,8 @@ from sklearn.decomposition import PCA
 import pickle
 import os
 
+import clean
+
 
 class ClusterData:
     '''This class creates the prepared data for the knn and also hierarchy clustering
@@ -39,28 +41,39 @@ class ClusterData:
         self.kinaseCounts = []
         self.kinaseData = np.array(pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t"))
         self.phosphorylationData = np.array(pd.read_csv("./data/phosphorylation_data.txt", delimiter="\t"))
-        self.breastCancerData = None
+        self.CancerData = None
         #self.breastCancerData = xlrd.open_workbook("./data/BreastCancerData.xlsx", encoding_override="cp1252").sheet_by_name("data")
         self.phosphositePlusKinaseData = np.array(pd.read_csv("./data/KSA_human.txt", delim_whitespace=True))
         self.unique_kinases = None
+        self.colNames = None
         self.clean_data()
         
     def replace_with_average(self):
         #for every element in array with na replace with average
         #first get average of row
-        for i in range(len(self.breastCancerData)):
+        for i in range(len(self.CancerData)):
             indexes = []
             average = 0
             
-            for j in range(2, len(self.breastCancerData[i])):
-                if np.isnan(self.breastCancerData[i,j]):
+            for j in range(2, len(self.CancerData[i])):
+                if np.isnan(self.CancerData[i,j]):
                     indexes.append(j)
                 else:
-                    average += self.breastCancerData[i,j]
+                    average += self.CancerData[i,j]
 
             for k in indexes:
-                self.breastCancerData[i,k] = average
+                self.CancerData[i,k] = average
 
+
+    #remove column by index or label
+    def remove_column(self, index):
+        if type(index) == int:
+            self.CancerData.drop(columns=[self.colNames[index]])
+        else:
+            self.CancerData.drop(columns=[index])
+
+        self.colNames = self.CancerData.columns
+        print("You now have ", len(self.colNames), " columns")
 
     #clean breast cancer data and create 
     #kinase matrix and phosphosite matrix
@@ -70,18 +83,22 @@ class ClusterData:
         for i in self.unique_kinases:
             if i not in unique_kinase_temp:
                 unique_kinase_temp.append(i)
+
         #set unique kinases
         #strip na's
         #strip columns
         self.unique_kinases = unique_kinase_temp
         
         #print(self.phosphositePlusKinaseData[:,1])
-        self.breastCancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
+        df = clean.cleanMatrix(self.pfile, "data")
+        df.omit_columns([1,5,9])
+
+        self.CancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
         #join first two columns
-        for i in range(len(self.breastCancerData[:,0])):
-            self.breastCancerData[i,0] = str(self.breastCancerData[i,0]) + '-' +  str(self.breastCancerData[i, 1])
+        for i in range(len(self.CancerData[:,0])):
+            self.CancerData[i,0] = str(self.CancerData[i,0]) + '-' +  str(self.CancerData[i, 1])
             #strip last letter
-            self.breastCancerData[i,0] = (self.breastCancerData[i,0])[0:-2]
+            self.CancerData[i,0] = (self.CancerData[i,0])[0:-2]
            
         #fix Na's here
         self.replace_with_average()
@@ -92,7 +109,6 @@ class ClusterData:
         
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]
 
-        #self.print_data()
 
     #set number of substrates to put kinases in rich/poor class
     def set_arbitrary_kinase_class(self, n):
@@ -120,7 +136,7 @@ class ClusterData:
     
     #print lists
     def print_data(self):
-        print(self.breastCancerData[:100,])
+        print(self.CancerData[:100,])
         print(self.phosphositePlusKinaseData[:100,])
         print(self.unique_kinases[:10])
   
@@ -151,7 +167,7 @@ class ClusterData:
         for i in range(len(self.phosphositePlusKinaseData)):
             if self.phosphositePlusKinaseData[i][0] == kinase:
                 #?logic controllers
-                mid = int(len(self.breastCancerData) / 2)
+                mid = int(len(self.CancerData) / 2)
                 current = mid
                 start = True
                 prevMid = 0
@@ -167,7 +183,7 @@ class ClusterData:
                             break
 
                         #substrate at current index
-                        index = self.breastCancerData[int(current), 0]
+                        index = self.CancerData[int(current), 0]
                         #didn't find substrate
                         if substrate != index:
                             prevMid = mid
@@ -189,8 +205,8 @@ class ClusterData:
                             #add substrate to names and add it's data row to matrix
                             substrate_names.append(substrate)
                             data = []
-                            for i in range(2, len(self.breastCancerData[current])):
-                                data.append(self.breastCancerData[current][i])
+                            for i in range(2, len(self.CancerData[current])):
+                                data.append(self.CancerData[current][i])
 
                             substrate_matrix.append(data)
                             break

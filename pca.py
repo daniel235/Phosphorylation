@@ -3,19 +3,22 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from numpy import linalg
 from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import AgglomerativeClustering
 import pandas as pd
 import cluster_data
 import graph
 #start pca 
 
-#grab kinase matrixes
-def getMatrix():
-    myMatrix = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx").get_kinase_substrate_matrixes(2)
+#grab kinase bucket matrixes
+def getMatrix(kinase, data):
+    myMatrix = cluster_data.ClusterData(kinase, data).get_kinase_substrate_matrixes(2)
     return myMatrix
 
-#plot histogram count of number of substrates
-def getSVDdata():
-    matrix = getMatrix()
+
+#get SVDs of each kinase bucket and write it to svd txt file
+def getSVDdata(kinase, data):
+    kinaseFeature = {}
+    matrix = getMatrix(kinase, data)
 
     with open("svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
@@ -31,57 +34,40 @@ def getSVDdata():
             for substrate in data.values():
                 bucket.append(substrate)
 
-            #pc = getPcaVectors(bucket)
-            #bucket = np.transpose(np.array(bucket))
-            u, s, vt = getSVD(bucket)
-
-            if kinase == "AURKA":
-                getVarianceVector(kinase, bucket)
+            kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket)
 
             f.write("Kinase " + str(kinase) + "\n" + "Singular Vector U \n" + str(u) + "\n" + "Singular Values \n" + str(s) + "\n" + "Singular Vector V (transpose) \n" + str(vt) + "\n\n")
             
+    return kinaseFeature
 
+#get principal components of kinase buckets
 def getPcaVectors(matrix):
     pca = PCA(n_components=2)
     matrix = StandardScaler().fit_transform(matrix)
     pcs = pca.fit_transform(matrix)
     pcDf = pd.DataFrame(data=pcs, columns=['principal component 1', 'principal component 2'])
     return pcDf
-    
-def getSVD(matrix):
-    u, s, vt = linalg.svd(matrix, full_matrices=False)
-    return u, s, vt
 
-def getVarianceVector(kinase, matrix):
+
+#get kinase feature vector
+def getFeatureVector(kinase, matrix):
     #transpose matrix
     matrix = np.transpose(matrix)
     pcs = getPcaVectors(matrix)
-    u, s, vt = getSVD(matrix)
+    u, s, vt = linalg.svd(matrix, full_matrices=False)
     
-    #get first 2 columns of    (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
+    #get first column of V   (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
     v = np.transpose(vt)
     v = v[:,:1]
-    print(v)
-    print(matrix)
+    #get scores XVR
     vec = np.matmul(matrix, v)
-    print(vec)
-    for i in range(len(vec)):
-        print("vec ", i , vec[i])
-        plt.plot(vec[i,0], vec[i, 1], 'o')
+    return vec, u, s, vt
 
-    plt.ylabel("pc2")
-    plt.xlabel("pc1")
-    plt.show()
-
-
-def compareVectors(pcaMatrix, svdMatrix):
-    pass
-
-
-def visualizeDataApp():
+#list unique kinases and its substrates
+def visualizeDataApp(kinase, data):
     #create kinase and substrate association
     #matrix is dictionary
-    matrix = getMatrix()
+    matrix = getMatrix(kinase, data)
     
     #todo only getting two kinases?
     #write to file
@@ -94,12 +80,3 @@ def visualizeDataApp():
 
             f.write(F'{kinase} {sub}' + "\n")
 
-
-def printData():
-    dataCenter = cluster_data.ClusterData("./data/KSA_human.txt", "./data/BreastCancerData.xlsx")
-    matrix = dataCenter.get_kinase_substrate_matrixes(2)
-    
-    
-#printData()
-#visualizeDataApp()
-getSVDdata()
