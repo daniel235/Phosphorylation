@@ -25,7 +25,7 @@ class Hierarchical:
     def clusterMethod(self, method):
         if method == "pca":
             #get kinase svd feature 
-            self.kinaseFeatures = pca.getSVDdata(self.kinaseFile, self.dataFile)
+            self.kinaseFeatures = pca.getSVDdata(self.kinaseFile)
             print(self.kinaseFeatures)
             with open("kFeat.txt", 'w+') as f:
                 for kinase, vector in self.kinaseFeatures.items():
@@ -76,5 +76,5 @@ class Hierarchical:
 
 hierCluster = Hierarchical()
 hierCluster.kinaseFile = "./data/KSA_human.txt" 
-hierCluster.dataFile = "./data/BreastCancerData.xlsx"
+#hierCluster.dataFile = "./data/BreastCancerData.xlsx"
 hierCluster.clusterMethod("pca")

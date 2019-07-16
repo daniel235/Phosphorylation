@@ -33,8 +33,8 @@ class ClusterData:
         prepared data for clustering algorithms as class properties -> (self.trainBasal)
     '''
 
-    def __init__(self, kinaseSubstrateFile, PhosphoDataFile):
-        self.pfile = os.path.join(PhosphoDataFile)
+    def __init__(self, kinaseSubstrateFile):
+        self.pfile = None
         self.kfile = os.path.join(kinaseSubstrateFile)
         self.strongKinase = []
         self.weakKinase = []
@@ -47,7 +47,7 @@ class ClusterData:
         self.unique_kinases = None
         self.colNames = None
         self.clean_data()
-        self.phosDataOrdered = False
+        self.phosDataOrdered = True
         
     def replace_with_average(self):
         #for every element in array with na replace with average
@@ -95,10 +95,21 @@ class ClusterData:
         self.unique_kinases = unique_kinase_temp
         
         #print(self.phosphositePlusKinaseData[:,1])
+        self.pfile = input("What file do you want to use?")
+        self.pfile = os.path.join("./data/", self.pfile)
         sheet_name = input("What is your sheet name for phosphorylation data?")
         inputs = input("Is your phosphorylation data ordered(yes/no)?")
         if inputs == "yes":
+            print("yes ordered")
             self.phosDataOrdered = True
+        else:
+            self.phosDataOrdered = False
+
+        inputs = input("Trailing letters on genes?(yes/no)")
+        if inputs == "yes":
+            trailing = True
+        else:
+            trailing = False
 
         df = clean.cleanMatrix(self.pfile, sheet_name)
         input_column = input("Which column(s) is your psite in?(separate by space if more than 1)")
@@ -108,7 +119,7 @@ class ClusterData:
                 index.append(int(input_column[i]))
         
 
-        df.set_gene_site_column(index, True)
+        df.set_gene_site_column(index, trailing)
         index = []
         omit_column = input("what column(s) do i omit?(separate by space)")
         for i in range(len(omit_column)):
@@ -277,7 +288,6 @@ class ClusterData:
         kinases = np.array(self.unique_kinases)
         #todo hierarcharl clustering
         
-      
         with open("ksa2.txt", 'w+') as f:
             for i in range(len(kinases)):
                 count = self.count_substrates(kinases[i], ordered=False)
