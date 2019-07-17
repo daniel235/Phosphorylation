@@ -11,14 +11,15 @@ import graph
 
 #grab kinase bucket matrixes
 def getMatrix(kinase):
-    myMatrix = cluster_data.ClusterData(kinase).get_kinase_substrate_matrixes(2)
-    return myMatrix
+    clusterStructure = cluster_data.ClusterData(kinase)
+    myMatrix = clusterStructure.get_kinase_substrate_matrixes(2)
+    return myMatrix, clusterStructure.fileName
 
 
 #get SVDs of each kinase bucket and write it to svd txt file
 def getSVDdata(kinase):
     kinaseFeature = {}
-    matrix = getMatrix(kinase)
+    matrix, pfile = getMatrix(kinase)
     
     with open("svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
@@ -39,7 +40,7 @@ def getSVDdata(kinase):
 
             f.write("Kinase " + str(kinase) + "\n" + "Singular Vector U \n" + str(u) + "\n" + "Singular Values \n" + str(s) + "\n" + "Singular Vector V (transpose) \n" + str(vt) + "\n\n")
             
-    return kinaseFeature
+    return kinaseFeature, pfile
 
 #get principal components of kinase buckets
 def getPcaVectors(matrix):

@@ -35,6 +35,7 @@ class ClusterData:
 
     def __init__(self, kinaseSubstrateFile):
         self.pfile = None
+        self.fileName = None
         self.kfile = os.path.join(kinaseSubstrateFile)
         self.strongKinase = []
         self.weakKinase = []
@@ -95,8 +96,8 @@ class ClusterData:
         self.unique_kinases = unique_kinase_temp
         
         #print(self.phosphositePlusKinaseData[:,1])
-        self.pfile = input("What file do you want to use?")
-        self.pfile = os.path.join("./data/", self.pfile)
+        self.fileName = input("What file do you want to use?")
+        self.pfile = os.path.join("./data/", self.fileName)
         sheet_name = input("What is your sheet name for phosphorylation data?")
         inputs = input("Is your phosphorylation data ordered(yes/no)?")
         if inputs == "yes":

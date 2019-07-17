@@ -19,7 +19,7 @@ class Hierarchical:
     def clusterMethod(self, method):
         if method == "pca":
             #get kinase svd feature 
-            self.kinaseFeatures = pca.getSVDdata(self.kinaseFile)
+            self.kinaseFeatures, pfile = pca.getSVDdata(self.kinaseFile)
             with open("kFeat.txt", 'w+') as f:
                 for kinase, vector in self.kinaseFeatures.items():
                     self.X.append(vector)
@@ -35,7 +35,9 @@ class Hierarchical:
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labels, show_leaf_counts=True)
+        plt.savefig(("./data/results/" + str(pfile)[:-5] + ".png"))
         plt.show() 
+
 
     def euclidDistance(self, matrix):
         #for i in range(len(a)):
