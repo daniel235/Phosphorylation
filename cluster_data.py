@@ -46,8 +46,8 @@ class ClusterData:
         self.phosphositePlusKinaseData = np.array(pd.read_csv("./data/KSA_human.txt", delim_whitespace=True))
         self.unique_kinases = None
         self.colNames = None
-        self.clean_data()
         self.phosDataOrdered = True
+        self.clean_data()
         
     def replace_with_average(self):
         #for every element in array with na replace with average
@@ -238,7 +238,6 @@ class ClusterData:
                 
                         #found substrate
                         else:
-                            print("found")
                             count += 1
                             #add substrate to names and add it's data row to matrix
                             substrate_names.append(substrate)
@@ -258,12 +257,12 @@ class ClusterData:
 
                         #didn't find substrate
                         if substrate == index:
-                            print('match')
                             substrate_names.append(substrate)
                             data = []
                             for j in range(2, len(self.CancerData[i])):
-                                data.append(self.CancerData[j])
+                                data.append(self.CancerData[i][j])
 
+                            
                             substrate_matrix.append(data)
                             break
 
@@ -289,6 +288,7 @@ class ClusterData:
         #todo hierarcharl clustering
         
         with open("ksa2.txt", 'w+') as f:
+            f.write(str(self.pfile))
             for i in range(len(kinases)):
                 count = self.count_substrates(kinases[i], ordered=False)
                 substrates = {}

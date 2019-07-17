@@ -14,19 +14,12 @@ class Hierarchical:
         self.X = []
         self.labels = []
         self.k = 0
-        self.startCluster()
-
-
-    def startCluster(self):
-        if self.kinaseFile == None or self.dataFile == None:
-            print("Enter in Files...(kinase/Data)")
 
 
     def clusterMethod(self, method):
         if method == "pca":
             #get kinase svd feature 
             self.kinaseFeatures = pca.getSVDdata(self.kinaseFile)
-            print(self.kinaseFeatures)
             with open("kFeat.txt", 'w+') as f:
                 for kinase, vector in self.kinaseFeatures.items():
                     self.X.append(vector)

@@ -31,6 +31,7 @@ def getSVDdata(kinase):
         
         for kinase, data in matrix.items():
             bucket = []
+            print("k ", kinase, data)
             for substrate in data.values():
                 bucket.append(substrate)
 
@@ -53,7 +54,8 @@ def getPcaVectors(matrix):
 def getFeatureVector(kinase, matrix):
     #transpose matrix
     matrix = np.transpose(matrix)
-    pcs = getPcaVectors(matrix)
+    print(matrix.shape)
+    #pcs = getPcaVectors(matrix)
     u, s, vt = linalg.svd(matrix, full_matrices=False)
     
     #get first column of V   (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
@@ -64,10 +66,10 @@ def getFeatureVector(kinase, matrix):
     return vec, u, s, vt
 
 #list unique kinases and its substrates
-def visualizeDataApp(kinase, data):
+def visualizeDataApp(kinase):
     #create kinase and substrate association
     #matrix is dictionary
-    matrix = getMatrix(kinase, data)
+    matrix = getMatrix(kinase)
     
     #todo only getting two kinases?
     #write to file

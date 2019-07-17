@@ -27,13 +27,18 @@ class cleanMatrix:
                 self.data[i,0] = self.data[i, nth_columns[0]]
 
                 if trailing_letter:
-                    self.data[i,0] = str(self.data[i,0])[:-2]
+                    self.data[i,0] = str(self.data[i,0])[:-1]
 
         else:
             for i in range(len(self.data[:,0])):
                 self.data[i,0] = str(self.data[i,nth_columns[0]]) + "-" +  str(self.data[i,nth_columns[1]])
                 if trailing_letter:
-                    self.data[i,0] = str(self.data[i,0])[:-2]
+                    #self.data[i,0] = str(self.data[i,0])[:-1]
+                    while(True):
+                        if str(self.data[i,0])[-1] > '9' or str(self.data[i,0])[-1] < '0':
+                            self.data[i,0] = str(self.data[i,0])[:-1]
+                        else:
+                            break
 
 
             self.data = np.delete(self.data, nth_columns[1:], 1)
