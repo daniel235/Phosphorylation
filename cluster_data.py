@@ -11,6 +11,7 @@ import pickle
 import os
 
 import clean
+import stats
 
 
 class ClusterData:
@@ -48,9 +49,12 @@ class ClusterData:
         self.unique_kinases = None
         self.colNames = None
         self.phosDataOrdered = True
+        self.stats = stats.Statistics()
         self.clean_data()
         
+
     def replace_with_average(self):
+        delete_rows = []
         #for every element in array with na replace with average
         #first get average of row
         for i in range(len(self.CancerData[:,1])):
@@ -59,16 +63,28 @@ class ClusterData:
             non_empty = 0
 
             for j in range(2, len(self.CancerData[i])):
-                if np.isnan(self.CancerData[i,j]):
+                if self.fileName == 'colorectal_cancer.xlsx':
+                    if type(self.CancerData[i,j]) != float:
+                        indexes.append(j)
+
+                elif np.isnan(self.CancerData[i,j]):
                     indexes.append(j)
+
                 else:
                     average += self.CancerData[i,j]
                     non_empty += 1
 
             average = average / max(1, non_empty)
 
-            for k in indexes:
-                self.CancerData[i,k] = average
+            #delete row
+            if float(len(indexes) / len(self.CancerData[i])) > .5:
+                #replace k with k+1
+                delete_rows.append(i)
+            else:
+                for k in indexes:
+                    self.CancerData[i,k] = average
+
+        self.CancerData = np.delete(self.CancerData, delete_rows, 0)
 
 
     #remove column by index or label
@@ -113,6 +129,11 @@ class ClusterData:
             trailing = False
 
         df = clean.cleanMatrix(self.pfile, sheet_name)
+
+        #set stats (len of psites, len of unique kinases, len of tumor samples)
+        self.stats.set_table(len(df.data[:,0]), len(self.unique_kinases), len(df.data[1]))
+        self.stats.plotTable()
+
         input_column = input("Which column(s) is your psite in?(separate by space if more than 1)")
         index = []
         for i in range(len(input_column)):
@@ -122,11 +143,26 @@ class ClusterData:
 
         df.set_gene_site_column(index, trailing)
         index = []
+        current_int = []
+        counter = 0
         omit_column = input("what column(s) do i omit?(separate by space)")
         for i in range(len(omit_column)):
             if omit_column[i] != ' ':
-                index.append(int(omit_column[i]))
+                current_int.append(omit_column[i])
+            
+            else:
+                if len(current_int) > 1:
+                    for j in range(len(current_int)):
+                        if j == 0:
+                            current_int[j] = 10 * int(current_int[j])
 
+                        index.append(int(current_int[j]) + current_int[0])
+                else:
+                    index.append(current_int[0])
+
+                current_int = []
+
+        print("len of columns ", len(df.data[3]), df.data[3])
         df.omit_columns(index)
 
         ''' self.CancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
@@ -137,11 +173,10 @@ class ClusterData:
             self.CancerData[i,0] = (self.CancerData[i,0])[0:-2]
         '''
         self.CancerData = df.data
-        print(self.CancerData)
+        print(self.CancerData[3])
         #fix Na's here
         self.replace_with_average()
-        print(self.CancerData[2000])
-
+        print(self.CancerData)
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])):

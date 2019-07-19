@@ -9,24 +9,32 @@ import pca
 class Hierarchical:
     def __init__(self):
         self.kinaseFeatures = {}
+        self.poorKFeats = {}
+        self.richKFeats = {}
         self.kinaseFile = None
         self.dataFile = None
         self.X = []
         self.labels = []
+        self.Xpoor = []
+        self.labelsPoor = []
+        self.Xrich = []
+        self.labelsRich = []
         self.k = 0
 
 
     def clusterMethod(self, method):
         if method == "pca":
             #get kinase svd feature 
-            self.kinaseFeatures, pfile = pca.getSVDdata(self.kinaseFile)
-            with open("kFeat.txt", 'w+') as f:
-                for kinase, vector in self.kinaseFeatures.items():
-                    self.X.append(vector)
-                    self.labels.append(kinase)
-                    f.write(str(kinase) + "\n\n" + str(vector) + "\n\n")
+            self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata(self.kinaseFile, 10)
+            for kinase, vector in self.poorKFeats.items():
+                self.Xpoor.append(vector)
+                self.labelsPoor.append(kinase)
 
-        distMatrix = self.euclidDistance(self.X)
+            for kinase, vector in self.richKFeats.items():
+                self.Xrich.append(vector)
+                self.labelsRich.append(kinase)
+
+        distMatrix = self.euclidDistance(self.Xpoor, self.labelsPoor)
     
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
@@ -34,23 +42,36 @@ class Hierarchical:
         arr = linkage(distArray, method='single')
         #kinase names
         plt.figure()
-        dendrogram(arr, labels=self.labels, show_leaf_counts=True)
-        plt.savefig(("./data/results/" + str(pfile)[:-5] + ".png"))
+        dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True)
+        plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.jpg"))
+        plt.show() 
+
+        distMatrix = self.euclidDistance(self.Xrich, self.labelsRich)
+    
+        #condense distance matrix
+        distArray = ssd.squareform(distMatrix) 
+ 
+        arr = linkage(distArray, method='single')
+        #kinase names
+        plt.figure()
+        dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True)
+        plt.savefig(("./data/results/" + str(pfile)[:-5] + "rich.jpg"))
         plt.show() 
 
 
-    def euclidDistance(self, matrix):
+    def euclidDistance(self, matrix, labels):
         #for i in range(len(a)):
         #get euclid distance of a[i] and b[i]
         distMatrix = []
         row = []
-        
-        for i in range(len(self.X)):
-            a = self.X[i]
-            aLabel = self.labels[i]
-            for j in range(len(self.X)):
-                b = self.X[j]
-                bLabel = self.labels[j]
+        print("matr", matrix)
+
+        for i in range(len(matrix)):
+            a = matrix[i]
+            aLabel = labels[i]
+            for j in range(len(matrix)):
+                b = matrix[j]
+                bLabel = labels[j]
                 if i == j:
                     row.append(0)
                 else:

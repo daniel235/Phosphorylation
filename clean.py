@@ -13,7 +13,7 @@ class cleanMatrix:
         self.data = pd.read_excel(dataFile, sheet_name=sheetName, dtype=object)
         self.colnames = self.data.columns
         self.data = np.array(self.data)
-
+        
 
     def omit_columns(self, nth_columns):
         self.data = np.delete(self.data, nth_columns, 1)
@@ -29,6 +29,9 @@ class cleanMatrix:
                 if trailing_letter:
                     self.data[i,0] = str(self.data[i,0])[:-1]
 
+            if nth_columns[0] != 0:
+                self.data = np.delete(self.data, nth_columns, 1)
+
         else:
             for i in range(len(self.data[:,0])):
                 self.data[i,0] = str(self.data[i,nth_columns[0]]) + "-" +  str(self.data[i,nth_columns[1]])
@@ -40,10 +43,12 @@ class cleanMatrix:
                         else:
                             break
 
-
-            self.data = np.delete(self.data, nth_columns[1:], 1)
-            print("first one ", self.data[0,0])
+            if nth_columns[0] != 0:
+                self.data = np.delete(self.data, nth_columns, 1)
+            else:
+                self.data = np.delete(self.data, nth_columns[1:], 1)
+                
+            print("first one ", self.data[0])
             return
 
-        #drop nth column
-        self.data = np.delete(self.data, nth_columns[1:], 1)
+       
