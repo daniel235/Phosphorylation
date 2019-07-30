@@ -10,8 +10,8 @@ import os
 #parameters 
 class Kmeans_cluster:
     def __init__(self, kinaseFile):
-        self.clusters = 50
-        self.startCluster = cd.ClusterData(kinaseFile)
+        self.cluster_name = ""
+        self.clusters = 10
         self.X = []
         self.labels = []
         self.kinaseFeatures = {}
@@ -38,12 +38,15 @@ class Kmeans_cluster:
 
     def kmeansCluster(self, method):
         if method == "pca":
-            self.kinaseFeatures, pfile = pca.getSVDdata(self.kinaseFile)
+            self.kinaseFeatures, self.poorKinaseFeatures, self.richKinaseFeatures, pfile = pca.getSVDdata(self.kinaseFile, 10)
+            self.cluster_name = pfile
             for kinase, vector in self.kinaseFeatures.items():
                 self.X.append(vector)
                 self.labels.append(kinase)
 
         print(self.X)
+        self.kmeans(self.X)
+
         return
 
 Kmeans = Kmeans_cluster("./data/KSA_human.txt")

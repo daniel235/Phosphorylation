@@ -47,7 +47,7 @@ def getSVDdata(kinase, threshold):
                 bucket.append(substrate)
 
 
-            kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket)
+            kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket, 1)
             if substrateCount > threshold:
                 richKinaseFeature[kinase] = kinaseFeature[kinase]
             else:
@@ -68,7 +68,7 @@ def getPcaVectors(matrix):
 
 
 #get kinase feature vector
-def getFeatureVector(kinase, matrix):
+def getFeatureVector(kinase, matrix, dim):
     #transpose matrix
     matrix = np.transpose(matrix)
     
@@ -78,9 +78,8 @@ def getFeatureVector(kinase, matrix):
     #get first column of V   (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
     v = np.transpose(vt)
     #vR
-    v = v[:,:1]
+    v = v[:,:dim]
     #get scores XVR
     vec = np.matmul(matrix, v)
     return vec, u, s, vt
-
 

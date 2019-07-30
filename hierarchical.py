@@ -26,6 +26,10 @@ class Hierarchical:
         if method == "pca":
             #get kinase svd feature 
             self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata(self.kinaseFile, 10)
+            for kinase, vector in self.kinaseFeatures.items():
+                self.X.append(vector)
+                self.labels.append(kinase)
+
             for kinase, vector in self.poorKFeats.items():
                 self.Xpoor.append(vector)
                 self.labelsPoor.append(kinase)
@@ -34,6 +38,19 @@ class Hierarchical:
                 self.Xrich.append(vector)
                 self.labelsRich.append(kinase)
 
+        #plot general kinase clustering
+        distMatrix = self.euclidDistance(self.X, self.labels)
+
+        distArray = ssd.squareform(distMatrix)
+
+        arr = linkage(distArray, method='single')
+
+        plt.figure()
+        dendrogram(arr, labels=self.labels, show_leaf_counts=True)
+        plt.savefig(("./data/results/" + str(pfile)[:-5] + ".jpg"))
+        plt.show() 
+
+        #plot poor kinase clustering
         distMatrix = self.euclidDistance(self.Xpoor, self.labelsPoor)
     
         #condense distance matrix
@@ -46,6 +63,7 @@ class Hierarchical:
         plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.jpg"))
         plt.show() 
 
+        #plot rich kinase clustering
         distMatrix = self.euclidDistance(self.Xrich, self.labelsRich)
     
         #condense distance matrix
@@ -87,7 +105,11 @@ class Hierarchical:
             row = []
     
         return distMatrix
-       
+
+    #compute cophos of kinase bucket
+    def cophos(self, bucket):
+        #m x n
+        pass
         
 
 hierCluster = Hierarchical()

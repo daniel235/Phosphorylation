@@ -28,6 +28,9 @@ class cleanMatrix:
 
                 if trailing_letter:
                     self.data[i,0] = str(self.data[i,0])[:-1]
+                    #also check for semicolons
+                    self.check_for_multiples(self.data[i,0])
+                    
 
             if nth_columns[0] != 0:
                 self.data = np.delete(self.data, nth_columns, 1)
@@ -50,5 +53,16 @@ class cleanMatrix:
                 
             print("first one ", self.data[0])
             return
+
+
+    def check_for_multiples(self, string):
+        #check for semicolon
+        #add to array if multiple
+        #ARGTF-567;855;320;
+        for i in range(len(string)):
+            if string[i] == ';':
+                #iterate backwords to save word
+                pass
+        pass
 
        

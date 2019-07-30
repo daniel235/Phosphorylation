@@ -241,8 +241,8 @@ class ClusterData:
                 current = mid
                 start = True
                 prevMid = 0
-                substrate = self.phosphositePlusKinaseData[i][1]
-            
+                substrate = self.phosphositePlusKinaseData[i][1].upper()
+                
                 #find substrate in phosphorylation data
                 #binary search the data
                 if PhosDataOrdered:
