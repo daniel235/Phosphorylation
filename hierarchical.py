@@ -106,11 +106,6 @@ class Hierarchical:
     
         return distMatrix
 
-    #compute cophos of kinase bucket
-    def cophos(self, bucket):
-        #m x n
-        pass
-        
 
 hierCluster = Hierarchical()
 hierCluster.kinaseFile = "./data/KSA_human.txt" 

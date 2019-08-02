@@ -19,6 +19,7 @@ class Kmeans_cluster:
         self.richKinaseFeatures = {}
         self.kinaseFile = kinaseFile
 
+
     def kmeans(self, x):
         kmeans = KMeans(n_clusters=self.clusters, verbose=1)
         kmeans.fit(x)
@@ -36,6 +37,7 @@ class Kmeans_cluster:
     def graph_k(self):
         pass
 
+
     def kmeansCluster(self, method):
         if method == "pca":
             self.kinaseFeatures, self.poorKinaseFeatures, self.richKinaseFeatures, pfile = pca.getSVDdata(self.kinaseFile, 10)
@@ -45,9 +47,14 @@ class Kmeans_cluster:
                 self.labels.append(kinase)
 
         print(self.X)
-        self.kmeans(self.X)
-
+        self.kmeansPlot()
+        self.kmeans()
         return
+
+
+    def kmeansPlot(self):
+        pca.plotPCA(self.X[0][0], self.X[0][1])
+
 
 Kmeans = Kmeans_cluster("./data/KSA_human.txt")
 Kmeans.kmeansCluster("pca")

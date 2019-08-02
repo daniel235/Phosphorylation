@@ -47,7 +47,7 @@ def getSVDdata(kinase, threshold):
                 bucket.append(substrate)
 
 
-            kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket, 1)
+            kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket, 2)
             if substrateCount > threshold:
                 richKinaseFeature[kinase] = kinaseFeature[kinase]
             else:
@@ -69,9 +69,17 @@ def getPcaVectors(matrix):
 
 #get kinase feature vector
 def getFeatureVector(kinase, matrix, dim):
+    #todo center data
+
     #transpose matrix
     matrix = np.transpose(matrix)
+    print(matrix)
     
+    #standardize data scale 
+    ss = StandardScaler()
+    matrix = ss.fit_transform(matrix)
+    print(matrix)
+
     #pcs = getPcaVectors(matrix)
     u, s, vt = linalg.svd(matrix, full_matrices=False)
     
@@ -83,3 +91,8 @@ def getFeatureVector(kinase, matrix, dim):
     vec = np.matmul(matrix, v)
     return vec, u, s, vt
 
+
+def plotPCA(X, Y):
+    plt.figure()
+    plt.plot(X, Y, 'o')
+    plt.show()
