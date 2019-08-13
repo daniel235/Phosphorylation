@@ -57,7 +57,7 @@ class Graph:
         nodesStillNeeded = self.kinaseNodesNames
 
         #create sif file
-        filename = "./graphMod.sif"
+        filename = "./results/graphMod.sif"
         with open(filename, 'a') as f:
             for i in range(len(nodesStillNeeded)):
                 if not nodesStillNeeded:

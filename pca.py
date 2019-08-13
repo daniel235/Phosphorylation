@@ -4,10 +4,14 @@ from sklearn.decomposition import PCA
 from numpy import linalg
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AgglomerativeClustering
+import pickle
 import pandas as pd
+import seaborn as sns
+import os
 import cluster_data
 import graph
 import stats
+import math
 #start pca 
 
 #grab kinase bucket matrixes
@@ -17,7 +21,7 @@ def getMatrix(kinase):
     psiteCount = len(clusterStructure.CancerData[:,1])
     kinaseCount = len(myMatrix.keys())
     tsampleCount = len(clusterStructure.CancerData[1])
-    afterStat = stats.Statistics()
+    afterStat = stats.Statistics() 
     afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
     afterStat.plotTable()
     return myMatrix, clusterStructure.fileName
@@ -31,7 +35,7 @@ def getSVDdata(kinase, threshold):
     kinaseFeature = {}
     matrix, pfile = getMatrix(kinase)
     
-    with open("svd.txt", 'w+') as f: 
+    with open("./results/" + str(pfile)[:-5] + "svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
         f.write("X = U(SIG)V*\n\n")
         f.write("X shape (nxm)\n\n")
@@ -70,18 +74,27 @@ def getPcaVectors(matrix):
 #get kinase feature vector
 def getFeatureVector(kinase, matrix, dim):
     #todo center data
-
+    #todo pickle data
     #transpose matrix
     matrix = np.transpose(matrix)
-    print(matrix)
     
     #standardize data scale 
     ss = StandardScaler()
-    matrix = ss.fit_transform(matrix)
-    print(matrix)
+    #matrix = ss.fit_transform(matrix)
+    #print(matrix)
 
     #pcs = getPcaVectors(matrix)
     u, s, vt = linalg.svd(matrix, full_matrices=False)
+    
+
+    #get variance
+    var_explained = np.round(s**2/np.sum(s**2), decimals=3)
+    sns.barplot(x=list(range(1,len(var_explained)+1)),
+        y=var_explained, color="limegreen")
+        
+    plt.xlabel("PCS")
+    plt.ylabel("Percent Variance Explained")
+    plt.savefig('./results/svd_variance.png', dpi=100)
     
     #get first column of V   (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
     v = np.transpose(vt)
@@ -89,6 +102,14 @@ def getFeatureVector(kinase, matrix, dim):
     v = v[:,:dim]
     #get scores XVR
     vec = np.matmul(matrix, v)
+    
+
+    if not os.path.exists('./data/pickles/xvr'):
+        dbfile = open('./data/pickles/xvr', 'ab')
+
+        pickle.dump(vec, dbfile)
+        dbfile.close()
+
     return vec, u, s, vt
 
 

@@ -2,9 +2,12 @@ from scipy.cluster.hierarchy import dendrogram, linkage
 import scipy.spatial.distance as ssd
 from sklearn.cluster import AgglomerativeClustering
 from matplotlib import pyplot as plt 
+import seaborn as sns
 import numpy as np
 
 import pca
+
+#todo (correlation clustering  linkage avg)
 
 class Hierarchical:
     def __init__(self):
@@ -46,7 +49,7 @@ class Hierarchical:
         arr = linkage(distArray, method='single')
 
         plt.figure()
-        dendrogram(arr, labels=self.labels, show_leaf_counts=True)
+        dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + str(pfile)[:-5] + ".jpg"))
         plt.show() 
 
@@ -59,7 +62,7 @@ class Hierarchical:
         arr = linkage(distArray, method='single')
         #kinase names
         plt.figure()
-        dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True)
+        dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.jpg"))
         plt.show() 
 
@@ -72,9 +75,13 @@ class Hierarchical:
         arr = linkage(distArray, method='single')
         #kinase names
         plt.figure()
-        dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True)
+        dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + str(pfile)[:-5] + "rich.jpg"))
         plt.show() 
+
+
+    def correlationMatrix(self, matrix, labels):
+        pass
 
 
     def euclidDistance(self, matrix, labels):

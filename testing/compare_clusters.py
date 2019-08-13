@@ -21,7 +21,7 @@ class CompareCluster:
         self.types = []
         self.nclusters = nclusters
 
-    def setEdge(self):
+    def setEdge(self, cluster1, cluster2):
         pass
 
     def getNode(self):
