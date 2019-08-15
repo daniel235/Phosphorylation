@@ -16,3 +16,5 @@ class Statistics:
         cells=dict(values=[[self.phosphoSitesCount],[self.kinaseCount],[self.tumorSample]]))])
        
         fig.show()
+
+    

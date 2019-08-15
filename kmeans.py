@@ -78,13 +78,15 @@ class Kmeans_cluster:
                 raise ValueError('No File by this name')
                
             else:
-                self.cluster_name = filename[:-5]
+                self.cluster_name = filename
                 
+            corrmatr = self.correlation(self.kinaseFeatures)
             for kinase, vector in self.kinaseFeatures.items():
+                print("vec ", vector)
                 for x in vector:
                     self.X.append(x)
                     self.labels.append(kinase)
-
+                    
 
         self.X = np.array(self.X)
         self.kmeansPlot()
@@ -124,13 +126,79 @@ class Kmeans_cluster:
                 xbucket.append(self.X[i,0])
                 ybucket.append(self.X[i,1])
         
-
             
         plt.legend()
         filename = "./results/" + str(self.cluster_name)[:-5] + "kmeans.png"
         plt.savefig(filename)
         plt.show()
         
+    
+    def correlation(self, kfeatures):
+        fileName = './data/pickles/' + str(self.cluster_name)[:-5] + 'correlation'
+        if os.path.exists(fileName):
+            f = open(fileName, 'rb+')
+            corrmatr = pickle.load(f)
+            return corrmatr
+
+
+        corrmatr = np.zeros((len(kfeatures.keys()), len(kfeatures.keys())))
+        a = 0
+        b = 0
+        temp1 = []
+        temp2 = []
+        vec1 = []
+        vec2 = []
+        second_vec1 = []
+        second_vec2 = []
+        for kinase, vector in kfeatures.items():
+            b = 0
+            for coord in vector:
+                vec1.append(coord[0])
+                vec2.append(coord[1])
+
+
+            for kinase2, vector2 in kfeatures.items():
+                #combine vectors
+                for coord in vector2:
+                    second_vec1.append(coord[0])
+                    second_vec2.append(coord[1])
+                    
+                #combine matrices
+                combined_length = len(vec1) + len(second_vec1)
+                j = len(second_vec1)
+                for i in range(combined_length):
+                    if i >= len(vec1):
+                        temp1.append(second_vec1[j-i])
+                        temp2.append(second_vec2[j-i])
+                        j += 1
+                    else:
+                        temp1.append(vec1[i])
+                        temp2.append(vec2[i])
+                
+                if a != b:
+                    print(np.corrcoef(temp1, temp2)[0][1])
+                    corrmatr[a, b] = np.corrcoef(temp1, temp2)[0][1]
+                else:
+                    corrmatr[a,b] = 1
+
+                second_vec1 = []
+                second_vec2 = []
+                temp1 = []
+                temp2 = []
+                b += 1
+
+            a += 1
+            vec1 = []
+            vec2 = []
+            temp1 = []
+            temp2 = []
+        
+        print("corr matr 2, 2 ", corrmatr[2,2])
+        #pickle corrmatr
+        fileName = './data/pickles/' + str(self.cluster_name)[:-5] + 'correlation'
+        f = open(fileName, 'wb+')
+        pickle.dump(corrmatr, f)
+        return corrmatr
 
 
     def logValues(self):
@@ -143,8 +211,6 @@ class Kmeans_cluster:
                 self.X[i][0] = math.log2(abs(self.X[i][0]))
                 self.X[i][1] = math.log2(abs(self.X[i][1]))
             
-            
-    
         
 
 Kmeans = Kmeans_cluster("./data/KSA_human.txt")
