@@ -1,6 +1,7 @@
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 import math
 import cluster_data as cd
 import pca
@@ -20,6 +21,7 @@ class Kmeans_cluster:
         self.poorKinaseFeatures = {}
         self.richKinaseFeatures = {}
         self.clusters = {}
+        self.correlationMatrix = None
         self.kinaseFile = kinaseFile
 
 
@@ -81,6 +83,7 @@ class Kmeans_cluster:
                 self.cluster_name = filename
                 
             corrmatr = self.correlation(self.kinaseFeatures)
+            self.correlationMatrix = corrmatr
             for kinase, vector in self.kinaseFeatures.items():
                 print("vec ", vector)
                 for x in vector:
@@ -165,18 +168,17 @@ class Kmeans_cluster:
                     
                 #combine matrices
                 combined_length = len(vec1) + len(second_vec1)
-                j = len(second_vec1)
+    
                 for i in range(combined_length):
                     if i >= len(vec1):
-                        temp1.append(second_vec1[j-i])
-                        temp2.append(second_vec2[j-i])
-                        j += 1
+                        temp1.append(second_vec1[i-len(vec1)])
+                        temp2.append(second_vec2[i-len(vec1)])
                     else:
                         temp1.append(vec1[i])
                         temp2.append(vec2[i])
                 
                 if a != b:
-                    print(np.corrcoef(temp1, temp2)[0][1])
+                    print("temp1 ", temp1)
                     corrmatr[a, b] = np.corrcoef(temp1, temp2)[0][1]
                 else:
                     corrmatr[a,b] = 1
@@ -211,11 +213,17 @@ class Kmeans_cluster:
                 self.X[i][0] = math.log2(abs(self.X[i][0]))
                 self.X[i][1] = math.log2(abs(self.X[i][1]))
             
+
+    def heatmapCluster(self):
+        cg = sns.clustermap(self.correlationMatrix, cmap="YlGnBu", linewidths=0.1)
+        plt.setp(cg.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
+        plt.show()
         
 
 Kmeans = Kmeans_cluster("./data/KSA_human.txt")
 Kmeans.prepareKmeansCluster("pca")
 Kmeans.run_kmeans()
+Kmeans.heatmapCluster()
         
     
 

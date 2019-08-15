@@ -31,7 +31,8 @@ class VisualData:
 
     def getType(self):
         if type(self.dataObj) == np.ndarray:
-            print(self.dataObj[3,2])
+            print(self.dataObj[1,3])
+            print(self.dataObj[3,1])
             print(self.dataObj.shape)
         print(type(self.dataObj))
         
