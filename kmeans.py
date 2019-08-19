@@ -2,6 +2,7 @@ from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import pandas as pd
 import math
 import cluster_data as cd
 import pca
@@ -74,6 +75,7 @@ class Kmeans_cluster:
                 self.kinaseFeatures = kinase_feat_dict['kf']
                 self.poorKinaseFeatures = kinase_feat_dict['pkf']
                 self.richKinaseFeatures = kinase_feat_dict['rkf']
+                f.close()
 
             
             if filename not in os.listdir("./data"):
@@ -141,6 +143,7 @@ class Kmeans_cluster:
         if os.path.exists(fileName):
             f = open(fileName, 'rb+')
             corrmatr = pickle.load(f)
+            f.close()
             return corrmatr
 
 
@@ -200,6 +203,7 @@ class Kmeans_cluster:
         fileName = './data/pickles/' + str(self.cluster_name)[:-5] + 'correlation'
         f = open(fileName, 'wb+')
         pickle.dump(corrmatr, f)
+        f.close()
         return corrmatr
 
 
@@ -215,7 +219,9 @@ class Kmeans_cluster:
             
 
     def heatmapCluster(self):
-        cg = sns.clustermap(self.correlationMatrix, cmap="YlGnBu", linewidths=0.1)
+        #create data frame
+        df = pd.DataFrame(self.correlationMatrix, columns=set(self.labels))
+        cg = sns.clustermap(df, cmap="YlGnBu", linewidths=0.1, method="average")
         plt.setp(cg.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
         plt.show()
         

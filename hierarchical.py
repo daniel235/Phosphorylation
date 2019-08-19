@@ -3,6 +3,7 @@ import scipy.spatial.distance as ssd
 from sklearn.cluster import AgglomerativeClustering
 from matplotlib import pyplot as plt 
 import seaborn as sns
+import os
 import numpy as np
 
 import pca
@@ -22,6 +23,7 @@ class Hierarchical:
         self.labelsPoor = []
         self.Xrich = []
         self.labelsRich = []
+        self.pfile = None
         self.k = 0
 
 
@@ -41,6 +43,7 @@ class Hierarchical:
                 self.Xrich.append(vector)
                 self.labelsRich.append(kinase)
 
+        self.pfile = pfile
         #plot general kinase clustering
         distMatrix = self.euclidDistance(self.X, self.labels)
 
@@ -81,7 +84,11 @@ class Hierarchical:
 
 
     def correlationMatrix(self, matrix, labels):
-        pass
+        #check for pickle
+        filename = "./data/pickles/pfile" + str(self.pfile)
+        if os.path.exists(filename):
+            with open(filename, 'rb+') as f:
+                pass
 
 
     def euclidDistance(self, matrix, labels):
