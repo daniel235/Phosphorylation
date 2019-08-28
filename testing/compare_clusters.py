@@ -1,3 +1,4 @@
+import scipy
 #compare clusters (for now kmeans)
 
 class CompareCluster:
@@ -29,6 +30,18 @@ class CompareCluster:
 
     def setTypes(self):
         pass
+        
+    def hyperGeometric(self, k, N, n, K):
+        #observed success x in sub
+        #total success k in sub
+        #n is number of draws
+        #N is total population
+        success = scipy.misc.comb(k, K)
+        failures = scipy.misc.comb(N-K,n-k)
+        total = scipy.misc.comb(N,n)
+
+        prob = (success * failures) / total
+        print("probability ", prob)
 
 
 

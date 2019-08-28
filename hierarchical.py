@@ -3,6 +3,7 @@ import scipy.spatial.distance as ssd
 from sklearn.cluster import AgglomerativeClustering
 from matplotlib import pyplot as plt 
 import seaborn as sns
+import pickle
 import os
 import numpy as np
 
@@ -27,6 +28,7 @@ class Hierarchical:
         self.k = 0
 
 
+    #method of clustering/ create distance matrix 
     def clusterMethod(self, method):
         if method == "pca":
             #get kinase svd feature 
@@ -43,13 +45,14 @@ class Hierarchical:
                 self.Xrich.append(vector)
                 self.labelsRich.append(kinase)
 
+
         self.pfile = pfile
         #plot general kinase clustering
-        distMatrix = self.euclidDistance(self.X, self.labels)
+        distMatrix = self.correlationMatrix(self.X, self.labels)
 
         distArray = ssd.squareform(distMatrix)
 
-        arr = linkage(distArray, method='single')
+        arr = linkage(distArray, method='ward')
 
         plt.figure()
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
@@ -57,12 +60,13 @@ class Hierarchical:
         plt.show() 
 
         #plot poor kinase clustering
-        distMatrix = self.euclidDistance(self.Xpoor, self.labelsPoor)
+        distMatrix = self.correlationMatrix(self.Xpoor, self.labelsPoor)
     
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
  
-        arr = linkage(distArray, method='single')
+        arr = linkage(distArray, method='ward')
+        print(arr)
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
@@ -70,26 +74,32 @@ class Hierarchical:
         plt.show() 
 
         #plot rich kinase clustering
-        distMatrix = self.euclidDistance(self.Xrich, self.labelsRich)
+        distMatrix = self.correlationMatrix(self.Xrich, self.labelsRich)
     
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
  
-        arr = linkage(distArray, method='single')
+        arr = linkage(distArray, method='ward')
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(pfile)[:-5] + "rich.jpg"))
+        plt.savefig(("./data/results/" + str(self.pfile)[:-5] + "rich.jpg"))
         plt.show() 
+
 
 
     def correlationMatrix(self, matrix, labels):
         #check for pickle
-        filename = "./data/pickles/pfile" + str(self.pfile)
+        filename = "./data/pickles/" + str(self.pfile)[:-5] + "correlation"
         if os.path.exists(filename):
             with open(filename, 'rb+') as f:
-                pass
+                correlationMatr = pickle.load(f)
+                
+        else: 
+            "No Correlation Matrix"
 
+        return correlationMatr
+        
 
     def euclidDistance(self, matrix, labels):
         #for i in range(len(a)):
@@ -107,12 +117,6 @@ class Hierarchical:
                 if i == j:
                     row.append(0)
                 else:
-                    if(aLabel == 'SYK' and bLabel == 'LCK'):
-                        print("syk and lck distance ", np.linalg.norm(a-b))
-
-                    elif aLabel == 'PRKCA' and bLabel == 'MAPK9':
-                        print("prkca and mapk9 distance ", np.linalg.norm(a-b))
-
                     row.append(np.linalg.norm(a-b))
 
             distMatrix.append(row)

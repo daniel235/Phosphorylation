@@ -16,10 +16,22 @@ class cleanMatrix:
         self.data = np.array(self.data)
         
 
+    #remove columns from dataset
     def omit_columns(self, nth_columns):
         self.data = np.delete(self.data, nth_columns, 1)
 
 
+    #check if columns contain strings and convert to floats
+    def column_check_strings(self):
+        row = self.data[0]
+        change_cols = []
+        for i in range(1, len(row)):
+            if type(row[i]) != float:
+                #convert to float
+                change_cols.append(i)
+
+
+    #create the gene site column on the very first column
     def set_gene_site_column(self, nth_columns, trailing_letter=False):
         #combine columns and if trailing letter(s,t) remove it.
         #first column should be site name
@@ -52,7 +64,7 @@ class cleanMatrix:
             else:
                 self.data = np.delete(self.data, nth_columns[1:], 1)
                 
-            print("first one ", self.data[0])
+
             return
 
 
@@ -66,4 +78,33 @@ class cleanMatrix:
                 pass
         pass
 
+
+    def clean_rows(self):
+        delete_rows = []
+        #for every element in array with na replace with average
+        #first get average of row
+        for i in range(len(self.data[:,1])):
+            indexes = []
+            average = 0
+            non_empty = 0
+
+            for j in range(1, len(self.data[i])):
+                if np.isnan(self.data[i,j]):
+                    indexes.append(j)
+
+                else:
+                    average += self.data[i,j]
+                    non_empty += 1
+
+            average = average / max(1, non_empty)
+
+            #delete row
+            if float(len(indexes) / len(self.data[i])) > .5:
+                #replace k with k+1
+                delete_rows.append(i)
+            else:
+                for k in indexes:
+                    self.data[i,k] = average
+
+        self.data = np.delete(self.data, delete_rows, 0)
        

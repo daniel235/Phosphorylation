@@ -2,17 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from numpy import linalg
+from scipy import linalg
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AgglomerativeClustering
 import pickle
 import pandas as pd
 import seaborn as sns
+import statistics
 import os
 import cluster_data
 import graph
 import stats
 import math
 #start pca 
+
+Kinase_variance_vectors = {}
+pfile = None
 
 #grab kinase bucket matrixes
 def getMatrix(kinase):
@@ -75,6 +80,12 @@ def getPcaVectors(matrix):
 def getFeatureVector(kinase, matrix, dim):
     #todo center data
     #todo pickle data
+    #?(matrix -> 5000x24)
+    #?(u -> 5000x5000)
+    #?(s -> 5000x24)
+    #?(Vt -> 24x24)
+    #?(XxV -> (5000x24)x(24x24))
+    #!problem if n is less than m ->  for (nxm matrix)
     #transpose matrix
     matrix = np.transpose(matrix)
     
@@ -84,9 +95,17 @@ def getFeatureVector(kinase, matrix, dim):
     #print(matrix)
 
     #pcs = getPcaVectors(matrix)
+    #normalize columns
+    mean = 0
+    for i in range(len(matrix[0])):
+        mean = np.mean(matrix[:,i])
+        stdDev = statistics.stdev(matrix[:,i])
+        for j in range(len(matrix[:0])):
+            matrix[j,i] = (matrix[j,i] - mean) / stdDev
+
+    
     u, s, vt = linalg.svd(matrix, full_matrices=False)
     
-
     #get variance
     var_explained = np.round(s**2/np.sum(s**2), decimals=3)
     sns.barplot(x=list(range(1,len(var_explained)+1)),
@@ -97,7 +116,10 @@ def getFeatureVector(kinase, matrix, dim):
     plt.savefig('./results/svd_variance.png', dpi=100)
     
     #get first column of V   (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
+    #(6x24) x (24x1)
+
     v = np.transpose(vt)
+   
     #vR
     v = v[:,:dim]
     #get scores XVR
@@ -110,10 +132,18 @@ def getFeatureVector(kinase, matrix, dim):
         pickle.dump(vec, dbfile)
         dbfile.close()
 
+    variance_vector(kinase, matrix)
+        
     return vec, u, s, vt
 
 
-def plotPCA(X, Y):
-    plt.figure()
-    plt.plot(X, Y, 'o')
-    plt.show()
+def variance_vector(kinase, matrix):
+    #transpose matrix back to original form
+    matrix = np.transpose(matrix)
+    u, s, vt = linalg.svd(matrix, full_matrices=True)
+    Kinase_variance_vectors[kinase] = vt[0]
+    print("vt shape", vt.shape)
+    #pickle variance vector
+    filename = "./data/pickles/" + str(pfile)[:3] + "variance_vector"
+    with open(filename, 'wb+') as f:
+        pickle.dump(Kinase_variance_vectors, f)

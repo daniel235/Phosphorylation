@@ -22,13 +22,6 @@ class ClusterData:
 
     All functions are separated by underscores
 
-    returns datasets for basal and luminal types.
-
-    Also creates the y data to test against data.
-
-    Automatically separates data into train and test set
-
-    
     
     Returns:
         prepared data for clustering algorithms as class properties -> (self.trainBasal)
@@ -86,16 +79,6 @@ class ClusterData:
 
         self.CancerData = np.delete(self.CancerData, delete_rows, 0)
 
-
-    #remove column by index or label
-    def remove_column(self, index):
-        if type(index) == int:
-            self.CancerData.drop(columns=[self.colNames[index]])
-        else:
-            self.CancerData.drop(columns=[index])
-
-        self.colNames = self.CancerData.columns
-        print("You now have ", len(self.colNames), " columns")
 
     #clean breast cancer data and create 
     #kinase matrix and phosphosite matrix
@@ -162,9 +145,8 @@ class ClusterData:
 
                 current_int = []
 
-        print("len of columns ", len(df.data[3]), df.data[3])
         df.omit_columns(index)
-
+        df.check_for_multiples()
         ''' self.CancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
         #join first two columns
         for i in range(len(self.CancerData[:,0])):
@@ -173,10 +155,8 @@ class ClusterData:
             self.CancerData[i,0] = (self.CancerData[i,0])[0:-2]
         '''
         self.CancerData = df.data
-        print(self.CancerData[3])
         #fix Na's here
         self.replace_with_average()
-        print(self.CancerData)
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])):
