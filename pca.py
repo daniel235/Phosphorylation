@@ -142,7 +142,6 @@ def variance_vector(kinase, matrix):
     matrix = np.transpose(matrix)
     u, s, vt = linalg.svd(matrix, full_matrices=True)
     Kinase_variance_vectors[kinase] = vt[0]
-    print("vt shape", vt.shape)
     #pickle variance vector
     filename = "./data/pickles/" + str(pfile)[:3] + "variance_vector"
     with open(filename, 'wb+') as f:

@@ -24,7 +24,7 @@ class Kmeans_cluster:
         self.clusters = {}
         self.correlationMatrix = None
         self.kinaseFile = kinaseFile
-
+        self.final_clusters = {}
 
     def run_kmeans(self):
         kmeans = KMeans(n_clusters=self.nclusters, verbose=1)
@@ -49,12 +49,22 @@ class Kmeans_cluster:
         filename = "./results/" + str(self.cluster_name)[:-5] + "kmeanscluster.txt"
         with open(filename, 'w+') as f:
             for k, kinase in sorted(self.clusters.items()):
+                
                 sentence = "\nCluster " + str(k) + "\n"
                 f.write(sentence)
                 for kinase, data in kinase.items():
+                    #check if kinase qualifies to be in this cluster
+                    if data > 10:
+                        if k in self.final_clusters:
+                            self.final_clusters[k].append([kinase, data])
+
+                        else:
+                            self.final_clusters[k] = [[kinase, data]]
+
                     sentence = str(kinase) + " " + str(data) + " "
                     f.write(sentence)
 
+        return self.final_clusters
 
     def prepareKmeansCluster(self, method):
         if method == "pca":

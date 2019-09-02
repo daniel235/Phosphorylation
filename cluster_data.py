@@ -146,7 +146,10 @@ class ClusterData:
                 current_int = []
 
         df.omit_columns(index)
-        df.check_for_multiples()
+        df.column_check_strings()
+        df.clean_rows()
+    
+
         ''' self.CancerData = np.array(pd.read_excel(self.pfile, sheet_name="data", dtype=object))
         #join first two columns
         for i in range(len(self.CancerData[:,0])):
@@ -156,6 +159,7 @@ class ClusterData:
         '''
         self.CancerData = df.data
         #fix Na's here
+        print(self.CancerData[4])
         self.replace_with_average()
 
         #fix kinase substrates columns

@@ -1,0 +1,11 @@
+Method Singular Value Decomposition(One of the PCA methods)
+X = U(SIG)V*
+
+X shape (nxm)
+
+U shape (nxn)
+
+(SIG) shape (nx1)
+
+V shape (nxm)
+
