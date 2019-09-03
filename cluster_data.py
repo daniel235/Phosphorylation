@@ -27,7 +27,7 @@ class ClusterData:
         prepared data for clustering algorithms as class properties -> (self.trainBasal)
     '''
 
-    def __init__(self, kinaseSubstrateFile):
+    def __init__(self, kinaseSubstrateFile, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
         self.pfile = None
         self.fileName = None
         self.kfile = os.path.join(kinaseSubstrateFile)
@@ -43,7 +43,7 @@ class ClusterData:
         self.colNames = None
         self.phosDataOrdered = True
         self.stats = stats.Statistics()
-        self.clean_data()
+        self.clean_data(test, phosfile, sheet, ordered, trailing_letter, psite_cols, omit_cols)
         
 
     def replace_with_average(self):
@@ -82,7 +82,7 @@ class ClusterData:
 
     #clean breast cancer data and create 
     #kinase matrix and phosphosite matrix
-    def clean_data(self):
+    def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
         self.unique_kinases = np.array(pd.read_csv(self.kfile, delim_whitespace=True))[:,0]
         unique_kinase_temp = []
         for i in self.unique_kinases:
@@ -95,57 +95,73 @@ class ClusterData:
         self.unique_kinases = unique_kinase_temp
         
         #print(self.phosphositePlusKinaseData[:,1])
-        self.fileName = input("What file do you want to use?")
-        self.pfile = os.path.join("./data/", self.fileName)
-        sheet_name = input("What is your sheet name for phosphorylation data?")
-        inputs = input("Is your phosphorylation data ordered(yes/no)?")
-        if inputs == "yes":
-            print("yes ordered")
-            self.phosDataOrdered = True
-        else:
-            self.phosDataOrdered = False
+        if test == True:
+            self.fileName = phosfile
+            self.pfile = os.path.join("./data/", self.fileName)
+            sheet_name = sheet
+            self.phosDataOrdered = ordered
+            trailing = trailing_letter
+            index = psite_cols
+            omit_column = omit_cols
 
-        inputs = input("Trailing letters on genes?(yes/no)")
-        if inputs == "yes":
-            trailing = True
+
         else:
-            trailing = False
+            self.fileName = input("What file do you want to use?")
+            self.pfile = os.path.join("./data/", self.fileName)
+            sheet_name = input("What is your sheet name for phosphorylation data?")
+            inputs = input("Is your phosphorylation data ordered(yes/no)?")
+            if inputs == "yes":
+                print("yes ordered")
+                self.phosDataOrdered = True
+            else:
+                self.phosDataOrdered = False
+
+            inputs = input("Trailing letters on genes?(yes/no)")
+            if inputs == "yes":
+                trailing = True
+            else:
+                trailing = False
+
+
+
+            input_column = input("Which column(s) is your psite in?(separate by space if more than 1)")
+            index = []
+            for i in range(len(input_column)):
+                if input_column[i] != ' ':
+                    index.append(int(input_column[i]))
+            
+
+            omit_column = input("what column(s) do i omit?(separate by space)")
+
+            indexs = []
+            current_int = []
+            counter = 0
+            for i in range(len(omit_column)):
+                if omit_column[i] != ' ':
+                    current_int.append(omit_column[i])
+                
+                else:
+                    if len(current_int) > 1:
+                        for j in range(len(current_int)):
+                            if j == 0:
+                                current_int[j] = 10 * int(current_int[j])
+
+                            indexs.append(int(current_int[j]) + current_int[0])
+                    else:
+                        indexs.append(current_int[0])
+
+                    current_int = []
+
+
 
         df = clean.cleanMatrix(self.pfile, sheet_name)
-
         #set stats (len of psites, len of unique kinases, len of tumor samples)
         self.stats.set_table(len(df.data[:,0]), len(self.unique_kinases), len(df.data[1]))
         self.stats.plotTable()
-
-        input_column = input("Which column(s) is your psite in?(separate by space if more than 1)")
-        index = []
-        for i in range(len(input_column)):
-            if input_column[i] != ' ':
-                index.append(int(input_column[i]))
-        
-
         df.set_gene_site_column(index, trailing)
-        index = []
-        current_int = []
-        counter = 0
-        omit_column = input("what column(s) do i omit?(separate by space)")
-        for i in range(len(omit_column)):
-            if omit_column[i] != ' ':
-                current_int.append(omit_column[i])
-            
-            else:
-                if len(current_int) > 1:
-                    for j in range(len(current_int)):
-                        if j == 0:
-                            current_int[j] = 10 * int(current_int[j])
 
-                        index.append(int(current_int[j]) + current_int[0])
-                else:
-                    index.append(current_int[0])
 
-                current_int = []
-
-        df.omit_columns(index)
+        df.omit_columns(indexs)
         df.column_check_strings()
         df.clean_rows()
     

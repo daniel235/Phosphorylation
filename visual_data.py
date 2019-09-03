@@ -18,7 +18,7 @@ class VisualData:
             print((len(pickles)+1), " Exit")
 
             choice = input("What data object do you want?")
-            if choice == len(pickles) + 1:
+            if int(choice) >= len(pickles):
                 self.exitFlag = True
                 return
 

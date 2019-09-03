@@ -50,7 +50,7 @@ class cleanMatrix:
                 if trailing_letter:
                     self.data[i,0] = str(self.data[i,0])[:-1]
                     #also check for semicolons
-                    self.check_for_multiples(self.data[i,0])
+                    #self.check_for_multiples(self.data[i,0])
                     
 
             if nth_columns[0] != 0:

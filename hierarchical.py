@@ -26,6 +26,7 @@ class Hierarchical:
         self.labelsRich = []
         self.pfile = None
         self.k = 0
+        self.clusters = []
 
 
     #method of clustering/ create distance matrix 
@@ -57,6 +58,20 @@ class Hierarchical:
         #agglomerative
         cluster = AgglomerativeClustering(n_clusters=cluster_len, affinity='precomputed', linkage='complete')
         print(cluster.fit_predict(distMatrix))
+
+        #initialize empty arrays for each numbered cluster ex: 1, 2, 3
+        for i in range(cluster_len):
+            self.clusters.append([])
+
+        #create cluster group
+        keys = list(self.kinaseFeatures.keys())
+        for i in range(len(cluster.labels_)):
+            #match to kinase label
+            #if kinase not in cluster already add it
+            if keys[i] not in self.clusters[cluster.labels_[i]]:
+                self.clusters[cluster.labels_[i]].append(keys[i])
+
+        
 
         plt.figure()
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
@@ -218,7 +233,7 @@ class Hierarchical:
         pass
 
 
-hierCluster = Hierarchical()
+'''hierCluster = Hierarchical()
 hierCluster.kinaseFile = "./data/KSA_human.txt" 
 #hierCluster.dataFile = "./data/BreastCancerData.xlsx"
-hierCluster.clusterMethod("pca", 8)
+hierCluster.clusterMethod("pca", 8)'''

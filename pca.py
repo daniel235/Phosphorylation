@@ -20,25 +20,36 @@ Kinase_variance_vectors = {}
 pfile = None
 
 #grab kinase bucket matrixes
-def getMatrix(kinase):
+def getMatrix(kinase, test=False):
+    #clean data first
     clusterStructure = cluster_data.ClusterData(kinase)
+    #grab substrate matrixes with minimum requried substrates n
     myMatrix = clusterStructure.get_kinase_substrate_matrixes(2)
+    #how many psites are in data after it is cleaned
     psiteCount = len(clusterStructure.CancerData[:,1])
+    #how many kinases are matched to the phosphorylation data
     kinaseCount = len(myMatrix.keys())
+    #how many tumor samples are in the data after it is cleaned
     tsampleCount = len(clusterStructure.CancerData[1])
+    #get statistics (how many psites/kinases are in this filtered data)
     afterStat = stats.Statistics() 
     afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
     afterStat.plotTable()
+    #return matrix and name of the file we are using
     return myMatrix, clusterStructure.fileName
 
 
 #get SVDs of each kinase bucket and write it to svd txt file
-def getSVDdata(kinase, threshold):
+def getSVDdata(kinase, threshold, obs=None):
     poorKinaseFeature = {}
     richKinaseFeature = {}
     substrateCount = 0
     kinaseFeature = {}
-    matrix, pfile = getMatrix(kinase)
+    if obs == None:
+        matrix, pfile = getMatrix(kinase)
+
+    else:
+        matrix, pfile = None
     
     with open("./results/" + str(pfile)[:-5] + "svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
