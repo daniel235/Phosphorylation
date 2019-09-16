@@ -235,7 +235,7 @@ class ClusterData:
         start = False
         count = 0
         for i in range(len(self.phosphositePlusKinaseData)):
-            if self.phosphositePlusKinaseData[i][0] == kinase:
+            if self.phosphositePlusKinaseData[i][0].upper() == kinase.upper():
                 #?logic controllers
                 mid = int(len(self.CancerData) / 2)
                 current = mid
