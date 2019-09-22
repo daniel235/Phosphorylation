@@ -45,7 +45,7 @@ class CompareCluster:
         self.all_cluster_nodes = []
         self.overlap = []
         self.k = 0
-        self.N = len(self.family_data)
+        self.N = None
 
 
     def setEdge(self, cluster1, cluster2):
@@ -77,25 +77,34 @@ class CompareCluster:
 
 
 
-    def hyperGeometric(self, k, n, M):
+    def hyperGeometric(self, overlap, k, N):
         #k total success in M group - overlap
         #n is number of draws(size of 1 correlation cluster)
         #N is total population(all kinases in all families)
         #M is size of one family cluster
 
-        #M choose k
-        success = scipy.misc.comb(M, k)
-        #N-M choose n-k
-        failures = scipy.misc.comb((self.N-M),(n-k))
-        #N choose n
-        total = scipy.misc.comb(self.N,n)
-
-        prob = (success * failures) / total
-
-        #other cumulative hyper geometric distribution
+        #cumulative hyper geometric distribution
+        #x -> current integer in rayman sum
+        #M -> Total population of kinases in all clusters (even not in our phospho data)
+        #N -> Total population of family cluster i
+        #prob = hypergeom.cdf(x, M, n, N)
+        M = len(self.family_data)
+        #M = len(self.uniqueKinases)
+        print("M ", M, " N ", N, " k ", k, " overlap ", overlap)
+        prob = 0
+        for i in range(overlap):
+            #[x] choose [i]
+            one = scipy.misc.comb(k, i)
+            print("one ", one)
+            #[M-x] choose [N-i]
+            two = scipy.misc.comb((M-k), (N-i))
+            print("two ", two)
+            #[M] choose [N]
+            prob += (one * two) / scipy.misc.comb(M, N)
 
 
         return prob
+
 
     def get_edge_scores(self):
         k = 0
@@ -119,14 +128,19 @@ class CompareCluster:
                             k += 1
 
                     #before you move to next cluster computer edge score of node
+                    #n is length of cluster j
                     n = len(self.all_cluster_nodes[i][j].data)
-                    M = len(self.all_cluster_nodes[0][s].data)
+                    #N is length of family cluster s
+                    N = len(self.all_cluster_nodes[0][s].data)
+                    
                     #set edge score of cluster group i and cluster j with family group and cluster s
-                    self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[0][s].name] = self.hyperGeometric(k, n, M)
+                    overlap = k
+                    self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[0][s].name] = self.hyperGeometric(overlap, n, N)
                     print("Edge between ", self.all_cluster_nodes[i][j].name, " and ", self.all_cluster_nodes[0][s].name, " is ", self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[0][s].name])
 
             self.overlap.append(commonKinases)
             commonKinases = []
+
 
     def create_graph(self):
         #create nodes for main family tree

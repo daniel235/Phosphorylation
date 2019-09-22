@@ -87,7 +87,7 @@ class ClusterData:
         unique_kinase_temp = []
         for i in self.unique_kinases:
             if i not in unique_kinase_temp:
-                unique_kinase_temp.append(i)
+                unique_kinase_temp.append(i.upper())
 
         #set unique kinases
         #strip na's

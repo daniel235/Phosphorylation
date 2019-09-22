@@ -90,7 +90,7 @@ class cleanMatrix:
             if string[i] == '-':
                 start = True
 
-            elif string[i] == ';':
+            elif string[i] == ';' or string[i] == ' ' or string[i] == '\t':
                 #iterate backwords to save word
                 sites[base + "-" + site] = index
                 returnStatus = True
@@ -153,7 +153,7 @@ class cleanMatrix:
         self.data = np.delete(self.data, delete_rows, 0)
        
         #run through all rows and create new rows
-        for i in range(len(self.data[:,1])):
+        '''for i in range(len(self.data[:,1])):
             #start here for column site cleanup
             extra_rows = self.check_for_multiples(self.data[i,0], i)
             first = ""
@@ -177,5 +177,5 @@ class cleanMatrix:
 
 
         if len(add_rows) > 1:
-            self.data = np.append(self.data, add_rows, axis=0)
+            self.data = np.append(self.data, add_rows, axis=0)'''
 
