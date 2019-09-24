@@ -48,10 +48,6 @@ class CompareCluster:
         self.N = None
 
 
-    def setEdge(self, cluster1, cluster2):
-        pass
-
-
     def setMainCluster(self):
         for i in range(len(self.family_data)):
             #if kinases not in kinase list then add it
@@ -90,56 +86,19 @@ class CompareCluster:
         #prob = hypergeom.cdf(x, M, n, N)
         M = len(self.family_data)
         #M = len(self.uniqueKinases)
-        print("M ", M, " N ", N, " k ", k, " overlap ", overlap)
+        if overlap != 0:
+            print("M ", M, " N ", N, " k ", k, " overlap ", overlap)
         prob = 0
-        for i in range(overlap):
+        for i in range(overlap, N):
             #[x] choose [i]
             one = scipy.misc.comb(k, i)
-            print("one ", one)
             #[M-x] choose [N-i]
             two = scipy.misc.comb((M-k), (N-i))
-            print("two ", two)
             #[M] choose [N]
             prob += (one * two) / scipy.misc.comb(M, N)
 
 
         return prob
-
-
-    def get_edge_scores(self):
-        k = 0
-        M = 0
-        n = 0
-        commonKinases = []
-        print("in edge scores")
-        #3
-        print(len(self.all_cluster_nodes))
-        print(len(self.all_cluster_nodes[1]))
-
-        for i in range(1, len(self.all_cluster_nodes)):
-            #computer edge score between all of the ith cluster node and original family cluster node
-            for j in range(len(self.all_cluster_nodes[i])):
-                for s in range(len(self.all_cluster_nodes[0])):
-                    k = 0
-                    for kinase in self.all_cluster_nodes[0][s].data:
-                        #if kinase in family is in the cluster group i cluster j add it to overlap
-                        if kinase in self.all_cluster_nodes[i][j].data:
-                            commonKinases.append(kinase)
-                            k += 1
-
-                    #before you move to next cluster computer edge score of node
-                    #n is length of cluster j
-                    n = len(self.all_cluster_nodes[i][j].data)
-                    #N is length of family cluster s
-                    N = len(self.all_cluster_nodes[0][s].data)
-                    
-                    #set edge score of cluster group i and cluster j with family group and cluster s
-                    overlap = k
-                    self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[0][s].name] = self.hyperGeometric(overlap, n, N)
-                    print("Edge between ", self.all_cluster_nodes[i][j].name, " and ", self.all_cluster_nodes[0][s].name, " is ", self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[0][s].name])
-
-            self.overlap.append(commonKinases)
-            commonKinases = []
 
 
     def create_graph(self):
@@ -150,7 +109,9 @@ class CompareCluster:
 
         for i in range(len(self.family_clusters)):
             n = Node(cluster_family_names[i])
+            print(n.name)
             n.data = cluster_family_vals[i]
+            print(n.data)
             row.append(n)
 
 
@@ -184,16 +145,50 @@ class CompareCluster:
         return
 
 
+
+    def get_edge_scores(self):
+        k = 0
+        M = 0
+        n = 0
+        commonKinases = []
+
+        for i in range(1, len(self.all_cluster_nodes)):
+            for kr in range(len(self.all_cluster_nodes)):
+                #computer edge score between all of the ith cluster node and original family cluster node
+                for j in range(len(self.all_cluster_nodes[i])):
+                    for s in range(len(self.all_cluster_nodes[kr])):
+                        k = 0
+                        for kinase in self.all_cluster_nodes[kr][s].data:
+                            #if kinase in family is in the cluster group i cluster j add it to overlap
+                            if kinase in self.all_cluster_nodes[i][j].data:
+                                commonKinases.append(kinase)
+                                k += 1
+
+                        #before you move to next cluster computer edge score of node
+                        #n is length of cluster j
+                        n = len(self.all_cluster_nodes[i][j].data)
+                        #N is length of family cluster s
+                        N = len(self.all_cluster_nodes[kr][s].data)
+                        
+                        #set edge score of cluster group i and cluster j with family group and cluster s
+                        overlap = k
+                        self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name] = self.hyperGeometric(overlap, n, N)
+                        print("Edge between ", self.all_cluster_nodes[i][j].name, " and ", self.all_cluster_nodes[kr][s].name, " is ", self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name])
+
+                self.overlap.append(commonKinases)
+                commonKinases = []
+
+
+    
+
     #filter out kinases that are not in our phosphorylation data
     def filter_phospho_kinases(self):
         replace_kinases = []
-        print("unique ", self.uniqueKinases, "kinasesList")
         print("len of cluster nodes ", len(self.all_cluster_nodes[0]))
         for i in range(len(self.all_cluster_nodes[0])):
             for kinase in self.all_cluster_nodes[0][i].data:
                 #uppercase kinase
                 kinase = str(kinase).upper()
-                print(kinase)
                 if kinase in self.uniqueKinases:
                     replace_kinases.append(kinase)
 
@@ -213,6 +208,7 @@ class CompareCluster:
                     f.write(string)
 
 
+    #check if cluster groups file exists if not create it
     def data_exists_check(self):
         #look for pickle files
         filename1 = "./data/pickles/clusterGroups"

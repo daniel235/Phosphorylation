@@ -12,9 +12,10 @@ import os
 
 import clean
 import stats
+import alias 
 
 
-class ClusterData:
+class PrepareClusterData:
     '''This class creates the prepared data for the knn and also hierarchy clustering
     functions.  
 
@@ -84,10 +85,12 @@ class ClusterData:
     #kinase matrix and phosphosite matrix
     def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
         self.unique_kinases = np.array(pd.read_csv(self.kfile, delim_whitespace=True))[:,0]
+        aliases = alias.Alias("./data/info_table.csv")
         unique_kinase_temp = []
         for i in self.unique_kinases:
-            if i not in unique_kinase_temp:
-                unique_kinase_temp.append(i.upper())
+            kinase = aliases.get_main_kinase(i)
+            if kinase not in unique_kinase_temp:
+                unique_kinase_temp.append(kinase.upper())
 
         #set unique kinases
         #strip na's
