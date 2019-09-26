@@ -41,26 +41,54 @@ class Alias:
 
         #if not found go through every row of kinases
         #binary search sorted array
-        m = len(self.alias_list) / 2
+        m = int(len(self.alias_list) / 2)
         current = None
         low = 0
         high = len(self.alias_list)
-        while(m != current):
-            current = self.alias_list[m]
+        previous = 0
+        breakCase = 0
+        currentChar = 0
+        currentIndex = m
+
+        while(m != previous and m < len(self.alias_list) and m > 0):
+            current = self.alias_list[int(currentIndex)]
+            print("current ", m, " low ", low)
+            previous = m
+            m = int(m / 2)
+
+            print(kinase, " -> ", current)
             #check if kinase is current kinase pointed to
             if kinase == current:
+                print("found kinase")
                 break
+
             #check if kinase name is in lower half
             if kinase < current:
-                m = m / 2
+                print("lower")
+                currentIndex = m + low
+
             #check if kinase name is in upper half
             else:
-                m = m + (m / 2)
+                print("higher")
+                low = currentIndex
+                currentIndex = m + low
 
 
+            if m == previous:
+                return kinase
+            
+
+            if breakCase > 100:
+                return kinase
 
 
-        return kinase
+            breakCase += 1
+
+
+        #look for current in dictionary
+        newKinase = self.alias_dict[current]
+
+        return newKinase
 
     
     def set_alias_dictionary(self):

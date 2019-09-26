@@ -26,6 +26,7 @@ class Kmeans_cluster:
         self.kinaseFile = kinaseFile
         self.final_clusters = {}
 
+
     def run_kmeans(self):
         kmeans = KMeans(n_clusters=self.nclusters, verbose=1)
         kmeans.fit(self.X)
