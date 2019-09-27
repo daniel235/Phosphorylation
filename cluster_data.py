@@ -44,6 +44,7 @@ class PrepareClusterData:
         self.colNames = None
         self.phosDataOrdered = True
         self.stats = stats.Statistics()
+        self.alias = alias.Alias("./data/info_table.csv")
         self.clean_data(test, phosfile, sheet, ordered, trailing_letter, psite_cols, omit_cols)
         
 
@@ -84,12 +85,12 @@ class PrepareClusterData:
     def convert_kinases(self, kinaseFile):
         #check if file exists 
         files = "./results/newPhosKinaseFile.txt"
-        if(os.path.exists(files) == False):
+        if(os.path.exists(files) == False or os.stat(files).st_size == 0):
             with open(files, 'w+') as f:
                 arr = pd.read_csv(kinaseFile, delimiter="\t")
                 for i in range(len(arr)):
                     #search for kinase in alias list
-                    arr["Kinase"][i] = alias.Alias("./data/info_table.csv").get_main_kinase(arr["Kinase"][i])
+                    arr["Kinase"][i] = self.alias.get_main_kinase(arr["Kinase"][i])
                     #write to file
                     s = arr["Kinase"][i] + "\n"
                     f.write(s)
@@ -157,7 +158,7 @@ class PrepareClusterData:
 
             indexs = []
             current_int = []
-            counter = 0
+            
             for i in range(len(omit_column)):
                 if omit_column[i] != ' ':
                     current_int.append(omit_column[i])

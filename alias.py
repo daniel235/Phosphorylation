@@ -61,7 +61,6 @@ class Alias:
 
             #check if kinase name is in lower half
             if kinase < current:
-                high = currentIndex
                 currentIndex = m + low
 
             #check if kinase name is in upper half
@@ -95,5 +94,5 @@ class Alias:
             
         #sort dictionary
         self.alias_list = sorted(self.alias_dict.keys())
-        print(self.alias_dict)
+        
         
