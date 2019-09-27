@@ -150,34 +150,43 @@ class CompareCluster:
         M = 0
         n = 0
         commonKinases = []
+        significantScores = []
+        with open("./results/overlapScores.txt", 'w+') as f:
+            for i in range(1, len(self.all_cluster_nodes)):
+                for kr in range(len(self.all_cluster_nodes)):
+                    #computer edge score between all of the ith cluster node and original family cluster node
+                    for j in range(len(self.all_cluster_nodes[i])):
+                        if i != j:
+                            for s in range(len(self.all_cluster_nodes[kr])):
+                                k = 0
+                                for kinase in self.all_cluster_nodes[kr][s].data:
+                                    #if kinase in family is in the cluster group i cluster j add it to overlap
+                                    if kinase in self.all_cluster_nodes[i][j].data:
+                                        commonKinases.append(kinase)
+                                        k += 1
 
-        for i in range(1, len(self.all_cluster_nodes)):
-            for kr in range(len(self.all_cluster_nodes)):
-                #computer edge score between all of the ith cluster node and original family cluster node
-                for j in range(len(self.all_cluster_nodes[i])):
-                    for s in range(len(self.all_cluster_nodes[kr])):
-                        k = 0
-                        for kinase in self.all_cluster_nodes[kr][s].data:
-                            #if kinase in family is in the cluster group i cluster j add it to overlap
-                            if kinase in self.all_cluster_nodes[i][j].data:
-                                commonKinases.append(kinase)
-                                k += 1
+                                #before you move to next cluster computer edge score of node
+                                #n is length of cluster j
+                                n = len(self.all_cluster_nodes[i][j].data)
+                                #N is length of family cluster s
+                                N = len(self.all_cluster_nodes[kr][s].data)
+                                
+                                #set edge score of cluster group i and cluster j with family group and cluster s
+                                overlap = k
+                                score = self.hyperGeometric(overlap, n, N)
+                                self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name] = score
+                                if score < .05 and score != 0:
+                                    significantScores.append(("Edge between " + str(self.all_cluster_nodes[i][j].name) + " and " + str(self.all_cluster_nodes[kr][s].name) + " is " + str(self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name]) + "\n"))
 
-                        #before you move to next cluster computer edge score of node
-                        #n is length of cluster j
-                        n = len(self.all_cluster_nodes[i][j].data)
-                        #N is length of family cluster s
-                        N = len(self.all_cluster_nodes[kr][s].data)
-                        
-                        #set edge score of cluster group i and cluster j with family group and cluster s
-                        overlap = k
-                        self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name] = self.hyperGeometric(overlap, n, N)
-                        print("Edge between ", self.all_cluster_nodes[i][j].name, " and ", self.all_cluster_nodes[kr][s].name, " is ", self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name])
+                                scores = "Edge between " + str(self.all_cluster_nodes[i][j].name) + " and " + str(self.all_cluster_nodes[kr][s].name) + " is " + str(self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name]) + "\n"
+                                f.write(scores)
 
-                self.overlap.append(commonKinases)
-                commonKinases = []
+                        self.overlap.append(commonKinases)
+                        commonKinases = []
 
-
+        with open("./results/significantScores.txt", 'w+') as f:
+            for i in range(len(significantScores)):
+                f.write(significantScores[i])
     
 
     #filter out kinases that are not in our phosphorylation data

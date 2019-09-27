@@ -80,6 +80,14 @@ class PrepareClusterData:
 
         self.CancerData = np.delete(self.CancerData, delete_rows, 0)
 
+    #?convert phosphositeplus kinases into correct aliases
+    def convert_kinases(self, kinaseFile):
+        #check if file exists 
+        files = "./results/newPhosKinaseFile.txt"
+        if(os.path.exists(files) == False):
+            arr = pd.read_csv(kinaseFile, delimiter="\t")
+            for i in range(len(arr)):
+                arr["kinase"][i] = None 
 
     #clean breast cancer data and create 
     #kinase matrix and phosphosite matrix
@@ -88,10 +96,14 @@ class PrepareClusterData:
         aliases = alias.Alias("./data/info_table.csv")
         unique_kinase_temp = []
         for i in self.unique_kinases:
-            kinase = aliases.get_main_kinase(i)
+            '''kinase = aliases.get_main_kinase(i)
             if kinase not in unique_kinase_temp:
                 unique_kinase_temp.append(kinase.upper())
-
+            '''
+            i = i.upper()
+            if i not in unique_kinase_temp:
+                unique_kinase_temp.append(i)
+                
         #set unique kinases
         #strip na's
         #strip columns
@@ -238,7 +250,8 @@ class PrepareClusterData:
         start = False
         count = 0
         for i in range(len(self.phosphositePlusKinaseData)):
-            if self.phosphositePlusKinaseData[i][0].upper() == kinase.upper():
+            currentKinase = alias.Alias("./data/info_table.csv").get_main_kinase(self.phosphositePlusKinaseData[i][0].upper())
+            if currentKinase == kinase.upper():
                 #?logic controllers
                 mid = int(len(self.CancerData) / 2)
                 current = mid

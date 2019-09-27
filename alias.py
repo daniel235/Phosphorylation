@@ -1,5 +1,5 @@
 import pandas as pd 
-
+import math
 
 class Alias:
     def __init__(self, filename):
@@ -50,11 +50,13 @@ class Alias:
         currentChar = 0
         currentIndex = m
 
+        #!bug : m is getting too small (soln: m is equal to high - low / 2)
         while(m != previous and m < len(self.alias_list) and m > 0):
             current = self.alias_list[int(currentIndex)]
-            print("current ", m, " low ", low)
+            print("current ", m, " low ", low, 'high', high)
             previous = m
-            m = int(m / 2)
+            m = int(math.ceil(m / 2))
+            #m = int((high - low) / 2)
 
             print(kinase, " -> ", current)
             #check if kinase is current kinase pointed to
@@ -65,6 +67,7 @@ class Alias:
             #check if kinase name is in lower half
             if kinase < current:
                 print("lower")
+                high = currentIndex
                 currentIndex = m + low
 
             #check if kinase name is in upper half
