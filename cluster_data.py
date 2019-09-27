@@ -85,9 +85,17 @@ class PrepareClusterData:
         #check if file exists 
         files = "./results/newPhosKinaseFile.txt"
         if(os.path.exists(files) == False):
-            arr = pd.read_csv(kinaseFile, delimiter="\t")
-            for i in range(len(arr)):
-                arr["kinase"][i] = None 
+            with open(files, 'w+') as f:
+                arr = pd.read_csv(kinaseFile, delimiter="\t")
+                for i in range(len(arr)):
+                    #search for kinase in alias list
+                    arr["Kinase"][i] = alias.Alias("./data/info_table.csv").get_main_kinase(arr["Kinase"][i])
+                    #write to file
+                    s = arr["Kinase"][i] + "\n"
+                    f.write(s)
+
+        else:
+            return
 
     #clean breast cancer data and create 
     #kinase matrix and phosphosite matrix
@@ -96,20 +104,19 @@ class PrepareClusterData:
         aliases = alias.Alias("./data/info_table.csv")
         unique_kinase_temp = []
         for i in self.unique_kinases:
-            '''kinase = aliases.get_main_kinase(i)
+            kinase = aliases.get_main_kinase(i)
             if kinase not in unique_kinase_temp:
                 unique_kinase_temp.append(kinase.upper())
-            '''
-            i = i.upper()
+            
+            '''i = i.upper()
             if i not in unique_kinase_temp:
-                unique_kinase_temp.append(i)
+                unique_kinase_temp.append(i)'''
                 
         #set unique kinases
         #strip na's
         #strip columns
         self.unique_kinases = unique_kinase_temp
         
-        #print(self.phosphositePlusKinaseData[:,1])
         if test == True:
             self.fileName = phosfile
             self.pfile = os.path.join("./data/", self.fileName)
@@ -193,8 +200,14 @@ class PrepareClusterData:
         print(self.CancerData[4])
         self.replace_with_average()
 
+        #kinase alias name fix here
+        self.convert_kinases("./data/KSA_human.txt")
+        tempKinases = pd.read_csv("./results/newPhosKinaseFile.txt")
+        
+
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])):
+            self.phosphositePlusKinaseData[i,0] = tempKinases[i]
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
         
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]
@@ -250,7 +263,7 @@ class PrepareClusterData:
         start = False
         count = 0
         for i in range(len(self.phosphositePlusKinaseData)):
-            currentKinase = alias.Alias("./data/info_table.csv").get_main_kinase(self.phosphositePlusKinaseData[i][0].upper())
+            currentKinase = self.phosphositePlusKinaseData[i][0].upper()
             if currentKinase == kinase.upper():
                 #?logic controllers
                 mid = int(len(self.CancerData) / 2)
