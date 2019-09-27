@@ -90,7 +90,7 @@ class PrepareClusterData:
                 arr = pd.read_csv(kinaseFile, delimiter="\t")
                 for i in range(len(arr)):
                     #search for kinase in alias list
-                    arr["Kinase"][i] = self.alias.get_main_kinase(arr["Kinase"][i])
+                    arr["Kinase"][i] = self.alias.get_main_kinase(str(arr["Kinase"][i]))
                     #write to file
                     s = arr["Kinase"][i] + "\n"
                     f.write(s)
@@ -203,7 +203,7 @@ class PrepareClusterData:
 
         #kinase alias name fix here
         self.convert_kinases("./data/KSA_human.txt")
-        tempKinases = pd.read_csv("./results/newPhosKinaseFile.txt")
+        tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
         
 
         #fix kinase substrates columns
