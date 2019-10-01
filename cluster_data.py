@@ -88,6 +88,7 @@ class PrepareClusterData:
         if(os.path.exists(files) == False or os.stat(files).st_size == 0):
             with open(files, 'w+') as f:
                 arr = pd.read_csv(kinaseFile, delimiter="\t")
+                print(len(arr))
                 for i in range(len(arr)):
                     #search for kinase in alias list
                     arr["Kinase"][i] = self.alias.get_main_kinase(str(arr["Kinase"][i]))
@@ -106,7 +107,7 @@ class PrepareClusterData:
         unique_kinase_temp = []
         for i in self.unique_kinases:
             kinase = aliases.get_main_kinase(i)
-            if kinase not in unique_kinase_temp:
+            if kinase.upper() not in unique_kinase_temp:
                 unique_kinase_temp.append(kinase.upper())
             
             '''i = i.upper()
@@ -207,7 +208,7 @@ class PrepareClusterData:
         
 
         #fix kinase substrates columns
-        for i in range(len(self.phosphositePlusKinaseData[:,1])):
+        for i in range(len(self.phosphositePlusKinaseData[:,1])-1):
             self.phosphositePlusKinaseData[i,0] = tempKinases[i]
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
         
@@ -264,7 +265,7 @@ class PrepareClusterData:
         start = False
         count = 0
         for i in range(len(self.phosphositePlusKinaseData)):
-            currentKinase = self.phosphositePlusKinaseData[i][0].upper()
+            currentKinase = self.phosphositePlusKinaseData[i][0]
             if currentKinase == kinase.upper():
                 #?logic controllers
                 mid = int(len(self.CancerData) / 2)

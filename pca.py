@@ -30,7 +30,7 @@ def getMatrix(kinase, test=False):
     #how many kinases are matched to the phosphorylation data
     kinaseCount = len(myMatrix.keys())
     #how many tumor samples are in the data after it is cleaned
-    tsampleCount = len(clusterStructure.CancerData[1])
+    tsampleCount = len(clusterStructure.CancerData[1]) - 1
     #get statistics (how many psites/kinases are in this filtered data)
     afterStat = stats.Statistics() 
     afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
