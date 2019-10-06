@@ -137,6 +137,12 @@ class CompareCluster:
             self.all_cluster_nodes.append(row)
             row = []
 
+        #pickle kinases for interaction matrix
+        filename = "./data/pickles/uniqueKinases"
+        if os.path.exists(filename) == False:
+            with open(filename, 'wb+') as f:
+                pickle.dump(self.uniqueKinases, f)
+
         #remove kinases not in data
         self.filter_phospho_kinases()
 
