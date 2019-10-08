@@ -135,7 +135,7 @@ class Hierarchical:
 
         return euclidMatr
 
-
+    #?getting correlation from projected data
     def correlation(self, kfeatures, filename):
         fileName = filename
         #fileName = './data/pickles/' + str(self.pfile)[:-5] + 'correlation'
