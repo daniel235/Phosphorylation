@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
 import pickle
 
 
@@ -35,4 +37,24 @@ for i in range(len(cg)):
 
 
 
-print(uniqueKinases[3], interaction_matrix[3])
+print(uniqueKinases[0], interaction_matrix[0])
+
+#visualize data 
+fig, ax = plt.subplots()
+im = ax.imshow(interaction_matrix)
+
+ax.set_xticks(np.arange(len(uniqueKinases)))
+ax.set_yticks(np.arange(len(uniqueKinases)))
+ax.set_xticklabels(uniqueKinases)
+ax.set_yticklabels(uniqueKinases)
+
+plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+for i in range(len(uniqueKinases)):
+    for j in range(len(uniqueKinases)):
+        text = ax.text(j, i, interaction_matrix[i, j], ha="center", va="center", color="w")
+
+ax.set_title("Interaction matrix")
+fig.tight_layout()
+plt.show()
+

@@ -8,21 +8,31 @@ class cleanMatrix:
         this class prepares the data to remove unwanted columns
         prepares the gene site column as one and without tumor type
 
+        Formula 
+        1.) clean_rows()
+        2.) set_gene_site_column()
+        3.) omit_columns
+
     '''
-    def __init__(self, dataFile, sheetName):
+    def __init__(self, dataFile=None, sheetName=None):
         self.matrix = []
-        self.data = pd.read_excel(dataFile, sheet_name=sheetName, dtype=object)
-        self.colnames = self.data.columns
+        self.data = None
+        if dataFile != None:
+            self.data = pd.read_excel(dataFile, sheet_name=sheetName, dtype=object)
         self.data = np.array(self.data)
         
 
     #remove columns from dataset
     def omit_columns(self, nth_columns):
+        '''Delete columns from data
+            Example: omit_columns(nth_columns=[1,2,3])
+        '''
         self.data = np.delete(self.data, nth_columns, 1)
 
 
     #check if columns contain strings and convert to floats
     def column_check_strings(self):
+        '''Changes excel string values to floats'''
         row = self.data[0]
         change_cols = []
         for i in range(1, len(row)):
@@ -41,6 +51,10 @@ class cleanMatrix:
 
     #create the gene site column on the very first column
     def set_gene_site_column(self, nth_columns, trailing_letter=False):
+        '''Set the main psite column with complete protein and site name
+            optional: trailing letter to remove T/F
+            Also deletes first row to replace
+        '''
         #combine columns and if trailing letter(s,t) remove it.
         #first column should be site name
         if len(nth_columns) == 1:
@@ -112,6 +126,7 @@ class cleanMatrix:
 
 
     def clean_rows(self):
+        '''Deletes rows with more than 50 percent of data missing '''
         delete_rows = []
         add_rows = []
         #for every element in array with na replace with average
