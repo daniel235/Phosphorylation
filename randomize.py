@@ -5,7 +5,11 @@ import clean
 import cluster_data
 import pca
 import hierarchical
+import threading
 #import data
+
+
+
 
 cancer_data = np.array(pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", dtype=object))
 print(cancer_data)
