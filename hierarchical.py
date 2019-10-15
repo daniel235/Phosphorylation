@@ -75,7 +75,7 @@ class Hierarchical:
 
         plt.figure()
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(pfile)[:-5] + ".jpg"))
+        plt.savefig(("./data/results/" + str(pfile)[:-5] + ".png"))
         plt.show() 
 
         #plot poor kinase clustering
@@ -88,7 +88,7 @@ class Hierarchical:
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.jpg"))
+        plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.png"))
         plt.show() 
 
         #plot rich kinase clustering
@@ -101,7 +101,7 @@ class Hierarchical:
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(self.pfile)[:-5] + "rich.jpg"))
+        plt.savefig(("./data/results/" + str(self.pfile)[:-5] + "rich.png"))
         plt.show() 
 
 

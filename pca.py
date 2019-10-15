@@ -138,7 +138,7 @@ def getFeatureVector(kinase, matrix, dim):
     vec = np.matmul(matrix, v)
     
 
-    if not os.path.exists('./data/pickles/xvr'):
+    if os.path.exists('./data/pickles/xvr') == False:
         dbfile = open('./data/pickles/xvr', 'ab')
 
         pickle.dump(vec, dbfile)

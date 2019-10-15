@@ -56,6 +56,9 @@ X = []
 labels = []
 Xpoor = []
 labelsPoor = []
+Xrich = []
+labelsRich = []
+
 kinaseFeatures, poorKFeats, richKFeats, pfile = pca.getSVDdata("./data/KSA_human.txt", 10, obs="somethin", pfile=data_pipeline.fileName, matrix=subMatrix)
 for kinase, vector in kinaseFeatures.items():
     X.append(vector)
@@ -64,6 +67,10 @@ for kinase, vector in kinaseFeatures.items():
 for kinase, vector in poorKFeats.items():
     Xpoor.append(vector)
     labelsPoor.append(kinase)
+
+for kinase, vector in richKFeats.items():
+    Xrich.append(vector)
+    labelsRich.append(kinase)
 
 print("before hier")
 HierCluster = hierarchical.Hierarchical()
@@ -74,5 +81,7 @@ HierCluster.labels = labels
 HierCluster.kinaseFeatures = kinaseFeatures
 HierCluster.poorKFeats = poorKFeats
 HierCluster.richKFeats = richKFeats
+HierCluster.labelsPoor = labelsPoor
+HierCluster.labelsRich = labelsRich
 HierCluster.pfile = pfile
 HierCluster.clusterMethod("notpca", 12, pfile)
