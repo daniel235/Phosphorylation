@@ -9,9 +9,9 @@ class cleanMatrix:
         prepares the gene site column as one and without tumor type
 
         Formula 
-        1.) clean_rows()
+        1.) omit_columns()
         2.) set_gene_site_column()
-        3.) omit_columns
+        3.) clean_data()
 
     '''
     def __init__(self, dataFile=None, sheetName=None):
@@ -52,6 +52,7 @@ class cleanMatrix:
     #create the gene site column on the very first column
     def set_gene_site_column(self, nth_columns, trailing_letter=False):
         '''Set the main psite column with complete protein and site name
+            nth_columns needs to be in array format nth_columns=[1,2]
             optional: trailing letter to remove T/F
             Also deletes first row to replace
         '''

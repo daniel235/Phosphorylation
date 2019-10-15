@@ -45,7 +45,7 @@ class PrepareClusterData:
         self.phosDataOrdered = True
         self.stats = stats.Statistics()
         self.alias = alias.Alias("./data/info_table.csv")
-        self.clean_data(test, phosfile, sheet, ordered, trailing_letter, psite_cols, omit_cols)
+        #self.clean_data(test, phosfile, sheet, ordered, trailing_letter, psite_cols, omit_cols)
         
 
     def replace_with_average(self):
@@ -81,6 +81,7 @@ class PrepareClusterData:
 
         self.CancerData = np.delete(self.CancerData, delete_rows, 0)
 
+
     #?convert phosphositeplus kinases into correct aliases
     def convert_kinases(self, kinaseFile):
         #check if file exists 
@@ -99,9 +100,8 @@ class PrepareClusterData:
         else:
             return
 
-    #clean breast cancer data and create 
-    #kinase matrix and phosphosite matrix
-    def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
+    def create_unique_kinases(self):
+        '''create the unique kinase array along with alias names'''
         self.unique_kinases = np.array(pd.read_csv(self.kfile, delim_whitespace=True))[:,0]
         aliases = alias.Alias("./data/info_table.csv")
         unique_kinase_temp = []
@@ -118,6 +118,12 @@ class PrepareClusterData:
         #strip na's
         #strip columns
         self.unique_kinases = unique_kinase_temp
+
+
+    def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
+        '''clean breast cancer data and create 
+        kinase matrix and phosphosite matrix  ''' 
+        self.create_unique_kinases()
         
         if test == True:
             self.fileName = phosfile
@@ -260,6 +266,7 @@ class PrepareClusterData:
                 
     #?grab substrates of kinase passed in
     def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
+        '''search through ksa_human.txt to look for substrates'''
         substrate_matrix = []
         substrate_names = []
         start = False
@@ -347,14 +354,13 @@ class PrepareClusterData:
         substrates = {}
         names = []
         data = []
-        
 
         #kinases = list(set(self.kinaseData[:,0]))
         #new kinase data
         kinases = np.array(self.unique_kinases)
         #todo hierarcharl clustering
         
-        with open("ksa2.txt", 'w+') as f:
+        with open("kinase_substrate_assocations.txt", 'w+') as f:
             f.write(str(self.pfile))
             for i in range(len(kinases)):
                 count = self.count_substrates(kinases[i], ordered=False)
@@ -368,7 +374,7 @@ class PrepareClusterData:
                             kinase_matrixes[kinases[i]] = substrates
                             
 
-                        #f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
+                        f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
 
         return kinase_matrixes
 

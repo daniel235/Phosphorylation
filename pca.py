@@ -23,6 +23,7 @@ pfile = None
 def getMatrix(kinase, test=False):
     #clean data first
     clusterStructure = cluster_data.PrepareClusterData(kinase)
+    clusterStructure.clean_data()
     #grab substrate matrixes with minimum requried substrates n
     myMatrix = clusterStructure.get_kinase_substrate_matrixes(2)
     #how many psites are in data after it is cleaned
@@ -40,16 +41,16 @@ def getMatrix(kinase, test=False):
 
 
 #get SVDs of each kinase bucket and write it to svd txt file
-def getSVDdata(kinase, threshold, obs=None):
+def getSVDdata(kinase, threshold, obs=None, pfile=None, matrix=None):
     poorKinaseFeature = {}
     richKinaseFeature = {}
     substrateCount = 0
     kinaseFeature = {}
+    
     if obs == None:
         matrix, pfile = getMatrix(kinase)
 
-    else:
-        matrix, pfile = None
+    
     
     with open("./results/" + str(pfile)[:-5] + "svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")

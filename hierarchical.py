@@ -30,10 +30,10 @@ class Hierarchical:
 
 
     #method of clustering/ create distance matrix 
-    def clusterMethod(self, method, cluster_len):
+    def clusterMethod(self, method, cluster_len, pfile=None):
         if method == "pca":
             #get kinase svd feature 
-            self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata(self.kinaseFile, 10)
+            self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata("./data/KSA_human.txt", 10)
             for kinase, vector in self.kinaseFeatures.items():
                 self.X.append(vector)
                 self.labels.append(kinase)

@@ -315,8 +315,6 @@ class Node:
         self.name = name
 
 
-
-
 main = CompareCluster(2)
 main.setMainCluster()
 main.data_exists_check()
