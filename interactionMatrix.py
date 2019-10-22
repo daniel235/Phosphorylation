@@ -4,14 +4,33 @@ import matplotlib
 import matplotlib.pyplot as plt
 import pickle
 
+import alias
 
 #read unique kinases
 filename = "./data/pickles/uniqueKinases"
 with open(filename, 'rb+') as f:
     uniqueKinases = pickle.load(f)
 
+
+#family lookup
+family_data = pd.read_csv("./data/kinaseClass.txt", delimiter=",")
+family = []
+for i in range(len(family_data)):
+    #get unique family names
+    if family_data['Classification'][i] not in family:
+        family.append(family_data['Classification'][i])
+
+
+kinase_dict = {}
+alias_object = alias.Alias("./data/info_table.csv")
+for kinase in uniqueKinases:
+    kinase_dict[kinase] = alias_object.get_main_kinase(kinase)
+    #check for family
+
+
+
 #create matrix
-interaction_matrix = np.zeros(shape=(len(uniqueKinases), len(uniqueKinases)))
+interaction_matrix = np.zeros(shape=(12, 12))
 
 print(interaction_matrix)
 
@@ -22,22 +41,27 @@ with open(filename, 'rb+') as f:
 
 
 #go through cluster groups
-for i in range(len(cg)):
-    for j in range(len(cg[i])):
-        #inside the cluster group k
-        for k in cg[i][j]:
-            for l in cg[i][j]:
-                if k != l:
-                    #add instance to interaction matrix
-                    #get index from unique kinases
-                    index1 = uniqueKinases.index(k)
-                    index2 = uniqueKinases.index(l)
-                    interaction_matrix[index1, index2] += 1
-                    interaction_matrix[index2, index1] += 1
+for j in range(len(cg[0])):
+    #inside the cluster group k
+    for k in cg[0][j]:
+        for l in cg[0][j]:
+            if k != l:
+                #add instance to interaction matrix
+                #get index from unique kinases
+                aliasKinase = kinase_dict[k]
+                aliasKinase2 = kinase_dict[l]
+                print(aliasKinase)
+                print(aliasKinase2)
+                #search for family kinase
+                fam1 = family_data['Gene'].tolist().index(aliasKinase)
+                fam2 = family_data['Gene'].tolist().index(aliasKinase2)
+                index1 = family.index(family_data['Classification'][fam1])
+                index2 = family.index(family_data['Classification'][fam2])
+                interaction_matrix[index1, index2] += 1
+                interaction_matrix[index2, index1] += 1
 
 
-
-print(uniqueKinases[0], interaction_matrix[0])
+print(interaction_matrix)
 
 #visualize data 
 fig, ax = plt.subplots()

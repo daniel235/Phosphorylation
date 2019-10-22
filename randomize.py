@@ -112,11 +112,11 @@ for i in range(100):
     #!in range 12
     for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
         for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
-            if len(scores) < len(comparativeClusterGroups.uniqueKinases):
-                scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k]]])
+            if i == 0:
+                scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name])
 
             else:
-                scores[k] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[ik][]]
+                scores[k] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name]
 
 
     print("current scores ", scores)
