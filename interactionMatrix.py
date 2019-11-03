@@ -24,8 +24,17 @@ for i in range(len(family_data)):
 kinase_dict = {}
 alias_object = alias.Alias("./data/info_table.csv")
 for kinase in uniqueKinases:
-    kinase_dict[kinase] = alias_object.get_main_kinase(kinase)
-    #check for family
+    #?add family 
+    if kinase not in family_data['Gene'].tolist():
+        #!get alias and try
+        print("old ", kinase)
+        newKinase = alias_object.get_main_kinase(kinase)
+        print("new ", newKinase)
+        kinase_dict[newKinase] = family_data['Classification'][family_data['Gene'].tolist().index(newKinase)]
+
+    else:
+        kinase_dict[kinase] = family_data['Classification'][family_data['Gene'].tolist().index(kinase)]
+        #check for family
 
 
 
@@ -41,25 +50,31 @@ with open(filename, 'rb+') as f:
 
 
 #go through cluster groups
+#required data structures 
+famDict = {}
 for j in range(len(cg[0])):
     #inside the cluster group k
+    print(cg[0][j]) 
     for k in cg[0][j]:
-        for l in cg[0][j]:
-            if k != l:
-                #add instance to interaction matrix
-                #get index from unique kinases
-                aliasKinase = kinase_dict[k]
-                aliasKinase2 = kinase_dict[l]
-                print(aliasKinase)
-                print(aliasKinase2)
-                #search for family kinase
-                fam1 = family_data['Gene'].tolist().index(aliasKinase)
-                fam2 = family_data['Gene'].tolist().index(aliasKinase2)
-                index1 = family.index(family_data['Classification'][fam1])
-                index2 = family.index(family_data['Classification'][fam2])
-                interaction_matrix[index1, index2] += 1
-                interaction_matrix[index2, index1] += 1
+        #add instance to interaction matrix
+        #get index from unique kinases
+        print("instance in loop ", kinase_dict[k])
+        #search for family kinase
+        
+        fam = family_data['Gene'].tolist().index(k) 
+        index = family.index(family_data['Classification'][fam])
+    
+        if k in famDict:
+            famDict[k] += 1
+        else:
+            famDict[k] = 1
 
+    #!before moving to new cluster
+    #check threshold
+    for i in famDict:
+        print(i)
+
+    
 
 print(interaction_matrix)
 

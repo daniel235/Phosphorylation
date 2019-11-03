@@ -30,7 +30,7 @@ class Hierarchical:
 
 
     #method of clustering/ create distance matrix 
-    def clusterMethod(self, method, cluster_len, pfile=None):
+    def clusterMethod(self, method, cluster_len, pfile=None, show_plots=False):
         if method == "pca":
             #get kinase svd feature 
             self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata("./data/KSA_human.txt", 10)
@@ -76,7 +76,8 @@ class Hierarchical:
         plt.figure()
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + str(pfile)[:-5] + ".png"))
-        plt.show() 
+        if show_plots:
+            plt.show() 
 
         #plot poor kinase clustering
         distMatrix = self.correlationMatrix(self.poorKFeats, 'poor')
@@ -89,7 +90,8 @@ class Hierarchical:
         plt.figure()
         dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.png"))
-        plt.show() 
+        if show_plots:
+            plt.show() 
 
         #plot rich kinase clustering
         distMatrix = self.correlationMatrix(self.richKFeats, 'rich')
@@ -102,7 +104,8 @@ class Hierarchical:
         plt.figure()
         dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + str(self.pfile)[:-5] + "rich.png"))
-        plt.show() 
+        if show_plots:
+            plt.show() 
 
 
 
@@ -195,8 +198,7 @@ class Hierarchical:
             vec2 = []
             temp1 = []
             temp2 = []
-        
-        print("corr matr 2, 2 ", corrmatr[2,2])
+      
         #pickle corrmatr
         fileName = './data/pickles/' + str(self.pfile)[:-5] + 'correlation'
         f = open(fileName, 'wb+')
@@ -210,7 +212,6 @@ class Hierarchical:
         #get euclid distance of a[i] and b[i]
         distMatrix = []
         row = []
-        print("matr", matrix)
 
         for i in range(len(matrix)):
             a = matrix[i]

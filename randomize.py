@@ -27,8 +27,8 @@ cleanData.clean_rows()
 cancer_data = cleanData.data
 
 
-for i in range(100):
-    print("run ", i)
+for indy in range(100):
+    print("run ", indy)
     #insert random data into cells
     print(cancer_data[0])
     for i in range(len(cancer_data)):
@@ -110,15 +110,29 @@ for i in range(100):
     comparativeClusterGroups.display_stats()
     #todo get average of scores
     #!in range 12
+    print("cluster nodes ", comparativeClusterGroups.all_cluster_nodes[0])
+    print("current scores ", scores)
+    print("i ", indy)
     for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
         for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
-            if i == 0:
-                scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name])
+            if indy == 0:
+                if ik != k:
+                    scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name])
+                else:
+                    scores.append(0)
+
+                print(scores[indy])
 
             else:
-                scores[k] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name]
+                if ik != k:
+                    scores[k] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+                
 
 
-    print("current scores ", scores)
+#divide scores by 100 
+for score in scores:
+    score = score / 100
+   
+print("current scores ", scores)
 
 
