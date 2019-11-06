@@ -20,14 +20,21 @@ class Alias:
         for i in range(len(self.data)):
             for j in range(len(self.data['Alias'][i])):
                 if self.data['Alias'][i][j] != ',' and self.data['Alias'][i][j] != ' ' and self.data['Alias'][i][j] != '\t':
-                    kinase += self.data['Alias'][i][j]
+                    kinase += self.data['Alias'][i][j] 
+                    if i == 117:
+                        print(kinase)
 
                 else:
                     if len(kinase) >= 2:
+                        if i == 117:
+                            print("k added ", kinase)
                         kinases.append(kinase)
 
                     kinase = ""
 
+            #?at end of string
+            kinases.append(kinase)
+            kinase = ""
             #turn string into a list of kinases
             self.data['Alias'][i] = kinases
             kinases = []
@@ -54,6 +61,9 @@ class Alias:
 
         #!bug : m is getting too small (soln: m is equal to high - low / 2)
         while(m != previous and m < len(self.alias_list) and m > 0):
+            if m < 10 and kinase == 'PRKAA1':
+                print(current)
+
             #current is kinase keys
             current = self.alias_list[int(currentIndex)]
             previous = m
@@ -109,7 +119,7 @@ class Alias:
 
 
     def separate_alias(self):
-        print(self.data['Alias'][51])
+        print(self.data['Alias'][117])
         
 
 
