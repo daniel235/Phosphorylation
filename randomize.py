@@ -107,8 +107,8 @@ for indy in range(100):
     #todo get average of scores
     #!in range 12
     print("current scores ", scores)
-    for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
-        for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
+    for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
+        for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
             if indy == 0:
                 if ik != k:
                     scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name])
@@ -116,9 +116,14 @@ for indy in range(100):
                     scores.append(0)
 
             else:
-                if ik != k:
-                    scores[k] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+                #!bug :going only till k need to extend to all 144
+                if ik != k and k != 0:
+                    scores[k * ik] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
                 
+                elif ik != k and  k == 0:
+                    scores[ik * 12] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+
+
 
 
 #divide scores by 100 

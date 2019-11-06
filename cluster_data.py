@@ -106,7 +106,8 @@ class PrepareClusterData:
         aliases = alias.Alias("./data/info_table.csv")
         unique_kinase_temp = []
         for i in self.unique_kinases:
-            kinase = aliases.get_main_kinase(i)
+            #kinase = aliases.get_main_kinase(i)
+            kinase = i
             if kinase.upper() not in unique_kinase_temp:
                 unique_kinase_temp.append(kinase.upper())
             
