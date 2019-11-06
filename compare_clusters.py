@@ -7,6 +7,7 @@ import numpy as np
 import os
 import sys
 from scipy.stats import hypergeom
+from scipy.special import comb 
 
 import hierarchical
 
@@ -85,16 +86,15 @@ class CompareCluster:
         #prob = hypergeom.cdf(x, M, n, N)
         M = len(self.family_data)
         #M = len(self.uniqueKinases)
-        if overlap != 0:
-            print("M ", M, " N ", N, " k ", k, " overlap ", overlap)
+        
         prob = 0
         for i in range(overlap, N):
             #[x] choose [i]
-            one = scipy.misc.comb(k, i)
+            one = comb(k, i)
             #[M-x] choose [N-i]
-            two = scipy.misc.comb((M-k), (N-i))
+            two = comb((M-k), (N-i))
             #[M] choose [N]
-            prob += (one * two) / scipy.misc.comb(M, N)
+            prob += (one * two) / comb(M, N)
 
 
         return prob
@@ -178,7 +178,6 @@ class CompareCluster:
                             #set edge score of cluster group i and cluster j with family group and cluster s
                             overlap = k
                             score = self.hyperGeometric(overlap, n, N)
-                            print("scores ", score)
                             self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name] = score
                             if score < .05 and score != 0:
                                 significantScores.append(("Edge between " + str(self.all_cluster_nodes[i][j].name) + " and " + str(self.all_cluster_nodes[kr][s].name) + " is " + str(self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name]) + "\n"))
@@ -196,7 +195,6 @@ class CompareCluster:
     #filter out kinases that are not in our phosphorylation data
     def filter_phospho_kinases(self):
         replace_kinases = []
-        print("len of cluster nodes ", len(self.all_cluster_nodes[0]))
         for i in range(len(self.all_cluster_nodes[0])):
             for kinase in self.all_cluster_nodes[0][i].data:
                 #uppercase kinase

@@ -271,6 +271,7 @@ class PrepareClusterData:
         substrate_names = []
         start = False
         count = 0
+        #!todo remove alias names(only used on searching in families)
         for i in range(len(self.phosphositePlusKinaseData)):
             currentKinase = self.phosphositePlusKinaseData[i][0]
             if currentKinase == kinase.upper():

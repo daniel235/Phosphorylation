@@ -15,7 +15,7 @@ scores = []
 
 
 cancer_data = np.array(pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", dtype=object))
-print(cancer_data)
+
 
 #clean data
 cleanData = clean.cleanMatrix()
@@ -30,13 +30,10 @@ cancer_data = cleanData.data
 for indy in range(100):
     print("run ", indy)
     #insert random data into cells
-    print(cancer_data[0])
     for i in range(len(cancer_data)):
         for j in range(1, len(cancer_data[i])):
             cancer_data[i][j] = random.uniform(-2, 3)
             #todo need to get float values
-            
-    print(cancer_data[0])
 
     data_pipeline = cluster_data.PrepareClusterData("./data/KSA_human.txt")
     print("got past pipeline")
@@ -82,9 +79,8 @@ for indy in range(100):
         Xrich.append(vector)
         labelsRich.append(kinase)
 
-    print("before hier")
+
     HierCluster = hierarchical.Hierarchical()
-    print("after hier")
     #add data to hiercluster
     HierCluster.X = X
     HierCluster.labels = labels
@@ -110,9 +106,7 @@ for indy in range(100):
     comparativeClusterGroups.display_stats()
     #todo get average of scores
     #!in range 12
-    print("cluster nodes ", comparativeClusterGroups.all_cluster_nodes[0])
     print("current scores ", scores)
-    print("i ", indy)
     for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
         for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
             if indy == 0:
@@ -120,8 +114,6 @@ for indy in range(100):
                     scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name])
                 else:
                     scores.append(0)
-
-                print(scores[indy])
 
             else:
                 if ik != k:
