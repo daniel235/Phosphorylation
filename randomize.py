@@ -10,7 +10,7 @@ import pickle
 import compare_clusters
 #import data
 
-
+#!todo fix scores bug
 scores = []
 
 
@@ -107,6 +107,7 @@ for indy in range(100):
     #todo get average of scores
     #!in range 12
     print("current scores ", scores)
+    counter = 0
     for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
         for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
             if indy == 0:
@@ -116,16 +117,20 @@ for indy in range(100):
                     scores.append(0)
 
             else:
+                print("counter ", counter)
                 #!bug :going only till k need to extend to all 144
-                if ik != k and k != 0:
-                    scores[k * ik] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+                if ik * k == 0:
+                    print("condition 1 run", indy)
+                if ik != k and k != 0 and ik != 0:
+                    scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
                 
-                elif ik != k and  k == 0:
-                    scores[ik * 12] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+                elif ik != k and k == 0:
+                    scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
 
+            counter += 1
+        print("cs ", scores)
 
-
-
+    counter = 0
 #divide scores by 100 
 for score in scores:
     score = score / 100
