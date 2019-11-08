@@ -307,7 +307,6 @@ class CompareCluster:
                         f.write(line)
 
 
-
 class Node:
     def __init__(self, name):
         self.data = None

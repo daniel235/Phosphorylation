@@ -28,9 +28,9 @@ cleanData.omit_columns([16,17,18])
 cleanData.clean_rows()
 
 cancer_data = cleanData.data
+im = np.zeros(shape=(12,12))
 
-
-for indy in range(100):
+for indy in range(6):
     print("run ", indy)
     #insert random data into cells
     for i in range(len(cancer_data)):
@@ -110,9 +110,10 @@ for indy in range(100):
     #!in range 12
 
     #?start random interaction
-    im = interactionMatrix.InteractionMatrix(comparativeClusterGroups.all_clusters)
+    matrix = interactionMatrix.InteractionMatrix(comparativeClusterGroups.all_clusters)
+    im = np.add(im, matrix.run_interaction())
+    
 
-    print("current scores ", scores)
     counter = 0
     for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
         for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
@@ -127,11 +128,17 @@ for indy in range(100):
 
             counter += 1
 
-    counter = 0
+    
 #divide scores by 100 
 for i in range(len(scores)):
-    scores[i] = scores[i] / 100
-   
+    scores[i] = scores[i] / 6
+
+
+#averaging interaction matrix
+im = np.floor_divide(im, 6)
+matrix.save_matrix(im, matrix.family)
+
+
 
 ##pickle data
 filename="data/pickles/randomScores"
