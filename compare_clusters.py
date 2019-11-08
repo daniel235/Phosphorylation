@@ -314,7 +314,7 @@ class Node:
         self.edges = {}
         self.name = name
 
-'''
+
 main = CompareCluster(2)
 main.setMainCluster()
 main.data_exists_check()
@@ -322,5 +322,5 @@ main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()
 main.display_stats()
-'''
+
 #hypergf summation cumulative & equal

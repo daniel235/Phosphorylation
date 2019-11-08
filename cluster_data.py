@@ -210,13 +210,13 @@ class PrepareClusterData:
         self.replace_with_average()
 
         #kinase alias name fix here
-        self.convert_kinases("./data/KSA_human.txt")
-        tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
+        #self.convert_kinases("./data/KSA_human.txt")
+        #tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
         
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])-1):
-            self.phosphositePlusKinaseData[i,0] = tempKinases[i]
+            #self.phosphositePlusKinaseData[i,0] = tempKinases[i]
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
         
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]

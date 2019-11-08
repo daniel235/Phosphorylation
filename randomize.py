@@ -5,7 +5,10 @@ import clean
 import cluster_data
 import pca
 import hierarchical
+import math
 import threading
+import seaborn as sns
+import interactionMatrix
 import pickle
 import compare_clusters
 #import data
@@ -106,12 +109,8 @@ for indy in range(100):
     #todo get average of scores
     #!in range 12
 
-
-    ############Test checking if changing cluster groups #############
-    print("cluster groups ", comparativeClusterGroups.all_cluster_nodes[1][1].data)
-    
-    ###################################################################3
-
+    #?start random interaction
+    im = interactionMatrix.InteractionMatrix(comparativeClusterGroups.all_clusters)
 
     print("current scores ", scores)
     counter = 0
@@ -119,12 +118,12 @@ for indy in range(100):
         for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
             if indy == 0:
                 if ik != k:
-                    scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name])
+                    scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name])
                 else:
                     scores.append(0)
 
             else:
-                scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+                scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name]
 
             counter += 1
 
@@ -142,4 +141,53 @@ with open(filename, 'wb+') as f:
 
 print("current scores ", scores)
 
+def get_sig_scores(obj, cg):
+    obj = np.array(obj)
+    minVal = 0
+    
+
+    ##remove zeros from low list
+    for k in range(len(obj)):
+        if obj[k] == 0:
+            #add 5 to it
+            obj[k] = 5
+    
+
+    o = obj.argsort()
+    indexes = []
+    lowScores = []
+    for p in range(5):
+        print(obj[o[p]])
+        lowScores.append(obj[o[p]])
+        indexes.append(o[p])
+        
+
+    print(indexes)
+    sigNodes = []
+    for j in range(len(indexes)):
+        index1 = int(math.floor(indexes[j] / 13))
+        index2 = int(math.floor(indexes[j] % 13)) 
+        #!todo not going to find it
+        sigNodes.append([cg[1][index1].name, cg[0][index2].name])
+
+    #write sig nodes to pickle
+    with open("./data/pickles/randomSignificantNodes", 'wb+') as f:
+        pickle.dump(sigNodes, f)
+
+
+    print(sigNodes)
+
+with open("./data/pickles/randomScores", 'rb+') as f:
+    obj = pickle.load(f)
+
+with open("./data/pickles/clusterNodes", 'rb+') as f:
+    cgNodes = pickle.load(f)
+
+
+def distro_scores(scores):
+    sns.distplot(scores)
+
+
+get_sig_scores(obj, cgNodes)
+#distro_scores(obj)
 
