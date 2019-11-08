@@ -1,25 +1,36 @@
 import pygame
 import os, sys
+import pickle
 
 
 
 class gameManager():
     def __init__(self):
         #import data from pickles
-        pass
-
+        #get cluster groups
+        with open("./data/pickles/clusterGroups", 'rb+') as f:
+            self.clusterGroups = pickle.load(f)
+        board = Surface()
 
     def draw_objects(self):
         pass
 
+    def update(self):
+        while 1:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    sys.exit()
+
+            
+
 class Surface():
     def __init__(self):
-        screen = pygame.display.get_surface()
-        self.area = screen.get_rect()
-        self.rect.topleft = 10, 10
+        pygame.init()
+        pygame.display.set_mode([800, 800])
+        self.screen = pygame.display.get_surface()
 
-    def draw(obj):
-        pygame.draw(Surface.screen, obj.color, pygame.math.Vector2(obj.x, obj.y)  self.width)
+    def draw(self, obj):
+        pygame.draw(self.screen, obj.color, pygame.math.Vector2(obj.x, obj.y), obj.width)
 
 
 class cluster():
@@ -30,4 +41,8 @@ class cluster():
         self.color = None
         self.x = None
         self.y = None
+        self.data = None
 
+
+gm = gameManager()
+gm.update()
