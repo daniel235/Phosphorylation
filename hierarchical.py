@@ -79,6 +79,7 @@ class Hierarchical:
         if show_plots:
             plt.show() 
 
+        plt.close()
         #plot poor kinase clustering
         distMatrix = self.correlationMatrix(self.poorKFeats, 'poor')
     
@@ -92,7 +93,7 @@ class Hierarchical:
         plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.png"))
         if show_plots:
             plt.show() 
-
+        plt.close()
         #plot rich kinase clustering
         distMatrix = self.correlationMatrix(self.richKFeats, 'rich')
 
@@ -106,7 +107,7 @@ class Hierarchical:
         plt.savefig(("./data/results/" + str(self.pfile)[:-5] + "rich.png"))
         if show_plots:
             plt.show() 
-
+        plt.close()
 
 
     def correlationMatrix(self, kfeats, type):

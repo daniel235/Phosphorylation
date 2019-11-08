@@ -36,7 +36,6 @@ for indy in range(100):
             #todo need to get float values
 
     data_pipeline = cluster_data.PrepareClusterData("./data/KSA_human.txt")
-    print("got past pipeline")
     data_pipeline.CancerData = cancer_data
     data_pipeline.replace_with_average()
 
@@ -106,6 +105,14 @@ for indy in range(100):
     comparativeClusterGroups.display_stats()
     #todo get average of scores
     #!in range 12
+
+
+    ############Test checking if changing cluster groups #############
+    print("cluster groups ", comparativeClusterGroups.all_cluster_nodes[1][1].data)
+    
+    ###################################################################3
+
+
     print("current scores ", scores)
     counter = 0
     for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
@@ -117,24 +124,22 @@ for indy in range(100):
                     scores.append(0)
 
             else:
-                print("counter ", counter)
-                #!bug :going only till k need to extend to all 144
-                if ik * k == 0:
-                    print("condition 1 run", indy)
-                if ik != k and k != 0 and ik != 0:
-                    scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
-                
-                elif ik != k and k == 0:
-                    scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
+                scores[counter] += comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[1][k].name]
 
             counter += 1
-        print("cs ", scores)
 
     counter = 0
 #divide scores by 100 
-for score in scores:
-    score = score / 100
+for i in range(len(scores)):
+    scores[i] = scores[i] / 100
    
+
+##pickle data
+filename="data/pickles/randomScores"
+with open(filename, 'wb+') as f:
+    pickle.dump(scores, f)
+
+
 print("current scores ", scores)
 
 

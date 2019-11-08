@@ -207,9 +207,7 @@ class CompareCluster:
 
 
     def display_stats(self):
-        print("in display stats")
         filename = "./results/familyclusters.txt"
-        print(len(self.all_cluster_nodes))
         with open(filename, 'w+') as f:
             for i in range(len(self.all_cluster_nodes)):
                 for j in range(len(self.all_cluster_nodes[i])):
@@ -219,10 +217,10 @@ class CompareCluster:
 
 
     #check if cluster groups file exists if not create it
-    def data_exists_check(self):
+    def data_exists_check(self, random=False):
         #look for pickle files
         filename1 = "./data/pickles/clusterGroups"
-        if os.path.exists(filename1):
+        if os.path.exists(filename1) and random == False:
             #read in clusters
             with open(filename1, 'rb+') as f:
                 self.all_clusters = pickle.load(f)
@@ -310,7 +308,7 @@ class Node:
         self.edges = {}
         self.name = name
 
-
+'''
 main = CompareCluster(2)
 main.setMainCluster()
 main.data_exists_check()
@@ -318,5 +316,5 @@ main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()
 main.display_stats()
-
+'''
 #hypergf summation cumulative & equal
