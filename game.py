@@ -3,17 +3,23 @@ import os, sys
 import pickle
 
 
-
 class gameManager():
     def __init__(self):
         #import data from pickles
         #get cluster groups
-        with open("./data/pickles/clusterGroups", 'rb+') as f:
+        with open("./data/pickles/clusterNodes", 'rb+') as f:
             self.clusterGroups = pickle.load(f)
         board = Surface()
+        self.clusters = []
 
     def draw_objects(self):
-        pass
+        count = 0
+        for cluster in self.clusterGroups[1]:
+            self.clusters.append(Cluster(cluster.name))
+            self.clusters[count].edges = cluster.edges
+            self.clusters[count].data = cluster.data
+
+
 
     def update(self):
         while 1:
@@ -33,7 +39,7 @@ class Surface():
         pygame.draw(self.screen, obj.color, pygame.math.Vector2(obj.x, obj.y), obj.width)
 
 
-class cluster():
+class Cluster():
     def __init__(self, name):
         self.edges = {}
         self.name = name

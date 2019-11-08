@@ -187,6 +187,12 @@ class CompareCluster:
                         self.overlap.append(commonKinases)
                         commonKinases = []
 
+                        
+        #pickle cluster nodes
+        with open("./data/pickles/clusterNodes", 'wb+') as f:
+            pickle.dump(self.all_cluster_nodes, f)
+
+
         with open("./results/significantScores.txt", 'w+') as f:
             for i in range(len(significantScores)):
                 f.write(significantScores[i])
