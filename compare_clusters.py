@@ -1,6 +1,7 @@
 import scipy
 import pandas as pd
 import pickle
+import alias
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,6 +40,7 @@ class CompareCluster:
         self.family = []
         self.uniqueKinases = []
         self.all_clusters = []
+        self.alias_object = alias.Alias("./data/info_table.csv")
         self.filename = "kinase_class.csv"
         self.family_data = pd.read_csv("./data/kinaseClass.txt", delimiter=",")
         self.family_clusters = {}
@@ -50,6 +52,7 @@ class CompareCluster:
 
     def setMainCluster(self):
         for i in range(len(self.family_data)):
+            #!todo check aliases
             #if kinases not in kinase list then add it
             if self.family_data['Gene'][i] not in self.kinases:
                 self.kinases.append(self.family_data['Gene'][i])
@@ -157,6 +160,7 @@ class CompareCluster:
         n = 0
         commonKinases = []
         significantScores = []
+        sigNodes = []
         with open("./results/overlapScores.txt", 'w+') as f:
             for i in range(1, len(self.all_cluster_nodes)):
                 for kr in range(len(self.all_cluster_nodes)):
@@ -174,13 +178,13 @@ class CompareCluster:
                             n = len(self.all_cluster_nodes[i][j].data)
                             #N is length of family cluster s
                             N = len(self.all_cluster_nodes[kr][s].data)
-                            
                             #set edge score of cluster group i and cluster j with family group and cluster s
                             overlap = k
                             score = self.hyperGeometric(overlap, n, N)
                             self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name] = score
                             if score < .05 and score != 0:
                                 significantScores.append(("Edge between " + str(self.all_cluster_nodes[i][j].name) + " and " + str(self.all_cluster_nodes[kr][s].name) + " is " + str(self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name]) + "\n"))
+                                sigNodes.append([self.all_cluster_nodes[i][j].name, self.all_cluster_nodes[kr][s].name])
                             scores = "Edge between " + str(self.all_cluster_nodes[i][j].name) + " and " + str(self.all_cluster_nodes[kr][s].name) + " is " + str(self.all_cluster_nodes[i][j].edges[self.all_cluster_nodes[kr][s].name]) + "\n"
                             f.write(scores)
 
@@ -192,6 +196,9 @@ class CompareCluster:
         with open("./data/pickles/clusterNodes", 'wb+') as f:
             pickle.dump(self.all_cluster_nodes, f)
 
+        #significant cluster nodes
+        with open("./data/pickles/sigNodes", 'wb+') as f:
+            pickle.dump(sigNodes, f)
 
         with open("./results/significantScores.txt", 'w+') as f:
             for i in range(len(significantScores)):

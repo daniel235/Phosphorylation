@@ -194,6 +194,7 @@ class InteractionMatrix:
 
         self.kinase_dict = kinase_dict
         self.family = family
+        
 
     def save_matrix(self, interactionMatrixFig, family):
         #visualize data 

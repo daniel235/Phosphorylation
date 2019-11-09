@@ -128,6 +128,7 @@ for indy in range(6):
 
             counter += 1
 
+print("finished run")
     
 #divide scores by 100 
 for i in range(len(scores)):
