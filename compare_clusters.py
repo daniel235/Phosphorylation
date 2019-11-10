@@ -111,9 +111,7 @@ class CompareCluster:
 
         for i in range(len(self.family_clusters)):
             n = Node(cluster_family_names[i])
-            print(n.name)
             n.data = cluster_family_vals[i]
-            print(n.data)
             row.append(n)
 
 
@@ -193,8 +191,15 @@ class CompareCluster:
 
                         
         #pickle cluster nodes
-        with open("./data/pickles/clusterNodes", 'wb+') as f:
-            pickle.dump(self.all_cluster_nodes, f)
+        with open("./data/pickles/clusterNodes", 'wb+') as fo:
+            print("pickling data")
+            pickle.dump(self.all_cluster_nodes, fo)
+
+
+        #!tets open data
+        with open("./data/pickles/clusterNodes", 'rb+') as fos:
+            cn = pickle.load(fos)
+            print(cn)
 
         #significant cluster nodes
         with open("./data/pickles/sigNodes", 'wb+') as f:
@@ -287,7 +292,7 @@ class CompareCluster:
         nodes = []
         groupNodes = []
 
-        print(len(nodes))
+        
         #get group names
         groupNodes = []
         for node in self.all_cluster_nodes[0]:
@@ -296,7 +301,6 @@ class CompareCluster:
                 groupNodes.append(nodetype.name)
 
 
-        print(len(groupNodes))
         df = pd.DataFrame({'from': nodes, 'to': groupNodes})
         G=nx.from_pandas_edgelist(df, 'from', 'to')
         #Graph with custom nodes

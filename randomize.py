@@ -13,6 +13,7 @@ import pickle
 import compare_clusters
 #import data
 
+
 #!todo fix scores bug
 scores = []
 

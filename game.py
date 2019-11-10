@@ -1,4 +1,5 @@
 import pygame
+import compare_clusters
 import os, sys
 import pickle
 
@@ -12,22 +13,51 @@ class gameManager():
         self.board = Surface()
         self.clusters = []
 
+
     def draw_objects(self):
         pos = (50, 50)
         count = 0
-        for cluster in self.clusterGroups[1]:
-            self.clusters.append(Cluster(cluster.name))
-            self.clusters[count].edges = cluster.edges
-            self.clusters[count].data = cluster.data
-            #set position for cluster width(20)
-            self.clusters[count].x = int((count + 1) * pos[0])
-            self.clusters[count].y = int(pos[1])
-            self.clusters[count].pos = pygame.math.Vector2(self.clusters[count].x, self.clusters[count].y)
-            count += 1
+        countx = 0
+        for subtype in range(len(self.clusterGroups)-1):
+            for cluster in self.clusterGroups[subtype]:
+                self.clusters.append(Cluster(cluster.name))
+                self.clusters[count].edges = cluster.edges
+                self.clusters[count].data = cluster.data
+                color = []
+                for i in range(3):
+                    self.clusters[count].color[i] = self.clusters[count].color[i] + (subtype * 50)
         
+                self.clusters[count].color = pygame.Color(self.clusters[count].color[0], self.clusters[count].color[1], self.clusters[count].color[2])
+                #set position for cluster width(20)
+                self.clusters[count].x = int((countx + 1) * pos[0])
+                self.clusters[count].y = int(pos[1]) + (subtype * 200)
+                self.clusters[count].pos = pygame.math.Vector2(self.clusters[count].x, self.clusters[count].y)
+                count += 1
+                countx += 1
+        
+            countx = 0
+            
         #after finish initializing cluster properties draw clusters
         for cluster in self.clusters:
             self.board.draw(cluster)
+
+        
+        cnt = 0
+        for cluster in self.clusters:
+            cnt += 1
+            #create all edged in each cluster
+            for edge, score in cluster.edges.items():
+                print(edge)
+                #find cluster name
+                for famcluster in self.clusters:
+                    if famcluster.name == edge:
+                        if score > .05:
+                            color = (255, 255, 255)
+                        else:
+                            if score != 0:
+                                color = ((200 - cnt), (cnt * 10), (cnt * 2))
+                                self.board.drawLine(cluster, famcluster, color)
+                        
 
 
     def update(self):
@@ -51,18 +81,23 @@ class Surface():
         print(type(obj.color), type(obj.pos), type(obj.width))
         pygame.draw.circle(self.screen, obj.color, (int(obj.pos.x), int(obj.pos.y)), int(obj.width))
 
+    def drawLine(self, obj, obj2, color):
+        pygame.draw.lines(self.screen, color, True, [(obj.x, obj.y), (obj2.x, obj2.y)])
+
+
 
 class Cluster():
     def __init__(self, name):
         self.edges = {}
         self.name = name
         self.width = 20
-        self.color = pygame.Color(20, 100, 100)
+        self.color = [20, 100, 100]
         self.x = None
         self.y = None
         self.pos = None
         self.data = None
 
+    
 
 gm = gameManager()
 gm.draw_objects()
