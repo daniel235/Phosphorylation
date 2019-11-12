@@ -38,7 +38,6 @@ class PrepareClusterData:
         self.kinaseData = np.array(pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t"))
         self.phosphorylationData = np.array(pd.read_csv("./data/phosphorylation_data.txt", delimiter="\t"))
         self.CancerData = None
-        #self.breastCancerData = xlrd.open_workbook("./data/BreastCancerData.xlsx", encoding_override="cp1252").sheet_by_name("data")
         self.phosphositePlusKinaseData = np.array(pd.read_csv("./data/KSA_human.txt", delim_whitespace=True))
         self.unique_kinases = None
         self.colNames = None
@@ -89,7 +88,6 @@ class PrepareClusterData:
         if(os.path.exists(files) == False or os.stat(files).st_size == 0):
             with open(files, 'w+') as f:
                 arr = pd.read_csv(kinaseFile, delimiter="\t")
-                print(len(arr))
                 for i in range(len(arr)):
                     #search for kinase in alias list
                     arr["Kinase"][i] = self.alias.get_main_kinase(str(arr["Kinase"][i]))
@@ -210,13 +208,13 @@ class PrepareClusterData:
         self.replace_with_average()
 
         #kinase alias name fix here
-        #self.convert_kinases("./data/KSA_human.txt")
-        #tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
+        self.convert_kinases("./data/KSA_human.txt")
+        tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
         
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])-1):
-            #self.phosphositePlusKinaseData[i,0] = tempKinases[i]
+            self.phosphositePlusKinaseData[i,0] = tempKinases[i]
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
         
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]
@@ -246,8 +244,6 @@ class PrepareClusterData:
                 self.weakKinase.append(names[i])
                 
 
-  
-    #todo modularize functions
     def count_substrates(self, kinase, ordered=False):
         start = False
         subCount = 0
@@ -272,9 +268,11 @@ class PrepareClusterData:
         substrate_names = []
         start = False
         count = 0
-        #!todo remove alias names(only used on searching in families)
+        #!todo find kinases in data here
         for i in range(len(self.phosphositePlusKinaseData)):
+            #?iterate through whole kinase file
             currentKinase = self.phosphositePlusKinaseData[i][0]
+            #?if match binary search phosphorylation file
             if currentKinase == kinase.upper():
                 #?logic controllers
                 mid = int(len(self.CancerData) / 2)
@@ -359,8 +357,9 @@ class PrepareClusterData:
 
         #kinases = list(set(self.kinaseData[:,0]))
         #new kinase data
+        #todo get kinase matrixes and combine similar kinases and finally replace name with alias name
+        #!this will make sure every kinase is found in data and combined will make sure no double representation is in the data
         kinases = np.array(self.unique_kinases)
-        #todo hierarcharl clustering
         
         with open("kinase_substrate_assocations.txt", 'w+') as f:
             f.write(str(self.pfile))

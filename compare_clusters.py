@@ -208,6 +208,7 @@ class CompareCluster:
     #filter out kinases that are not in our phosphorylation data
     def filter_phospho_kinases(self):
         replace_kinases = []
+        #in family clusters
         for i in range(len(self.all_cluster_nodes[0])):
             for kinase in self.all_cluster_nodes[0][i].data:
                 #uppercase kinase
@@ -278,39 +279,6 @@ class CompareCluster:
         filename = "./data/pickles/clusterGroups"
         with open(filename, 'wb+') as f:
             pickle.dump(self.all_clusters, f)
-
-
-
-
-    def draw_graph(self):
-        #family cluster group
-        nodes = []
-        groupNodes = []
-
-        
-        #get group names
-        groupNodes = []
-        for node in self.all_cluster_nodes[0]:
-            for nodetype in self.all_cluster_nodes[1]:
-                nodes.append(node.name)
-                groupNodes.append(nodetype.name)
-
-
-        df = pd.DataFrame({'from': nodes, 'to': groupNodes})
-        G=nx.from_pandas_edgelist(df, 'from', 'to')
-        #Graph with custom nodes
-        nx.draw(G, with_labels=True, node_size=1000, node_color="skyblue", node_shape="s", alpha=0.5, linewidths=40)
-        plt.show()
-
-
-        #print data
-        filename2 = "./results/kinaseOverlap.txt"
-        with open(filename2, 'w+') as f:
-            for i in range(1, len(self.all_cluster_nodes)):
-                for j in range(len(self.all_cluster_nodes[i])):
-                    for key, val in self.all_cluster_nodes[i][j].edges.items():
-                        line = str(self.all_cluster_nodes[i][j].name) + " " + str(key) + " " + str(val) + "\n"
-                        f.write(line)
 
 
 class Node:
