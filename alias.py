@@ -93,6 +93,8 @@ class Alias:
 
         return newKinase
 
+    def in_file_kinase(self, kinase):
+        pass
     
     def set_alias_dictionary(self):
         for i in range(len(self.data)):

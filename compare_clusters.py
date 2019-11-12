@@ -196,11 +196,6 @@ class CompareCluster:
             pickle.dump(self.all_cluster_nodes, fo)
 
 
-        #!tets open data
-        with open("./data/pickles/clusterNodes", 'rb+') as fos:
-            cn = pickle.load(fos)
-            print(cn)
-
         #significant cluster nodes
         with open("./data/pickles/sigNodes", 'wb+') as f:
             pickle.dump(sigNodes, f)
