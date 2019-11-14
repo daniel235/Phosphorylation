@@ -49,7 +49,9 @@ with open(filename, 'rb+') as f:
 
 #go through cluster groups
 #required data structures 
+previousFams = []
 famDict = {}
+#cg[0] -> breast cancer clusters
 for j in range(len(cg[0])):
     #inside the cluster group k
     clusterLen = len(cg[0][j])
@@ -77,10 +79,12 @@ for j in range(len(cg[0])):
     #iterate through famdict to start filling in interaction matrix
     for fam, cnt in famDict.items():
         for fam2, cnt2 in famDict.items():
-            print(fam, fam2)
             if cnt > (clusterLen * .3) and cnt2 > (clusterLen * .3) and fam != fam2:
                 interaction_matrix[family.index(fam), family.index(fam2)] += 1
 
+    #reset famdict
+    previousFams.append(famDict)
+    famDict = {}
 
 #visualize data 
 fig, ax = plt.subplots()
@@ -155,7 +159,7 @@ class InteractionMatrix:
             for fam, cnt in famDict.items():
                 for fam2, cnt2 in famDict.items():
                     print(fam, fam2)
-                    if cnt > (clusterLen * .3) and cnt2 > (clusterLen * .3) and fam != fam2:
+                    if cnt > (clusterLen * .2) and cnt2 > (clusterLen * .2) and fam != fam2:
                         interaction_matrix[family.index(fam), family.index(fam2)] += 1
 
 

@@ -98,6 +98,7 @@ class PrepareClusterData:
         else:
             return
 
+
     def create_unique_kinases(self):
         '''create the unique kinase array along with alias names'''
         self.unique_kinases = np.array(pd.read_csv(self.kfile, delim_whitespace=True))[:,0]

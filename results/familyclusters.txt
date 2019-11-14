@@ -10,6 +10,8 @@ Family RGC Kinase count0 Kinases []
 Family STE Kinase count8 Kinases ['MAP3K5', 'MAP3K7', 'PAK1', 'PAK2', 'PAK4', 'MAP2K1', 'MAP2K4', 'MAP2K7']
 Family TK Kinase count7 Kinases ['ABL1', 'AXL', 'JAK2', 'RET', 'SRC', 'HCK', 'LCK']
 Family TKL Kinase count2 Kinases ['IRAK4', 'LRRK2']
+
+
 Family type0family0 Kinase count2 Kinases ['AKT1', 'CDK2']
 Family type0family1 Kinase count15 Kinases ['CDK6', 'HIPK2', 'PIM1', 'GSK3B', 'MAPKAPK2', 'LRRK2', 'PLK2', 'SGK1', 'NEK6', 'SRPK1', 'MAP2K7', 'CLK2', 'MAP2K4', 'RET', 'HCK']
 Family type0family2 Kinase count5 Kinases ['ROCK1', 'ATR', 'ATM', 'TTK', 'PLK1']
@@ -22,6 +24,8 @@ Family type0family8 Kinase count2 Kinases ['GSK3A', 'PDK1']
 Family type0family9 Kinase count1 Kinases ['MAP3K5']
 Family type0family10 Kinase count1 Kinases ['ULK1']
 Family type0family11 Kinase count1 Kinases ['MARK2']
+
+
 Family type1family0 Kinase count6 Kinases ['CDK7', 'IRAK4', 'ULK1', 'MAP2K1', 'JAK2', 'HCK']
 Family type1family1 Kinase count2 Kinases ['AKT1', 'MAP3K7']
 Family type1family2 Kinase count6 Kinases ['GSK3B', 'CDK2', 'ATR', 'MAPKAPK2', 'SGK1', 'ABL1']

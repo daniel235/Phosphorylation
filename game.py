@@ -58,7 +58,7 @@ class gameManager():
             #create all edged in each cluster
             for edge, score in cluster.edges.items():
                 print(edge)
-                #find cluster name
+                #find cluster 
                 for famcluster in self.clusters:
                     if famcluster.name == edge:
                         if score > .05:

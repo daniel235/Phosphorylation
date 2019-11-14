@@ -34,6 +34,7 @@ class VisualData:
             print(self.dataObj[1,3])
             print(self.dataObj[3,1])
             print(self.dataObj.shape)
+            
         print(type(self.dataObj))
         
 
