@@ -294,6 +294,7 @@ main.data_exists_check()
 main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()
+print("got to end")
 main.display_stats()
 
 #hypergf summation cumulative & equal
