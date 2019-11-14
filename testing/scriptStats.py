@@ -1,17 +1,18 @@
 import pandas as pd
 import os
 from pathlib import Path
-
+import pickle
 
 #change directory 
 path = Path(os.getcwd())
 
 #script to double check all kinases 
-
+print("path", path)
 try:
     data = pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", dtype=object)
 except: 
     path = path.parent
+    os.chdir(str(path.resolve()))
     data = pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", dtype=object)
 
 
@@ -35,6 +36,10 @@ for i in range(len(kinase_data)):
             else:
                 matched_data[kinase_data['Kinase'][i]] = [kinase_data['Substrate'][i]]
     
+#pickle object
+with open("./data/pickles/matchData", 'wb+') as f:
+    pickle.dump(matched_data, f)
+
 
 print(matched_data)
 
