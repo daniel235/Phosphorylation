@@ -32,8 +32,8 @@ greatest = 0
 for i in range(len(list_of_files)):
     if "matchData" in list_of_files[i] and len(list_of_files[i]) > 10:
         #iterate to get to last digits
-        if int(list_of_files[i][8:]) > greatest:
-            greatest = list_of_files[8:]
+        if int(list_of_files[i][9:]) > greatest:
+            greatest = int(list_of_files[i][9:])
             print("greatest", greatest)
 
 
