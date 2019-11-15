@@ -84,13 +84,13 @@ class PrepareClusterData:
     #?convert phosphositeplus kinases into correct aliases
     def convert_kinases(self, kinaseFile):
         #check if file exists 
-        files = "./results/newPhosKinaseFile.txt"
+        files = "./results/newPhosKinaseFile.txt"   
         if(os.path.exists(files) == False or os.stat(files).st_size == 0):
             with open(files, 'w+') as f:
                 arr = pd.read_csv(kinaseFile, delimiter="\t")
                 for i in range(len(arr)):
                     #search for kinase in alias list
-                    arr["Kinase"][i] = self.alias.get_main_kinase(str(arr["Kinase"][i]))
+                    arr["Kinase"][i] = self.alias.get_main_kinase(str(arr["Kinase"][i])).upper()
                     #write to file
                     s = arr["Kinase"][i] + "\n"
                     f.write(s)
@@ -110,14 +110,12 @@ class PrepareClusterData:
             if kinase.upper() not in unique_kinase_temp:
                 unique_kinase_temp.append(kinase.upper())
             
-            '''i = i.upper()
-            if i not in unique_kinase_temp:
-                unique_kinase_temp.append(i)'''
                 
         #set unique kinases
         #strip na's
         #strip columns
         self.unique_kinases = unique_kinase_temp
+
 
 
     def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
@@ -205,7 +203,6 @@ class PrepareClusterData:
         '''
         self.CancerData = df.data
         #fix Na's here
-        print(self.CancerData[4])
         self.replace_with_average()
 
         #kinase alias name fix here
@@ -215,9 +212,11 @@ class PrepareClusterData:
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])-1):
+            #replace kinase data with alias names
             self.phosphositePlusKinaseData[i,0] = tempKinases[i]
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
         
+        #remove last column 
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]
 
 
@@ -246,22 +245,27 @@ class PrepareClusterData:
                 
 
     def count_substrates(self, kinase, ordered=False):
-        start = False
         subCount = 0
+        if kinase == 'NME1':
+            return 1
 
-        for i in range(len(self.phosphositePlusKinaseData)): 
-            if self.phosphositePlusKinaseData[i][0] == kinase:
-                if not start:
-                    start = True
-                    
-                subCount += 1
-            #this should stop loop once kinase name is passed (since its alphabetical)
-            elif(start and ordered and self.kinaseData[i][0] != kinase):
-                break
+        if os.path.exists("./data/pickles/matchDataComplete") == False:
+            for i in range(len(self.phosphositePlusKinaseData)): 
+                if self.phosphositePlusKinaseData[i][0] == kinase:
+                    subCount += 1
+            
+        else:
+            #read in pickle
+            with open("./data/pickles/matchDataComplete", 'rb') as f:
+                kinase_obj = pickle.load(f)
 
+            #search for kinase
+            print(kinase_obj)
+            subCount = len(kinase_obj[kinase])
+            print(subCount)
 
         return subCount
-                
+    
     #?grab substrates of kinase passed in
     def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
         '''search through ksa_human.txt to look for substrates'''
@@ -286,7 +290,7 @@ class PrepareClusterData:
                 #binary search the data
                 if PhosDataOrdered:
                     mins = 0
-                    while(mid > 0 and prevMid != mid):
+                    while(mid > 0 and prevMid != mid and mid < len(self.CancerData)):
                         #if not found
                         if prevMid == mid:
                             break
@@ -321,10 +325,18 @@ class PrepareClusterData:
                                 data.append(self.CancerData[current][i])
 
                             substrate_matrix.append(data)
+                            #check if next row is same substrate
+                            data = []
+                            if substrate == self.CancerData[int(current+1), 0]:
+                                for i in range(2, len(self.CancerData[current+1])):
+                                    data.append(self.CancerData[current+1][i])
+
+
                             break
 
                 #brute force data
                 else:
+                    #iterate through phosphorylation data(33,540 rows)
                     for i in range(len(self.CancerData[:,0])):
                         index = self.CancerData[i, 0]
                         if type(index) == float:
@@ -361,13 +373,14 @@ class PrepareClusterData:
         #todo get kinase matrixes and combine similar kinases and finally replace name with alias name
         #!this will make sure every kinase is found in data and combined will make sure no double representation is in the data
         kinases = np.array(self.unique_kinases)
-        
+        print("unk ", kinases)
         with open("kinase_substrate_assocations.txt", 'w+') as f:
             f.write(str(self.pfile))
             for i in range(len(kinases)):
                 count = self.count_substrates(kinases[i], ordered=False)
                 substrates = {}
                 names = []
+                #only check kinases that got past first round of obj check
                 if count >= threshold: 
                     names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=self.phosDataOrdered)
                     if len(names) > threshold:
@@ -376,9 +389,8 @@ class PrepareClusterData:
                             kinase_matrixes[kinases[i]] = substrates
                             
 
-                        #f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
+                        f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
 
         return kinase_matrixes
-
 
 

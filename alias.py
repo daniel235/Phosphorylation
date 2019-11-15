@@ -1,6 +1,7 @@
 import pandas as pd 
 import math
 
+
 class Alias:
     def __init__(self, filename):
         self.data = None

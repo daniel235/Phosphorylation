@@ -22,6 +22,7 @@ pfile = None
 #grab kinase bucket matrixes
 def getMatrix(kinase, test=False):
     #clean data first
+    #!check this code
     clusterStructure = cluster_data.PrepareClusterData(kinase)
     clusterStructure.clean_data()
     #grab substrate matrixes with minimum requried substrates n

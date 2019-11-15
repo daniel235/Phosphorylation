@@ -235,7 +235,8 @@ class Hierarchical:
         pass
 
 
-'''hierCluster = Hierarchical()
+hierCluster = Hierarchical()
 hierCluster.kinaseFile = "./data/KSA_human.txt" 
 #hierCluster.dataFile = "./data/BreastCancerData.xlsx"
-hierCluster.clusterMethod("pca", 8)'''
+hierCluster.clusterMethod("pca", 8)
+print("done")
