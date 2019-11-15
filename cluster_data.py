@@ -246,9 +246,6 @@ class PrepareClusterData:
 
     def count_substrates(self, kinase, ordered=False):
         subCount = 0
-        if kinase == 'NME1':
-            return 1
-
         if os.path.exists("./data/pickles/matchDataComplete") == False:
             for i in range(len(self.phosphositePlusKinaseData)): 
                 if self.phosphositePlusKinaseData[i][0] == kinase:
@@ -260,8 +257,12 @@ class PrepareClusterData:
                 kinase_obj = pickle.load(f)
 
             #search for kinase
-            print(kinase_obj)
-            subCount = len(kinase_obj[kinase])
+            try:
+                subCount = len(kinase_obj[kinase])
+            #if not found then no substrates in data
+            except:
+                return 0
+
             print(subCount)
 
         return subCount

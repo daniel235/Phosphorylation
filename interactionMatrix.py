@@ -162,9 +162,11 @@ class InteractionMatrix:
                     if cnt > (clusterLen * .2) and cnt2 > (clusterLen * .2) and fam != fam2:
                         interaction_matrix[family.index(fam), family.index(fam2)] += 1
 
+            famDict = {}
 
+            
         self.save_matrix(interaction_matrix, family)
-
+        
         return interaction_matrix
 
     def get_data(self):
