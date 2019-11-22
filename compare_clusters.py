@@ -36,6 +36,7 @@ class CompareCluster:
         self.accuracy = None
         self.kinases = []
         self.family = []
+        self.methodType = ""
         self.uniqueKinases = []
         self.all_clusters = []
         self.alias_object = alias.Alias("./data/info_table.csv")
@@ -155,9 +156,9 @@ class CompareCluster:
         significantScores = []
         sigNodes = []
         if random:
-            file = "./results/randomOverlapScores.txt"
+            file = "./results/randomOverlapScores" + self.methodType + ".txt"
         else:
-            file = "./results/overlapScores.txt"
+            file = "./results/overlapScores" + self.methodType + ".txt"
 
         with open(file, 'w+') as f:
             for i in range(1, len(self.all_cluster_nodes)):
@@ -228,7 +229,7 @@ class CompareCluster:
 
 
     def display_stats(self):
-        filename = "./results/familyclusters.txt"
+        filename = "./results/familyclusters" + self.methodType + ".txt"
         with open(filename, 'w+') as f:
             for i in range(len(self.all_cluster_nodes)):
                 for j in range(len(self.all_cluster_nodes[i])):
@@ -252,7 +253,8 @@ class CompareCluster:
             self.get_clusters()
 
 
-    def get_clusters(self):
+    def get_clusters(self, method=""):
+        self.methodType = method
         #start hierarchical clustering
         hierCluster = hierarchical.Hierarchical()
         #input kinase file to use
@@ -267,7 +269,7 @@ class CompareCluster:
             if len(self.all_cluster_nodes[0][i].data) != 0:
                 clLen += 1
 
-        hierCluster.start_hierarchical_clustering(clLen)
+        hierCluster.start_hierarchical_clustering(clLen, methodType=self.methodType)
         hBreastCancerCluster = hierCluster.clusters
 
 
@@ -279,7 +281,8 @@ class CompareCluster:
         ovHierCluster = hierarchical.Hierarchical()
         ovHierCluster.kinaseFile = "./data/KSA_human.txt"
         ovHierCluster.clusterMethod("pca")
-        ovHierCluster.start_hierarchical_clustering(clLen)
+        ovHierCluster.start_hierarchical_clustering(clLen, methodType=self.methodType)
+
         hOvarianCancerCluster = ovHierCluster.clusters
         self.add_cluster(hOvarianCancerCluster)
 
@@ -296,13 +299,14 @@ class Node:
         self.edges = {}
         self.name = name
 
-'''
+
 main = CompareCluster()
 main.setMainCluster()
-main.data_exists_check()
+#main.data_exists_check()
+main.get_clusters(method="average")
 main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()
-main.display_stats()'''
+main.display_stats()
 
 #hypergf summation cumulative & equal

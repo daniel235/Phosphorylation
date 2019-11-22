@@ -51,13 +51,13 @@ class Hierarchical:
 
 
 
-    def start_hierarchical_clustering(self, cluster_len, show_plots=False):
+    def start_hierarchical_clustering(self, cluster_len, show_plots=False, methodType="ward"):
         #plot general kinase clustering
         distMatrix = self.correlationMatrix(self.kinaseFeatures, 'all')
         
         distArray = ssd.squareform(distMatrix, checks=False)
 
-        arr = linkage(distArray, method='ward')
+        arr = linkage(distArray, method=methodType)
 
         #agglomerative
         cluster = AgglomerativeClustering(n_clusters=cluster_len, affinity='precomputed', linkage='complete')
@@ -80,7 +80,7 @@ class Hierarchical:
         plt.figure()
         plot_file = str(self.pfile).replace(".txtls", '')
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + plot_file + ".png"))
+        plt.savefig(("./data/results/" + plot_file + methodType + ".png"))
         if show_plots:
             plt.show() 
 
@@ -91,11 +91,11 @@ class Hierarchical:
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
  
-        arr = linkage(distArray, method='ward')
+        arr = linkage(distArray, method=methodType)
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + plot_file + "poor.png"))
+        plt.savefig(("./data/results/" + plot_file + methodType + "poor.png"))
         if show_plots:
             plt.show() 
         plt.close()
@@ -105,11 +105,11 @@ class Hierarchical:
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
  
-        arr = linkage(distArray, method='ward')
+        arr = linkage(distArray, method=methodType)
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + plot_file + "rich.png"))
+        plt.savefig(("./data/results/" + plot_file + methodType + "rich.png"))
         if show_plots:
             plt.show() 
         plt.close()
@@ -243,5 +243,7 @@ class Hierarchical:
 hierCluster = Hierarchical()
 hierCluster.kinaseFile = "./data/KSA_human.txt" 
 #hierCluster.dataFile = "./data/BreastCancerData.xlsx"
-hierCluster.clusterMethod("pca", 12)
-print("done")'''
+hierCluster.clusterMethod("pca")
+hierCluster.start_hierarchical_clustering(8, methodType='average', show_plots=True)
+
+'''

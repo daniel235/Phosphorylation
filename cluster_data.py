@@ -373,7 +373,7 @@ class PrepareClusterData:
         #todo get kinase matrixes and combine similar kinases and finally replace name with alias name
         #!this will make sure every kinase is found in data and combined will make sure no double representation is in the data
         kinases = np.array(self.unique_kinases)
-        print("unk ", kinases)
+        
         with open("kinase_substrate_assocations.txt", 'w+') as f:
             f.write(str(self.pfile))
             for i in range(len(kinases)):
