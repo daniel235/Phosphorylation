@@ -221,7 +221,7 @@ class InteractionMatrix:
         ax.set_title("Interaction matrix")
         fig.tight_layout()
         plt.savefig(("./results/RandomInteractionMatrix.png"))
-        plt.show()
+        #plt.show()
         plt.close()
         return
 

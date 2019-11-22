@@ -139,7 +139,6 @@ class PrepareClusterData:
             sheet_name = input("What is your sheet name for phosphorylation data?")
             inputs = input("Is your phosphorylation data ordered(yes/no)?")
             if inputs == "yes":
-                print("yes ordered")
                 self.phosDataOrdered = True
             else:
                 self.phosDataOrdered = False
@@ -263,7 +262,7 @@ class PrepareClusterData:
             except:
                 return 0
 
-            print(subCount)
+            
 
         return subCount
     

@@ -31,6 +31,27 @@ cleanData.clean_rows()
 cancer_data = cleanData.data
 im = np.zeros(shape=(12,12))
 
+data_pipeline = cluster_data.PrepareClusterData("./data/KSA_human.txt")
+#fix kinases
+#kinase alias name fix here
+data_pipeline.convert_kinases("./data/KSA_human.txt")
+tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
+#fix kinase substrates columns
+for i in range(len(data_pipeline.phosphositePlusKinaseData[:,1])-1):
+    data_pipeline.phosphositePlusKinaseData[i,0] = tempKinases[i]
+    data_pipeline.phosphositePlusKinaseData[i,1] = str(data_pipeline.phosphositePlusKinaseData[i,1]) + "-" + str(data_pipeline.phosphositePlusKinaseData[i,2])
+    
+data_pipeline.phosphositePlusKinaseData = data_pipeline.phosphositePlusKinaseData[:,0:-1]
+#get unique kinases
+data_pipeline.create_unique_kinases()
+
+
+HierCluster = hierarchical.Hierarchical()
+
+#add cluster to hyper geometric class
+comparativeClusterGroups = compare_clusters.CompareCluster()
+comparativeClusterGroups.setMainCluster()
+
 for indy in range(50):
     print("run ", indy)
     #insert random data into cells
@@ -39,25 +60,10 @@ for indy in range(50):
             cancer_data[i][j] = random.uniform(-2, 3)
             #todo need to get float values
 
-    data_pipeline = cluster_data.PrepareClusterData("./data/KSA_human.txt")
     data_pipeline.CancerData = cancer_data
     data_pipeline.replace_with_average()
 
-    #fix kinases
-    #kinase alias name fix here
-    data_pipeline.convert_kinases("./data/KSA_human.txt")
-    tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt"))
-
-
-    #fix kinase substrates columns
-    for i in range(len(data_pipeline.phosphositePlusKinaseData[:,1])-1):
-        data_pipeline.phosphositePlusKinaseData[i,0] = tempKinases[i]
-        data_pipeline.phosphositePlusKinaseData[i,1] = str(data_pipeline.phosphositePlusKinaseData[i,1]) + "-" + str(data_pipeline.phosphositePlusKinaseData[i,2])
-
-    data_pipeline.phosphositePlusKinaseData = data_pipeline.phosphositePlusKinaseData[:,0:-1]
-
-    #get unique kinases
-    data_pipeline.create_unique_kinases()
+    
     #get substrate matrixes 
     subMatrix = data_pipeline.get_kinase_substrate_matrixes(2)
 
@@ -83,7 +89,7 @@ for indy in range(50):
         labelsRich.append(kinase)
 
 
-    HierCluster = hierarchical.Hierarchical()
+    
     #add data to hiercluster
     HierCluster.X = X
     HierCluster.labels = labels
@@ -94,17 +100,26 @@ for indy in range(50):
     HierCluster.labelsRich = labelsRich
     HierCluster.pfile = pfile
     HierCluster.clusterMethod("notpca", pfile)
-    
 
-    #add cluster to hyper geometric class
-    comparativeClusterGroups = compare_clusters.CompareCluster()
+
+    #filter out kinases not in phosphorylation data
+    comparativeClusterGroups.filter_phospho_kinases(labels)
+    clLen = 0
+    #get number of non empty family nodes
+    family_indexes = []
+    for i in range(len(comparativeClusterGroups.all_cluster_nodes[0])):
+        if len(comparativeClusterGroups.all_cluster_nodes[0][i].data) != 0:
+            family_indexes.append(i)
+            clLen += 1
+
+
+    HierCluster.start_hierarchical_clustering(clLen)
     comparativeClusterGroups.add_cluster(HierCluster.clusters)
 
     filename = "./data/pickles/randomClusterGroups"
     with open(filename, 'wb+') as f:
         pickle.dump(comparativeClusterGroups.all_clusters, f)
 
-    comparativeClusterGroups.setMainCluster()
     comparativeClusterGroups.create_graph()
     comparativeClusterGroups.get_edge_scores(random=True)
     comparativeClusterGroups.display_stats()
@@ -117,8 +132,8 @@ for indy in range(50):
     
 
     counter = 0
-    for ik in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
-        for k in range(len(comparativeClusterGroups.all_cluster_nodes[0])): #12
+    for ik in range(clLen): 
+        for k in range(clLen): #12
             if indy == 0:
                 if ik != k:
                     scores.append(comparativeClusterGroups.all_cluster_nodes[1][ik].edges[comparativeClusterGroups.all_cluster_nodes[0][k].name])

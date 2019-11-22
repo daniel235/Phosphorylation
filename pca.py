@@ -34,9 +34,9 @@ def getMatrix(kinase, test=False):
     #how many tumor samples are in the data after it is cleaned
     tsampleCount = len(clusterStructure.CancerData[1]) - 1
     #get statistics (how many psites/kinases are in this filtered data)
-    afterStat = stats.Statistics() 
-    afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
-    afterStat.plotTable()
+    #afterStat = stats.Statistics() 
+    #afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
+    #afterStat.plotTable()
     #return matrix and name of the file we are using
     return myMatrix, clusterStructure.fileName
 
