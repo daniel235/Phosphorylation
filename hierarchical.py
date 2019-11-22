@@ -30,7 +30,7 @@ class Hierarchical:
 
 
     #method of clustering/ create distance matrix 
-    def clusterMethod(self, method, cluster_len, pfile=None, show_plots=False):
+    def clusterMethod(self, method, pfile=None):
         if method == "pca":
             #get kinase svd feature 
             self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata("./data/KSA_human.txt", 10)
@@ -48,6 +48,10 @@ class Hierarchical:
 
 
         self.pfile = pfile
+
+
+
+    def start_hierarchical_clustering(self, cluster_len, show_plots=False):
         #plot general kinase clustering
         distMatrix = self.correlationMatrix(self.kinaseFeatures, 'all')
         
@@ -74,8 +78,9 @@ class Hierarchical:
         
 
         plt.figure()
+        plot_file = str(self.pfile).replace(".txtls", '')
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(pfile)[:-5] + ".png"))
+        plt.savefig(("./data/results/" + plot_file + ".png"))
         if show_plots:
             plt.show() 
 
@@ -90,7 +95,7 @@ class Hierarchical:
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(pfile)[:-5] + "poor.png"))
+        plt.savefig(("./data/results/" + plot_file + "poor.png"))
         if show_plots:
             plt.show() 
         plt.close()
@@ -104,7 +109,7 @@ class Hierarchical:
         #kinase names
         plt.figure()
         dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + str(self.pfile)[:-5] + "rich.png"))
+        plt.savefig(("./data/results/" + plot_file + "rich.png"))
         if show_plots:
             plt.show() 
         plt.close()
@@ -234,9 +239,9 @@ class Hierarchical:
     def get_dendrogram_clusters(self, linkage):
         pass
 
-
-'''hierCluster = Hierarchical()
+'''
+hierCluster = Hierarchical()
 hierCluster.kinaseFile = "./data/KSA_human.txt" 
 #hierCluster.dataFile = "./data/BreastCancerData.xlsx"
-hierCluster.clusterMethod("pca", 8)
+hierCluster.clusterMethod("pca", 12)
 print("done")'''

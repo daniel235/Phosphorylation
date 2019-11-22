@@ -32,10 +32,8 @@ class CompareCluster:
         Idea - Cytoscape to visualize  sif format
 
     '''
-    def __init__(self, nclusters):
+    def __init__(self):
         self.accuracy = None
-        self.types = []
-        self.nclusters = nclusters
         self.kinases = []
         self.family = []
         self.uniqueKinases = []
@@ -70,6 +68,18 @@ class CompareCluster:
                 self.family_clusters[self.family_data['Classification'][k]] = [self.family_data['Gene'][k]]
 
 
+        cluster_family_names = list(self.family_clusters.keys())
+        cluster_family_vals = list(self.family_clusters.values())
+        row = []
+
+        for i in range(len(self.family_clusters)):
+            n = Node(cluster_family_names[i])
+            n.data = cluster_family_vals[i]
+            row.append(n)
+
+
+        self.all_cluster_nodes.append(row)
+
 
     def add_cluster(self, cluster_group):
         self.all_clusters.append(cluster_group)
@@ -86,9 +96,7 @@ class CompareCluster:
         #x -> current integer in rayman sum
         #M -> Total population of kinases in all clusters (even not in our phospho data)
         #N -> Total population of family cluster i
-        #prob = hypergeom.cdf(x, M, n, N)
         M = len(self.family_data)
-        #M = len(self.uniqueKinases)
         
         prob = 0
         for i in range(overlap, N):
@@ -104,21 +112,8 @@ class CompareCluster:
 
 
     def create_graph(self):
-        #create nodes for main family tree
-        cluster_family_names = list(self.family_clusters.keys())
-        cluster_family_vals = list(self.family_clusters.values())
         row = []
 
-        for i in range(len(self.family_clusters)):
-            n = Node(cluster_family_names[i])
-            n.data = cluster_family_vals[i]
-            row.append(n)
-
-
-        self.all_cluster_nodes.append(row)
-        row = []
-
-        #should be two
         #set up unique kinases here
         for i in range(len(self.all_clusters)):
             for j in range(len(self.all_clusters[i])):
@@ -144,22 +139,27 @@ class CompareCluster:
             with open(filename, 'wb+') as f:
                 pickle.dump(self.uniqueKinases, f)
 
-        #remove kinases not in data
-        self.filter_phospho_kinases()
+        #remove family kinases not in data
+        self.filter_phospho_kinases(self.uniqueKinases)
 
         row = []
         return
 
 
 
-    def get_edge_scores(self):
+    def get_edge_scores(self, random=False):
         k = 0
         M = 0
         n = 0
         commonKinases = []
         significantScores = []
         sigNodes = []
-        with open("./results/overlapScores.txt", 'w+') as f:
+        if random:
+            file = "./results/randomOverlapScores.txt"
+        else:
+            file = "./results/overlapScores.txt"
+
+        with open(file, 'w+') as f:
             for i in range(1, len(self.all_cluster_nodes)):
                 for kr in range(len(self.all_cluster_nodes)):
                     #computer edge score between all of the ith cluster node and original family cluster node
@@ -191,9 +191,16 @@ class CompareCluster:
 
                         
         #pickle cluster nodes
-        with open("./data/pickles/clusterNodes", 'wb+') as fo:
-            print("pickling data")
-            pickle.dump(self.all_cluster_nodes, fo)
+        #if random
+        if random:
+            with open("./data/pickles/randomClusterNodes", 'wb+') as f:
+                pickle.dump(self.all_cluster_nodes, f)
+
+                
+        else:
+            with open("./data/pickles/clusterNodes", 'wb+') as fo:
+                print("pickling data")
+                pickle.dump(self.all_cluster_nodes, fo)
 
 
         #significant cluster nodes
@@ -206,14 +213,14 @@ class CompareCluster:
     
 
     #filter out kinases that are not in our phosphorylation data
-    def filter_phospho_kinases(self):
+    def filter_phospho_kinases(self, kinases):
         replace_kinases = []
         #in family clusters
         for i in range(len(self.all_cluster_nodes[0])):
             for kinase in self.all_cluster_nodes[0][i].data:
                 #uppercase kinase
                 kinase = str(kinase).upper()
-                if kinase in self.uniqueKinases:
+                if kinase in kinases:
                     replace_kinases.append(kinase)
 
             self.all_cluster_nodes[0][i].data = replace_kinases
@@ -233,7 +240,7 @@ class CompareCluster:
     #check if cluster groups file exists if not create it
     def data_exists_check(self, random=False):
         #look for pickle files
-        filename1 = "./data/pickles/clusterGroups"
+        filename1 = "./data/pickles/ccclusterGroups"
         if os.path.exists(filename1) and random == False:
             #read in clusters
             with open(filename1, 'rb+') as f:
@@ -248,9 +255,19 @@ class CompareCluster:
     def get_clusters(self):
         #start hierarchical clustering
         hierCluster = hierarchical.Hierarchical()
+        #input kinase file to use
         hierCluster.kinaseFile = "./data/KSA_human.txt"
-        #hierCluster.dataFile = "./data/BreastCancerData.xlsx"
-        hierCluster.clusterMethod("pca", 12)
+        #input method to use
+        hierCluster.clusterMethod("pca")
+        #filter out kinases not in phosphorylation data
+        self.filter_phospho_kinases(hierCluster.labels)
+        clLen = 0
+        #get number of non empty family nodes
+        for i in range(len(self.all_cluster_nodes[0])):
+            if len(self.all_cluster_nodes[0][i].data) != 0:
+                clLen += 1
+
+        hierCluster.start_hierarchical_clustering(clLen)
         hBreastCancerCluster = hierCluster.clusters
 
 
@@ -261,18 +278,10 @@ class CompareCluster:
         #get ovarian cancer clustering
         ovHierCluster = hierarchical.Hierarchical()
         ovHierCluster.kinaseFile = "./data/KSA_human.txt"
-        ovHierCluster.clusterMethod("pca", 12)
+        ovHierCluster.clusterMethod("pca")
+        ovHierCluster.start_hierarchical_clustering(clLen)
         hOvarianCancerCluster = ovHierCluster.clusters
         self.add_cluster(hOvarianCancerCluster)
-
-
-
-        #get colorectal cancer clustering
-        '''colHierCluster = hierarchical.Hierarchical()
-        colHierCluster.kinaseFile = "./data/KSA_human.txt"
-        colHierCluster.clusterMethod("pca", 8)
-        colCancerCluster = colHierCluster.clusters
-        main.add_cluster(colCancerCluster)'''
 
 
         #pickle clusters
@@ -288,13 +297,12 @@ class Node:
         self.name = name
 
 
-main = CompareCluster(2)
+main = CompareCluster()
 main.setMainCluster()
 main.data_exists_check()
 main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()
-print("got to end")
 main.display_stats()
 
 #hypergf summation cumulative & equal

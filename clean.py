@@ -18,7 +18,17 @@ class cleanMatrix:
         self.matrix = []
         self.data = None
         if dataFile != None:
-            self.data = pd.read_excel(dataFile, sheet_name=sheetName, dtype=object)
+            try:
+                self.data = pd.read_excel(dataFile, sheet_name=sheetName, dtype=object)
+            except:
+                self.data = pd.read_csv(dataFile, delim_whitespace=True)
+                self.data = np.array(self.data)
+                for i in range(len(self.data)):
+                    #remove quote marks
+                    self.data[i][0] = self.data[i][0].replace("'", '')
+
+                return
+
         self.data = np.array(self.data)
         
 

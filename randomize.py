@@ -105,7 +105,7 @@ for indy in range(6):
 
     comparativeClusterGroups.setMainCluster()
     comparativeClusterGroups.create_graph()
-    comparativeClusterGroups.get_edge_scores()
+    comparativeClusterGroups.get_edge_scores(random=True)
     comparativeClusterGroups.display_stats()
     #todo get average of scores
     #!in range 12
