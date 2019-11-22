@@ -31,7 +31,7 @@ cleanData.clean_rows()
 cancer_data = cleanData.data
 im = np.zeros(shape=(12,12))
 
-for indy in range(6):
+for indy in range(50):
     print("run ", indy)
     #insert random data into cells
     for i in range(len(cancer_data)):
@@ -93,10 +93,11 @@ for indy in range(6):
     HierCluster.labelsPoor = labelsPoor
     HierCluster.labelsRich = labelsRich
     HierCluster.pfile = pfile
-    HierCluster.clusterMethod("notpca", 12, pfile)
+    HierCluster.clusterMethod("notpca", pfile)
+    
 
     #add cluster to hyper geometric class
-    comparativeClusterGroups = compare_clusters.CompareCluster(12)
+    comparativeClusterGroups = compare_clusters.CompareCluster()
     comparativeClusterGroups.add_cluster(HierCluster.clusters)
 
     filename = "./data/pickles/randomClusterGroups"
@@ -133,11 +134,11 @@ print("finished run")
     
 #divide scores by 100 
 for i in range(len(scores)):
-    scores[i] = scores[i] / 6
+    scores[i] = scores[i] / 50
 
 
 #averaging interaction matrix
-im = np.floor_divide(im, 6)
+im = np.floor_divide(im, 50)
 matrix.save_matrix(im, matrix.family)
 
 
@@ -152,7 +153,6 @@ print("current scores ", scores)
 
 def get_sig_scores(obj, cg):
     obj = np.array(obj)
-    minVal = 0
     
 
     ##remove zeros from low list

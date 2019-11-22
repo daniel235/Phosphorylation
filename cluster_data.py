@@ -389,8 +389,9 @@ class PrepareClusterData:
                             substrates[names[j]] = data[j]
                             kinase_matrixes[kinases[i]] = substrates
                             
-
-                        f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
+                                       
+                        #f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
+                        
 
         return kinase_matrixes
 

@@ -52,7 +52,7 @@ with open(filename, 'rb+') as f:
 previousFams = []
 famDict = {}
 #cg[0] -> breast cancer clusters
-for j in range(len(cg[0])):
+for j in range(len(cg[1])):
     #inside the cluster group k
     clusterLen = len(cg[0][j])
     print("cg ", cg[0][j]) 
@@ -103,7 +103,7 @@ for i in range(12):
 
 ax.set_title("Interaction matrix")
 fig.tight_layout()
-plt.savefig(("./results/InteractionMatrix.png"))
+plt.savefig(("./results/BCInteractionMatrix.png"))
 plt.show()
 
 
@@ -159,7 +159,7 @@ class InteractionMatrix:
             for fam, cnt in famDict.items():
                 for fam2, cnt2 in famDict.items():
                     print(fam, fam2)
-                    if cnt > (clusterLen * .2) and cnt2 > (clusterLen * .2) and fam != fam2:
+                    if cnt > (clusterLen * .3) and cnt2 > (clusterLen * .3) and fam != fam2:
                         interaction_matrix[family.index(fam), family.index(fam2)] += 1
 
             famDict = {}
