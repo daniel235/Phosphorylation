@@ -47,6 +47,7 @@ class PrepareClusterData:
         self.stats = stats.Statistics()
         self.alias = alias.Alias("./data/info_table.csv")
         self.finalSubstrates = []
+        self.finalKinases = []
         #self.clean_data(test, phosfile, sheet, ordered, trailing_letter, psite_cols, omit_cols)
         
 
@@ -389,7 +390,7 @@ class PrepareClusterData:
                         for j in range(len(names)):
                             substrates[names[j]] = data[j]
                             kinase_matrixes[kinases[i]] = substrates
-                            
+                            self.finalKinases.append(kinases[i])
                                        
                         #f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
                         
