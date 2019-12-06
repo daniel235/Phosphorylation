@@ -1,11 +1,14 @@
 import plotly.graph_objects as go
 import xlwt
 from xlwt import Workbook
+import os
 
-from cluster_data import PrepareClusterData
+
+import cluster_data
+
 
 class Statistics:
-    def __init__(self, fileName):
+    def __init__(self, fileName=None):
         self.phosphoSitesCount = 0
         self.fileName = fileName
         self.kinaseCount = 0
@@ -24,14 +27,15 @@ class Statistics:
        
         fig.show()
 
-    def get_final_data(self):
+    #!todo fix dumbass import error
+    '''def get_final_data(self):
         #call cluster data object
-        cl = PrepareClusterData("./data/KSA_human.txt")
+        cl = cluster_data.PrepareClusterData("./data/KSA_human.txt")
         cl.clean_data()
         cl.get_kinase_substrate_matrixes(3)
         self.finalSubstrates = cl.finalSubstrates
         self.finalKinases = cl.finalKinases
-
+    '''
 
     def write_all_sig_data(self, sheet="one"):
         wb = Workbook()
@@ -47,18 +51,9 @@ class Statistics:
         wbfile = "./results/" + str(self.fileName) + "stats.xls"
         wb.save(wbfile)
         
-
-s = Statistics("BreastCancer")
-s.get_final_data()
-s.write_all_sig_data(sheet=s.fileName)
-
-s2 = Statistics("OvarianCancer")
-s2.get_final_data()
-s2.write_all_sig_data(sheet=s2.fileName)
-
+        
+    
 
         
     
 
-
-    

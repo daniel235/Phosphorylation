@@ -394,7 +394,10 @@ class PrepareClusterData:
                                        
                         #f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
                         
-
+        self.stats.finalKinases = self.finalKinases
+        self.stats.finalSubstrates = self.finalSubstrates
+        self.stats.fileName = self.pfile
+        self.stats.write_all_sig_data(sheet=self.pfile)
         return kinase_matrixes
 
-
+    
