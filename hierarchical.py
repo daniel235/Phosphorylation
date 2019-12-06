@@ -34,6 +34,8 @@ class Hierarchical:
         if method == "pca":
             #get kinase svd feature 
             self.kinaseFeatures, self.poorKFeats, self.richKFeats, pfile = pca.getSVDdata("./data/KSA_human.txt", 10)
+            
+
             for kinase, vector in self.kinaseFeatures.items():
                 self.X.append(vector)
                 self.labels.append(kinase)
@@ -45,6 +47,12 @@ class Hierarchical:
             for kinase, vector in self.richKFeats.items():
                 self.Xrich.append(vector)
                 self.labelsRich.append(kinase)
+
+            #write contextual kinases to file
+            with open(file="./testing/"+pfile+"contextKinases.txt", mode='w+') as f:
+                for label in range(len(self.labels)):
+                    s = self.labels[label] + "\n"
+                    f.write(s)
 
 
         self.pfile = pfile

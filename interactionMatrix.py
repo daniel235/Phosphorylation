@@ -35,7 +35,6 @@ for kinase in uniqueKinases:
         #check for family
 
 
-
 #create matrix
 interaction_matrix = np.zeros(shape=(12, 12))
 
@@ -48,75 +47,85 @@ with open(filename, 'rb+') as f:
 
 
 #go through cluster groups
-#required data structures 
-previousFams = []
-famDict = {}
+
 #cg[0] -> breast cancer clusters
-for j in range(len(cg[1])):
-    #inside the cluster group k
-    clusterLen = len(cg[0][j])
-    print("cg ", cg[0][j]) 
-    for k in cg[0][j]:
-        #add instance to interaction matrix
-        #get index from unique kinases
-        #search for family kinase
-        try:
-            fam = family_data['Gene'].tolist().index(k) 
-        except ValueError:
-            fam = family_data['Gene'].tolist().index(alias_object.get_main_kinase(k))
-
-        #set family index
-        index = family.index(family_data['Classification'][fam])
-    
-        #?increment family in dictionary if it appears in cluster
-        if family[index] in famDict:
-            famDict[family[index]] += 1
-        else:
-            famDict[family[index]] = 1
-
-
-    #!before moving to new cluster
-    #iterate through famdict to start filling in interaction matrix
-    for fam, cnt in famDict.items():
-        for fam2, cnt2 in famDict.items():
-            if cnt > (clusterLen * .3) and cnt2 > (clusterLen * .3) and fam != fam2:
-                interaction_matrix[family.index(fam), family.index(fam2)] += 1
-
-    #reset famdict
-    previousFams.append(famDict)
+for typeNum in range(len(cg)):
+    #required data structures 
+    previousFams = []
     famDict = {}
+    interaction_matrix = np.zeros(shape=(12,12))
+    for j in range(len(cg[typeNum])):
+        #inside the cluster group k
+        clusterLen = len(cg[typeNum][j])
+        print("cg ", cg[typeNum][j]) 
+        for k in cg[typeNum][j]:
+            #add instance to interaction matrix
+            #get index from unique kinases
+            #search for family kinase
+            try:
+                fam = family_data['Gene'].tolist().index(k) 
+                family_found = True
 
-#visualize data 
-fig, ax = plt.subplots()
-im = ax.imshow(interaction_matrix)
+            except ValueError:
+                try:
+                    fam = family_data['Gene'].tolist().index(alias_object.get_main_kinase(k))
+                    family_found = True
+                except:
+                    family_found = False
+                
+            if(family_found):
+                #set family index
+                index = family.index(family_data['Classification'][fam])
 
-ax.set_xticks(np.arange(12))
-ax.set_yticks(np.arange(12))
-ax.set_xticklabels(family)
-ax.set_yticklabels(family)
+                #?increment family in dictionary if it appears in cluster
+                if family[index] in famDict:
+                    famDict[family[index]] += 1
+                else:
+                    famDict[family[index]] = 1
 
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+        #!before moving to new cluster
+        #iterate through famdict to start filling in interaction matrix
+        for fam, cnt in famDict.items():
+            for fam2, cnt2 in famDict.items():
+                if cnt > (clusterLen * .2) and cnt2 > (clusterLen * .2) and fam != fam2:
+                    interaction_matrix[family.index(fam), family.index(fam2)] += 1
 
-for i in range(12):
-    for j in range(12):
-        text = ax.text(j, i, interaction_matrix[i, j], ha="center", va="center", color="w")
+        #reset famdict
+        previousFams.append(famDict)
+        famDict = {}
 
-ax.set_title("Interaction matrix")
-fig.tight_layout()
-plt.savefig(("./results/BCInteractionMatrix.png"))
-plt.show()
+    #visualize data 
+    fig, ax = plt.subplots()
+    im = ax.imshow(interaction_matrix)
+
+    ax.set_xticks(np.arange(12))
+    ax.set_yticks(np.arange(12))
+    ax.set_xticklabels(family)
+    ax.set_yticklabels(family)
+
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+    for i in range(12):
+        for j in range(12):
+            text = ax.text(j, i, interaction_matrix[i, j], ha="center", va="center", color="w")
+
+    ax.set_title("Interaction matrix")
+    fig.tight_layout()
+    plt.savefig(("./results/" + str(typeNum) + "InteractionMatrix.png"))
+    plt.show()
 
 
-
+#?class used for random interaction matrix
 #?random interaction matrix
 class InteractionMatrix:
-    def __init__(self, clusterGroup):
+    def __init__(self, clusterGroup, name=None):
         self.cg = clusterGroup
         self.kinases = None
         self.reps = 10
         self.family = None
         self.kinase_dict = None
         self.get_data()
+
 
     def run_interaction(self):
         kinase_dict = self.kinase_dict
@@ -168,6 +177,7 @@ class InteractionMatrix:
         self.save_matrix(interaction_matrix, family)
         
         return interaction_matrix
+
 
     def get_data(self):
         #read unique kinases

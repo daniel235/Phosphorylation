@@ -4,6 +4,8 @@ import pipe_line as pipe
 import math
 import pandas as pd
 import xlrd 
+import xlwt
+from xlwt import Workbook
 from scipy.stats import stats
 from astropy import stats
 from sklearn.decomposition import PCA
@@ -44,6 +46,7 @@ class PrepareClusterData:
         self.phosDataOrdered = True
         self.stats = stats.Statistics()
         self.alias = alias.Alias("./data/info_table.csv")
+        self.finalSubstrates = []
         #self.clean_data(test, phosfile, sheet, ordered, trailing_letter, psite_cols, omit_cols)
         
 
@@ -56,12 +59,9 @@ class PrepareClusterData:
             average = 0
             non_empty = 0
 
+            #for column in row
             for j in range(2, len(self.CancerData[i])):
-                if self.fileName == 'colorectal_cancer.xlsx':
-                    if type(self.CancerData[i,j]) != float:
-                        indexes.append(j)
-
-                elif np.isnan(self.CancerData[i,j]):
+                if np.isnan(self.CancerData[i,j]):
                     indexes.append(j)
 
                 else:
@@ -340,11 +340,13 @@ class PrepareClusterData:
                     for i in range(len(self.CancerData[:,0])):
                         index = self.CancerData[i, 0]
                         if type(index) == float:
+                            raise Exception
                             break
 
-                        #didn't find substrate
+                        #did find substrate
                         if substrate == index:
                             substrate_names.append(substrate)
+                            self.finalSubstrates.append(substrate)
                             data = []
                             for j in range(2, len(self.CancerData[i])):
                                 data.append(self.CancerData[i][j])

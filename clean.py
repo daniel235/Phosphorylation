@@ -177,31 +177,3 @@ class cleanMatrix:
                     self.data[i,k] = average
 
         self.data = np.delete(self.data, delete_rows, 0)
-       
-        #run through all rows and create new rows
-        '''for i in range(len(self.data[:,1])):
-            #start here for column site cleanup
-            extra_rows = self.check_for_multiples(self.data[i,0], i)
-            first = ""
-            firstFlag = True
-
-            if extra_rows != None:
-                row = self.data[i]
-                for name, index in extra_rows.items():
-                    if firstFlag == True:
-                        first = name
-                        firstFlag = False
-                    else:
-                        #fetch row from data 
-                        row[0] = name
-                        #add to add_rows
-                        add_rows.append(row)
-
-                #set original row name to first extra row
-                print("first ", first)
-                self.data[i][0] = first
-
-
-        if len(add_rows) > 1:
-            self.data = np.append(self.data, add_rows, axis=0)'''
-
