@@ -48,7 +48,7 @@ class Statistics:
             #write to second column
             wb.write(1, cell, self.finalSubstrates[cell])
 
-        wbfile = "./results/" + str(self.fileName) + "stats.xls"
+        wbfile = "./results/" + str(self.fileName)[5:-5] + "stats.xls"
         wb.save(wbfile)
         
         
