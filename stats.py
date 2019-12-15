@@ -3,7 +3,7 @@ import xlwt
 from xlwt import Workbook
 import os
 
-
+#import dev files
 import cluster_data
 
 
@@ -38,7 +38,8 @@ class Statistics:
     '''
 
     def write_all_sig_data(self, sheet="one"):
-        wb = Workbook()
+        pass
+        '''wb = Workbook()
         wb.add_sheet(sheet)
         for cell in range(len(self.finalKinases)):
             #write to first column
@@ -49,7 +50,7 @@ class Statistics:
             wb.write(1, cell, self.finalSubstrates[cell])
 
         wbfile = "./results/" + str(self.fileName)[5:-5] + "stats.xls"
-        wb.save(wbfile)
+        wb.save(wbfile)'''
         
         
     

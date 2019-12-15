@@ -65,7 +65,7 @@ class Hierarchical:
         
         distArray = ssd.squareform(distMatrix, checks=False)
 
-        arr = linkage(distArray, method=methodType)
+        arr = linkage(distArray, method=methodType, optimal_ordering=True)
 
         #agglomerative
         cluster = AgglomerativeClustering(n_clusters=cluster_len, affinity='precomputed', linkage='complete')
@@ -85,6 +85,7 @@ class Hierarchical:
 
         
 
+        #save plot in data folder
         plt.figure()
         plot_file = str(self.pfile).replace(".txtls", '')
         dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
@@ -99,8 +100,8 @@ class Hierarchical:
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
  
-        arr = linkage(distArray, method=methodType)
-        #kinase names
+        arr = linkage(distArray, method=methodType, optimal_ordering=True)
+        #save poor kinase plots
         plt.figure()
         dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + plot_file + methodType + "poor.png"))
@@ -113,8 +114,8 @@ class Hierarchical:
         #condense distance matrix
         distArray = ssd.squareform(distMatrix) 
  
-        arr = linkage(distArray, method=methodType)
-        #kinase names
+        arr = linkage(distArray, method=methodType, optimal_ordering=True)
+        #save rich kinase plots
         plt.figure()
         dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
         plt.savefig(("./data/results/" + plot_file + methodType + "rich.png"))
@@ -127,16 +128,17 @@ class Hierarchical:
         correlationMatr = None
         #check for pickle
         filename = "./data/pickles/" + str(self.pfile)[:-5] + str(type) + "correlation"
-        if os.path.exists(filename):
+        '''if os.path.exists(filename):
             with open(filename, 'rb+') as f:
                 correlationMatr = pickle.load(f)
-                
-        else: 
-            correlationMatr = self.correlation(kfeats, filename)
+        '''     
+        #!fix (get new correlation matrix every time)
+        correlationMatr = self.correlation(kfeats, filename)
 
         #get euclid distance from correlation matrix
         euclidMatr = []
         row = []
+        #set correlation matrix 
         for i in range(len(correlationMatr)):
             for j in range(len(correlationMatr)):
                 if i != j:

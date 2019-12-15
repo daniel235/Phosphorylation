@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import pickle
 
+#import dev files
 import alias
 
 #read unique kinases
@@ -14,11 +15,15 @@ with open(filename, 'rb+') as f:
 
 #family lookup
 family_data = pd.read_csv("./data/kinaseClass.txt", delimiter=",")
+#create list to get names of families in our phosphorylation data
 family = []
 for i in range(len(family_data)):
     #get unique family names
     if family_data['Classification'][i] not in family:
         family.append(family_data['Classification'][i])
+
+    if len(family) > 11:
+        break
 
 
 kinase_dict = {}
@@ -32,7 +37,7 @@ for kinase in uniqueKinases:
 
     else:
         kinase_dict[kinase] = family_data['Classification'][family_data['Gene'].tolist().index(kinase)]
-        #check for family
+        
 
 
 #create matrix
@@ -42,23 +47,21 @@ interaction_matrix = np.zeros(shape=(12, 12))
 #get correlation values
 filename = "./data/pickles/clusterGroups"
 with open(filename, 'rb+') as f:
-    cg = pickle.load(f)
+    cluster_groups = pickle.load(f)
 
 
 
 #go through cluster groups
-
-#cg[0] -> breast cancer clusters
-for typeNum in range(len(cg)):
+for typeNum in range(len(cluster_groups)):
     #required data structures 
     previousFams = []
     famDict = {}
     interaction_matrix = np.zeros(shape=(12,12))
-    for j in range(len(cg[typeNum])):
+    for j in range(len(cluster_groups[typeNum])):
         #inside the cluster group k
-        clusterLen = len(cg[typeNum][j])
-        print("cg ", cg[typeNum][j]) 
-        for k in cg[typeNum][j]:
+        clusterLen = len(cluster_groups[typeNum][j])
+        print("cluster_groups ", cluster_groups[typeNum][j]) 
+        for k in cluster_groups[typeNum][j]:
             #add instance to interaction matrix
             #get index from unique kinases
             #search for family kinase
@@ -119,7 +122,7 @@ for typeNum in range(len(cg)):
 #?random interaction matrix
 class InteractionMatrix:
     def __init__(self, clusterGroup, name=None):
-        self.cg = clusterGroup
+        self.cluster_groups = clusterGroup
         self.kinases = None
         self.reps = 10
         self.family = None
@@ -136,15 +139,15 @@ class InteractionMatrix:
 
         #create matrix
         interaction_matrix = np.zeros(shape=(12, 12))
-        cg = self.cg
+        cluster_groups = self.cluster_groups
         
         #go through cluster groups
         #required data structures 
         famDict = {}
-        for j in range(len(cg[0])):
+        for j in range(len(cluster_groups[0])):
             #inside the cluster group k
-            clusterLen = len(cg[0][j])
-            for k in cg[0][j]:
+            clusterLen = len(cluster_groups[0][j])
+            for k in cluster_groups[0][j]:
                 #add instance to interaction matrix
                 #get index from unique kinases
                 #search for family kinase

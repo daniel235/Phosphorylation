@@ -303,7 +303,7 @@ class Node:
 main = CompareCluster()
 main.setMainCluster()
 #main.data_exists_check()
-main.get_clusters(method="average")
+main.get_clusters(method="complete")
 main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()

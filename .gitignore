@@ -5,3 +5,7 @@ __pycache__/
 node_modules/
 pickles/
 results/
+data/results/
+data/graphs/
+oldMl/
+web/

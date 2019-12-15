@@ -12,6 +12,7 @@ from sklearn.decomposition import PCA
 import pickle
 import os
 
+#import dev files
 import clean
 import stats
 import alias 
@@ -52,6 +53,7 @@ class PrepareClusterData:
         
 
     def replace_with_average(self):
+        print("**in replace_with_average function")
         delete_rows = []
         #for every element in array with na replace with average
         #first get average of row
@@ -84,6 +86,7 @@ class PrepareClusterData:
 
     #?convert phosphositeplus kinases into correct aliases
     def convert_kinases(self, kinaseFile):
+        print("***in convert_kinases function")
         #check if file exists 
         files = "./results/newPhosKinaseFile.txt"   
         if(os.path.exists(files) == False or os.stat(files).st_size == 0):
@@ -120,6 +123,7 @@ class PrepareClusterData:
 
 
     def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
+        print("***in clean_data function")
         '''clean breast cancer data and create 
         kinase matrix and phosphosite matrix  ''' 
         self.create_unique_kinases()
@@ -269,6 +273,7 @@ class PrepareClusterData:
     
     #?grab substrates of kinase passed in
     def grab_substrates(self, kinase, kinaseFileOrdered=False, PhosDataOrdered=False):
+        print("***In grab_substrates function")
         '''search through ksa_human.txt to look for substrates'''
         substrate_matrix = []
         substrate_names = []
@@ -291,6 +296,7 @@ class PrepareClusterData:
                 #binary search the data
                 if PhosDataOrdered:
                     mins = 0
+                    '''
                     while(mid > 0 and prevMid != mid and mid < len(self.CancerData)):
                         #if not found
                         if prevMid == mid:
@@ -334,7 +340,7 @@ class PrepareClusterData:
 
 
                             break
-
+                            '''
                 #brute force data
                 else:
                     #iterate through phosphorylation data(33,540 rows)
@@ -366,6 +372,7 @@ class PrepareClusterData:
                 
     #returns kinase matrix dictionary // Kinase is for testing purposes
     def get_kinase_substrate_matrixes(self, threshold, kinase=None):
+        print("***in get_kinase_substrate_matrixes function")
         kinase_matrixes = {}
         substrates = {}
         names = []
@@ -383,21 +390,20 @@ class PrepareClusterData:
                 count = self.count_substrates(kinases[i], ordered=False)
                 substrates = {}
                 names = []
-                #only check kinases that got past first round of obj check
-                if count >= threshold: 
-                    names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=self.phosDataOrdered)
-                    if len(names) > threshold:
-                        for j in range(len(names)):
-                            substrates[names[j]] = data[j]
-                            kinase_matrixes[kinases[i]] = substrates
-                            self.finalKinases.append(kinases[i])
+                
+                names, data = self.grab_substrates(kinases[i], False, PhosDataOrdered=self.phosDataOrdered)
+                if len(names) > threshold:
+                    for j in range(len(names)):
+                        substrates[names[j]] = data[j]
+                        kinase_matrixes[kinases[i]] = substrates
+                        self.finalKinases.append(kinases[i])
                                        
-                        #f.write(F'{kinases[i]}  {list(substrates.keys())}' + "\n")
+                    f.write(F'{kinases[i]} {len(substrates)} {list(substrates.keys())}' + "\n")
                         
         self.stats.finalKinases = self.finalKinases
         self.stats.finalSubstrates = self.finalSubstrates
         self.stats.fileName = self.pfile
-        self.stats.write_all_sig_data(sheet=self.pfile)
+        #self.stats.write_all_sig_data(sheet=self.pfile)
         return kinase_matrixes
 
     
