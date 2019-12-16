@@ -34,8 +34,8 @@ def getMatrix(kinase, test=False):
     #how many tumor samples are in the data after it is cleaned
     tsampleCount = len(clusterStructure.CancerData[1]) - 1
     #get statistics (how many psites/kinases are in this filtered data)
-    #afterStat = stats.Statistics() 
-    #afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
+    afterStat = stats.Statistics() 
+    afterStat.set_table(psiteCount, kinaseCount, tsampleCount)
     #afterStat.plotTable()
     #return matrix and name of the file we are using
     return myMatrix, clusterStructure.fileName
@@ -43,6 +43,7 @@ def getMatrix(kinase, test=False):
 
 #get SVDs of each kinase bucket and write it to svd txt file
 def getSVDdata(kinase, threshold, obs=None, pfile=None, matrix=None):
+    #*necessary data structures
     poorKinaseFeature = {}
     richKinaseFeature = {}
     substrateCount = 0
@@ -51,16 +52,9 @@ def getSVDdata(kinase, threshold, obs=None, pfile=None, matrix=None):
     if obs == None:
         matrix, pfile = getMatrix(kinase)
 
-    
-    
+    #write principal components to svd text file
     with open("./results/" + str(pfile)[:-5] + "svd.txt", 'w+') as f: 
         f.write("Method Singular Value Decomposition(One of the PCA methods)\n")
-        f.write("X = U(SIG)V*\n\n")
-        f.write("X shape (nxm)\n\n")
-        f.write("U shape (nxn)\n\n")
-        f.write("(SIG) shape (nx1)\n\n")
-        f.write("V shape (nxm)\n\n")
-
         
         for kinase, data in matrix.items():
             bucket = []
@@ -70,6 +64,7 @@ def getSVDdata(kinase, threshold, obs=None, pfile=None, matrix=None):
 
 
             kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket, 2)
+            #separate out poor and rich kinases
             if substrateCount > threshold:
                 richKinaseFeature[kinase] = kinaseFeature[kinase]
             else:
@@ -91,29 +86,15 @@ def getPcaVectors(matrix):
 
 #get kinase feature vector
 def getFeatureVector(kinase, matrix, dim):
-    #todo center data
-    #todo pickle data
-    #?(matrix -> 5000x24)
-    #?(u -> 5000x5000)
-    #?(s -> 5000x24)
-    #?(Vt -> 24x24)
-    #?(XxV -> (5000x24)x(24x24))
-    #!problem if n is less than m ->  for (nxm matrix)
     #transpose matrix
     matrix = np.transpose(matrix)
-    
-    #standardize data scale 
-    ss = StandardScaler()
-    #matrix = ss.fit_transform(matrix)
-    #print(matrix)
 
-    #pcs = getPcaVectors(matrix)
     #normalize columns
-    mean = 0
     for i in range(len(matrix[0])):
         mean = np.mean(matrix[:,i])
         stdDev = statistics.stdev(matrix[:,i])
         for j in range(len(matrix[:0])):
+            print("in get feat vec ", j)
             matrix[j,i] = (matrix[j,i] - mean) / stdDev
 
     
@@ -128,11 +109,8 @@ def getFeatureVector(kinase, matrix, dim):
     plt.ylabel("Percent Variance Explained")
     plt.savefig('./results/svd_variance.png', dpi=100)
     
-    #get first column of V   (6*6) (6*27) ((6*27)->VT)  / (27*27) (27*6) ((27*6) -> VT)  X-> (27*6) V -> (6*27)  VR-> (6 * 1)  X* VR -> (27*6)(6*1) -> (27*1)
-    #(6x24) x (24x1)
-
+    #transpose matrix 
     v = np.transpose(vt)
-   
     #vR
     v = v[:,:dim]
     #get scores XVR

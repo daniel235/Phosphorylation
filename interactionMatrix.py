@@ -53,14 +53,13 @@ with open(filename, 'rb+') as f:
 
 #go through cluster groups
 for typeNum in range(len(cluster_groups)):
-    #required data structures 
+    #*required data structures 
     previousFams = []
     famDict = {}
     interaction_matrix = np.zeros(shape=(12,12))
     for j in range(len(cluster_groups[typeNum])):
         #inside the cluster group k
         clusterLen = len(cluster_groups[typeNum][j])
-        print("cluster_groups ", cluster_groups[typeNum][j]) 
         for k in cluster_groups[typeNum][j]:
             #add instance to interaction matrix
             #get index from unique kinases
@@ -170,7 +169,6 @@ class InteractionMatrix:
             #iterate through famdict to start filling in interaction matrix
             for fam, cnt in famDict.items():
                 for fam2, cnt2 in famDict.items():
-                    print(fam, fam2)
                     if cnt > (clusterLen * .3) and cnt2 > (clusterLen * .3) and fam != fam2:
                         interaction_matrix[family.index(fam), family.index(fam2)] += 1
 

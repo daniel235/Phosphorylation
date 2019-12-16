@@ -151,7 +151,6 @@ class Hierarchical:
             euclidMatr.append(row)
             row = []
 
-
         return euclidMatr
 
     #?getting correlation from projected data
@@ -164,7 +163,7 @@ class Hierarchical:
             f.close()
             return corrmatr
 
-
+        #*necessary data structrues
         corrmatr = np.zeros((len(kfeatures.keys()), len(kfeatures.keys())))
         a = 0
         b = 0
@@ -174,6 +173,9 @@ class Hierarchical:
         vec2 = []
         second_vec1 = []
         second_vec2 = []
+
+        #?creating symmetric correlation matrix
+        #create
         for kinase, vector in kfeatures.items():
             b = 0
             for coord in vector:
