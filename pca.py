@@ -62,7 +62,6 @@ def getSVDdata(kinase, threshold, obs=None, pfile=None, matrix=None):
             for substrate in data.values():
                 bucket.append(substrate)
 
-
             kinaseFeature[kinase], u, s, vt = getFeatureVector(kinase, bucket, 2)
             #separate out poor and rich kinases
             if substrateCount > threshold:
@@ -71,7 +70,6 @@ def getSVDdata(kinase, threshold, obs=None, pfile=None, matrix=None):
                 poorKinaseFeature[kinase] = kinaseFeature[kinase]
 
             f.write("Kinase " + str(kinase) + "\n" + "Singular Vector U \n" + str(u) + "\n" + "Singular Values \n" + str(s) + "\n" + "Singular Vector V (transpose) \n" + str(vt) + "\n\n")
-            
     
     return kinaseFeature, poorKinaseFeature, richKinaseFeature, pfile
 

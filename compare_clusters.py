@@ -118,6 +118,7 @@ class CompareCluster:
         #set up unique kinases here
         for i in range(len(self.all_clusters)):
             for j in range(len(self.all_clusters[i])):
+                #fill in cluster information
                 name = "type" + str(i) + "family" + str(j)
                 n = Node(name)
                 kinaseList = self.all_clusters[i][j]
@@ -127,7 +128,7 @@ class CompareCluster:
                     kinase = str(kinase).upper()
                     if kinase not in self.uniqueKinases:
                         self.uniqueKinases.append(kinase)
-
+                #add to row of clusters to create a cluster group
                 row.append(n)
 
             #add type i group to cluster groups
@@ -149,6 +150,7 @@ class CompareCluster:
 
 
     def get_edge_scores(self, random=False):
+        #*necessary data structures
         k = 0
         M = 0
         n = 0
@@ -272,10 +274,8 @@ class CompareCluster:
         hierCluster.start_hierarchical_clustering(clLen, methodType=self.methodType)
         hBreastCancerCluster = hierCluster.clusters
 
-
         #add hierarchical clustering to all groups
         self.add_cluster(hBreastCancerCluster)
-
 
         #get ovarian cancer clustering
         ovHierCluster = hierarchical.Hierarchical()
@@ -285,7 +285,6 @@ class CompareCluster:
 
         hOvarianCancerCluster = ovHierCluster.clusters
         self.add_cluster(hOvarianCancerCluster)
-
 
         #pickle clusters
         filename = "./data/pickles/clusterGroups"

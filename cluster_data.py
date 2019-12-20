@@ -16,6 +16,7 @@ import os
 import clean
 import stats
 import alias 
+import testing.kinaseCounts
 
 
 class PrepareClusterData:
@@ -40,9 +41,11 @@ class PrepareClusterData:
         self.CancerData = None
         self.phosphositePlusKinaseData = np.array(pd.read_csv("./data/KSA_human.txt", delim_whitespace=True))
         self.unique_kinases = None
+        self.unique_alias_kinases = None
         self.phosDataOrdered = True
         self.stats = stats.Statistics()
         self.alias = alias.Alias("./data/info_table.csv")
+        self.testFunctions = testing.kinaseCounts.Kinase_Count_Test(alias_object=self.alias)
         self.finalSubstrates = []
         self.finalKinases = []
         
@@ -58,17 +61,18 @@ class PrepareClusterData:
             non_empty = 0
 
             #for column in row
-            for j in range(2, len(self.CancerData[i])):
+            for j in range(1, len(self.CancerData[i])):
+                #if data is empty(NA)
                 if np.isnan(self.CancerData[i,j]):
                     indexes.append(j)
-
+                #if data is not empty
                 else:
                     average += self.CancerData[i,j]
                     non_empty += 1
 
             average = average / max(1, non_empty)
 
-            #delete row
+            #delete row if ratio more than 50 percent empty
             if float(len(indexes) / len(self.CancerData[i])) > .5:
                 #replace k with k+1
                 delete_rows.append(i)
@@ -77,22 +81,28 @@ class PrepareClusterData:
                     self.CancerData[i,k] = average
 
         self.CancerData = np.delete(self.CancerData, delete_rows, 0)
-
+        print("len of psites ", len(self.CancerData))
 
     #?convert phosphositeplus kinases into correct aliases
     def convert_kinases(self, kinaseFile):
         print("***in convert_kinases function")
         #check if file exists 
         files = "./results/newPhosKinaseFile.txt"   
+        arr = pd.read_csv(kinaseFile, delimiter="\t")
         if(os.path.exists(files) == False or os.stat(files).st_size == 0):
             with open(files, 'w+') as f:
-                arr = pd.read_csv(kinaseFile, delimiter="\t")
                 for i in range(len(arr)):
                     #search for kinase in alias list
                     arr["Kinase"][i] = self.alias.get_main_kinase(str(arr["Kinase"][i])).upper()
                     #write to file
                     s = arr["Kinase"][i] + "\n"
                     f.write(s)
+
+        #double check if conversion was correct
+        for i in range(len(arr)):
+            if self.testFunctions.test_kinase_alias(arr["Kinase"][i]) == False:
+                print("wrong value for kinase alias", arr["Kinase"][i])
+                raise Exception
 
 
     def create_unique_kinases(self):
@@ -111,7 +121,7 @@ class PrepareClusterData:
         #strip na's
         #strip columns
         self.unique_kinases = unique_kinase_temp
-
+        print("length of unique kinases ", len(self.unique_kinases))
 
 
     def clean_data(self, test=False, phosfile=None, sheet=None, ordered=False, trailing_letter=False, psite_cols=None, omit_cols=None):
@@ -136,7 +146,7 @@ class PrepareClusterData:
             sheet_name = input("What is your sheet name for phosphorylation data?")
             inputs = input("Is your phosphorylation data ordered(yes/no)?")
             if inputs == "yes":
-                self.phosDataOrdered = True
+                self.phosDataOrdered = False
             else:
                 self.phosDataOrdered = False
 
@@ -179,6 +189,7 @@ class PrepareClusterData:
         self.stats.plotTable()
         df.set_gene_site_column(index, trailing)
 
+        #omit columns
         df.omit_columns(indexs)
         df.column_check_strings()
         df.clean_rows()
@@ -189,17 +200,18 @@ class PrepareClusterData:
 
         #kinase alias name fix here
         self.convert_kinases("./data/KSA_human.txt")
-        tempKinases = pd.read_csv("./results/newPhosKinaseFile.txt")
+        tempKinases = np.array(pd.read_csv("./results/newPhosKinaseFile.txt", header=None))
 
         #fix kinase substrates columns
         for i in range(len(self.phosphositePlusKinaseData[:,1])-1):
             #replace kinase data with alias names
-            self.phosphositePlusKinaseData[i,0] = tempKinases[i]
+            self.phosphositePlusKinaseData[i,0] = tempKinases[i][0]
             self.phosphositePlusKinaseData[i,1] = str(self.phosphositePlusKinaseData[i,1]) + "-" + str(self.phosphositePlusKinaseData[i,2])
         
         #remove last column 
         self.phosphositePlusKinaseData = self.phosphositePlusKinaseData[:,0:-1]
-
+        self.unique_alias_kinases = set(self.phosphositePlusKinaseData[:,0])
+        print(len(self.unique_alias_kinases))
 
     #set number of substrates to put kinases in rich/poor class
     def set_arbitrary_kinase_class(self, n):
@@ -207,7 +219,7 @@ class PrepareClusterData:
         names = []
         kinaseData = pd.read_csv("./data/Kinase_Substrates.txt", delimiter="\t")
         
-        #set numbers of 
+        #set count of substrates into kinaseDict
         for i in range(len(kinaseData)):
             keys = kinaseData["Kinase"][i]
             if keys in kinaseDict: 
@@ -217,7 +229,7 @@ class PrepareClusterData:
                 kinaseDict[keys] = 1
                 names.append(keys)
     
-        #separate kinases
+        #separate kinases into rich/poor categories
         for i in range(len(kinaseDict)):
             if kinaseDict[names[i]] > n:
                 self.strongKinase.append(names[i])
