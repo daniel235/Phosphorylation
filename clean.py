@@ -26,7 +26,7 @@ class cleanMatrix:
                 for i in range(len(self.data)):
                     #remove quote marks
                     self.data[i][0] = self.data[i][0].replace("'", '')
-
+                    print(self.data[i][0])
                 return
 
         self.data = np.array(self.data)

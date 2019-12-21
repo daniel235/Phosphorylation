@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 import sys
 
-#import dev files
-sys.path.append("../alias.py")
-import alias
 
 class Kinase_Count_Test:
     '''
@@ -44,8 +41,7 @@ class Kinase_Count_Test:
         if kinase not in self.alias.alias_dict.keys():
             return True
 
-        print(main_alias)
-        if kinase not in main_alias:
+        elif kinase not in main_alias:
             return False
 
         return True

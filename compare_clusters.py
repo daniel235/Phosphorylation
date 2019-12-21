@@ -272,19 +272,24 @@ class CompareCluster:
                 clLen += 1
 
         hierCluster.start_hierarchical_clustering(clLen, methodType=self.methodType)
-        hBreastCancerCluster = hierCluster.clusters
+        hCancerCluster = hierCluster.clusters
 
         #add hierarchical clustering to all groups
-        self.add_cluster(hBreastCancerCluster)
+        self.add_cluster(hCancerCluster)
 
-        #get ovarian cancer clustering
-        ovHierCluster = hierarchical.Hierarchical()
-        ovHierCluster.kinaseFile = "./data/KSA_human.txt"
-        ovHierCluster.clusterMethod("pca")
-        ovHierCluster.start_hierarchical_clustering(clLen, methodType=self.methodType)
+        #get other clusters
+        #loop until no more clusters
+        while(True):
+            choice = input("Do you want to add another file?(yes/no)")
+            if choice == 'no':
+                break
 
-        hOvarianCancerCluster = ovHierCluster.clusters
-        self.add_cluster(hOvarianCancerCluster)
+            HierCluster = hierarchical.Hierarchical()
+            HierCluster.kinaseFile = "./data/KSA_human.txt"
+            HierCluster.clusterMethod("pca")
+            HierCluster.start_hierarchical_clustering(clLen, methodType=self.methodType)
+            self.add_cluster(HierCluster.clusters)
+
 
         #pickle clusters
         filename = "./data/pickles/clusterGroups"
