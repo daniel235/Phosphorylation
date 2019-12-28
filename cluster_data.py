@@ -140,12 +140,13 @@ class PrepareClusterData:
         '''clean breast cancer data and create 
         kinase matrix and phosphosite matrix  ''' 
         #self.create_unique_kinases()
-        self.convert_kinases("./data/KSA_human.txt")
+        
         
         if test == True:
             self.fileName = phosfile
-            self.pfile = os.path.join("./data/", self.fileName)
             sheet_name = sheet
+            self.pfile = os.path.join("./data/", self.fileName)
+            self.convert_kinases("./data/KSA_human.txt")
             self.phosDataOrdered = ordered
             trailing = trailing_letter
             index = psite_cols
@@ -155,6 +156,7 @@ class PrepareClusterData:
         else:
             self.fileName = input("What file do you want to use?")
             self.pfile = os.path.join("./data/", self.fileName)
+            self.convert_kinases("./data/KSA_human.txt")
             sheet_name = input("What is your sheet name for phosphorylation data?")
             inputs = input("Is your phosphorylation data ordered(yes/no)?")
             if inputs == "yes":
@@ -229,14 +231,15 @@ class PrepareClusterData:
 
     def write_filtered_data_to_file(self):
         #open file for writing
-        with open("./data/BreastCancerFiltered.txt", 'w+') as bc:
+        files = str(self.pfile)[:-9] + "Filtered.txt"
+        with open(files, 'w+') as c:
             for row in range(len(self.CancerData)):
                 for col in range(len(self.CancerData[row])):
                     line = str(self.CancerData[row][col]) + " "
                     if col == (len(self.CancerData[row]) - 1):
                         line = str(self.CancerData[row][col]) + "\n"
 
-                    bc.write(line)
+                    c.write(line)
                 
 
 

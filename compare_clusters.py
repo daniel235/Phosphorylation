@@ -33,8 +33,6 @@ class CompareCluster:
 
     '''
     def __init__(self):
-        self.accuracy = None
-        self.kinases = []
         self.family = []
         self.methodType = ""
         self.uniqueKinases = []
@@ -50,16 +48,6 @@ class CompareCluster:
 
 
     def setMainCluster(self):
-        for i in range(len(self.family_data)):
-            #!todo check aliases
-            #if kinases not in kinase list then add it
-            if self.family_data['Gene'][i] not in self.kinases:
-                self.kinases.append(self.family_data['Gene'][i])
-
-            #get unique family names
-            if self.family_data['Classification'][i] not in self.family:
-                self.family.append(self.family_data['Classification'][i])
-
         #create family dictionary of kinases
         for k in range(len(self.family_data)):
             if self.family_data['Classification'][k] in self.family_clusters:
@@ -68,11 +56,12 @@ class CompareCluster:
             else:
                 self.family_clusters[self.family_data['Classification'][k]] = [self.family_data['Gene'][k]]
 
-
+        #get values in list format
         cluster_family_names = list(self.family_clusters.keys())
         cluster_family_vals = list(self.family_clusters.values())
         row = []
 
+        #create family nodes
         for i in range(len(self.family_clusters)):
             n = Node(cluster_family_names[i])
             n.data = cluster_family_vals[i]
@@ -81,7 +70,7 @@ class CompareCluster:
 
         self.all_cluster_nodes.append(row)
 
-
+    #function to add cluster group to overall cluster groups
     def add_cluster(self, cluster_group):
         self.all_clusters.append(cluster_group)
 
@@ -303,7 +292,7 @@ class Node:
         self.edges = {}
         self.name = name
 
-
+'''
 main = CompareCluster()
 main.setMainCluster()
 #main.data_exists_check()
@@ -311,6 +300,6 @@ main.get_clusters(method="complete")
 main.create_graph()
 main.get_edge_scores()
 #main.draw_graph()
-main.display_stats()
+main.display_stats()'''
 
 #hypergf summation cumulative & equal

@@ -13,13 +13,14 @@ import pickle
 import compare_clusters
 #import data
 
+#file functions
+import random_functions
+
 
 #!todo fix scores bug
 scores = []
-
-
+#import data
 cancer_data = np.array(pd.read_excel("./data/BreastCancerData.xlsx", sheet_name="data", dtype=object))
-
 
 #clean data
 cleanData = clean.cleanMatrix()
@@ -32,6 +33,7 @@ cancer_data = cleanData.data
 im = np.zeros(shape=(12,12))
 
 data_pipeline = cluster_data.PrepareClusterData("./data/KSA_human.txt")
+
 #fix kinases
 #kinase alias name fix here
 data_pipeline.convert_kinases("./data/KSA_human.txt")
@@ -45,25 +47,32 @@ data_pipeline.phosphositePlusKinaseData = data_pipeline.phosphositePlusKinaseDat
 #get unique kinases
 data_pipeline.create_unique_kinases()
 
-
 HierCluster = hierarchical.Hierarchical()
 
 #add cluster to hyper geometric class
 comparativeClusterGroups = compare_clusters.CompareCluster()
 comparativeClusterGroups.setMainCluster()
 
-for indy in range(50):
+#separate out psite column from numeric data to impute   
+random_data = cancer_data[:,1:]
+
+for indy in range(5):
     print("run ", indy)
-    #insert random data into cells
-    for i in range(len(cancer_data)):
-        for j in range(1, len(cancer_data[i])):
-            cancer_data[i][j] = random.uniform(-2, 3)
-            #todo need to get float values
+    #impute random data
+    #shuffle data in each row
+    for i in range(len(random_data)):
+        np.random.shuffle(random_data[i])
+    #shuffle rows 
+    np.random.shuffle(random_data)
+    
+    #put back imputed data into original cancer data
+    for cell in range(len(cancer_data)):
+        cancer_data[cell,1:] = random_data[cell]
+        
 
     data_pipeline.CancerData = cancer_data
     data_pipeline.replace_with_average()
 
-    
     #get substrate matrixes 
     subMatrix = data_pipeline.get_kinase_substrate_matrixes(2)
 
@@ -87,8 +96,6 @@ for indy in range(50):
     for kinase, vector in richKFeats.items():
         Xrich.append(vector)
         labelsRich.append(kinase)
-
-
     
     #add data to hiercluster
     HierCluster.X = X
@@ -101,7 +108,6 @@ for indy in range(50):
     HierCluster.pfile = pfile
     HierCluster.clusterMethod("notpca", pfile)
 
-
     #filter out kinases not in phosphorylation data
     comparativeClusterGroups.filter_phospho_kinases(labels)
     clLen = 0
@@ -111,7 +117,6 @@ for indy in range(50):
         if len(comparativeClusterGroups.all_cluster_nodes[0][i].data) != 0:
             family_indexes.append(i)
             clLen += 1
-
 
     HierCluster.start_hierarchical_clustering(clLen)
     comparativeClusterGroups.add_cluster(HierCluster.clusters)
@@ -130,7 +135,6 @@ for indy in range(50):
     matrix = interactionMatrix.InteractionMatrix(comparativeClusterGroups.all_clusters)
     im = np.add(im, matrix.run_interaction())
     
-
     counter = 0
     for ik in range(clLen): 
         for k in range(clLen): #12
@@ -149,13 +153,12 @@ print("finished run")
     
 #divide scores by 100 
 for i in range(len(scores)):
-    scores[i] = scores[i] / 50
+    scores[i] = scores[i] / 5
 
 
 #averaging interaction matrix
-im = np.floor_divide(im, 50)
+im = np.floor_divide(im, 5)
 matrix.save_matrix(im, matrix.family)
-
 
 
 ##pickle data
@@ -163,43 +166,7 @@ filename="data/pickles/randomScores"
 with open(filename, 'wb+') as f:
     pickle.dump(scores, f)
 
-
 print("current scores ", scores)
-
-def get_sig_scores(obj, cg):
-    obj = np.array(obj)
-    
-
-    ##remove zeros from low list
-    for k in range(len(obj)):
-        if obj[k] == 0:
-            #add 5 to it
-            obj[k] = 5
-    
-
-    o = obj.argsort()
-    indexes = []
-    lowScores = []
-    for p in range(5):
-        print(obj[o[p]])
-        lowScores.append(obj[o[p]])
-        indexes.append(o[p])
-        
-
-    print(indexes)
-    sigNodes = []
-    for j in range(len(indexes)):
-        index1 = int(math.floor(indexes[j] / 13))
-        index2 = int(math.floor(indexes[j] % 13)) 
-        #!todo not going to find it
-        sigNodes.append([cg[1][index1].name, cg[0][index2].name])
-
-    #write sig nodes to pickle
-    with open("./data/pickles/randomSignificantNodes", 'wb+') as f:
-        pickle.dump(sigNodes, f)
-
-
-    print(sigNodes)
 
 with open("./data/pickles/randomScores", 'rb+') as f:
     obj = pickle.load(f)
@@ -208,10 +175,6 @@ with open("./data/pickles/clusterNodes", 'rb+') as f:
     cgNodes = pickle.load(f)
 
 
-def distro_scores(scores):
-    sns.distplot(scores)
-
-
-get_sig_scores(obj, cgNodes)
+random_functions.get_sig_scores(obj, cgNodes)
 #distro_scores(obj)
 

@@ -2,7 +2,7 @@ import pygame
 import compare_clusters
 import os, sys
 import pickle
-
+from compare_clusters import *
 
 class gameManager():
     def __init__(self):
@@ -20,7 +20,8 @@ class gameManager():
         count = 0
         countx = 0
         black = (0, 0, 0)
-        for subtype in range(len(self.clusterGroups)-1):
+        options = self.pick_compare_clusters()
+        for subtype in options:
             for cluster in self.clusterGroups[subtype]:
                 #write text
                 #text = self.font.render(cluster.name, True, black)
@@ -32,6 +33,7 @@ class gameManager():
                 self.clusters[count].edges = cluster.edges
                 self.clusters[count].data = cluster.data
                 color = []
+                #set cluster color
                 for i in range(3):
                     self.clusters[count].color[i] = self.clusters[count].color[i] + (subtype * 50)
         
@@ -61,13 +63,38 @@ class gameManager():
                 #find cluster 
                 for famcluster in self.clusters:
                     if famcluster.name == edge:
-                        if score > .05:
+                        if score < .05:
                             color = (255, 255, 255)
-                        else:
-                            if score != 0:
-                                color = ((200 - cnt), (cnt * 10), (cnt * 3))
-                                self.board.drawLine(cluster, famcluster, color)
+                            self.board.drawLine(cluster, famcluster, color)
                         
+                        elif score != 0:
+                            #color = (200, cnt, cnt)
+                            color = (0, 0, 0)
+
+                        
+                        
+    #function to show edge scores between two cluster groups
+    def pick_compare_clusters(self):
+        #get number of clusters to see if options are valid
+        n = len(self.clusterGroups)
+        print("You have ", n, " cluster groups")
+        count = 0
+        options = []
+        while True:
+            count += 1
+            line = "What is your number " + str(count) + " option (enter 'done' to exit)"
+            choice = input(line)
+            if choice == "done":
+                break
+
+            choice = int(choice) - 1
+            if choice < n:
+                options.append(choice)
+            
+            else: 
+                raise Exception
+
+        return options
 
 
     def update(self):
