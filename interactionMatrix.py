@@ -153,8 +153,11 @@ class InteractionMatrix:
                 try:
                     fam = family_data['Gene'].tolist().index(k) 
                 except ValueError:
-                    fam = family_data['Gene'].tolist().index(alias_object.get_main_kinase(k))
-
+                    #try alias name
+                    try:
+                        fam = family_data['Gene'].tolist().index(alias_object.get_main_kinase(k))
+                    except ValueError:
+                        continue
                 #set family index
                 index = family.index(family_data['Classification'][fam])
             

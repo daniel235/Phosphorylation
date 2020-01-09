@@ -42,7 +42,7 @@ class PrepareClusterData:
         self.phosphositePlusKinaseData = np.array(pd.read_csv("./data/KSA_human.txt", delim_whitespace=True))
         self.unique_kinases = None
         self.unique_alias_kinases = None
-        self.phosDataOrdered = True
+        self.phosDataOrdered = False
         self.stats = stats.Statistics()
         self.alias = alias.Alias("./data/info_table.csv")
         self.testFunctions = testing.kinaseCounts.Kinase_Count_Test(alias_object=self.alias)
@@ -228,7 +228,7 @@ class PrepareClusterData:
         
         self.write_filtered_data_to_file()
 
-
+    #write clean data (deleted rows, cleaned columns, no NA's)
     def write_filtered_data_to_file(self):
         #open file for writing
         files = str(self.pfile)[:-9] + "Filtered.txt"
@@ -240,7 +240,6 @@ class PrepareClusterData:
                         line = str(self.CancerData[row][col]) + "\n"
 
                     c.write(line)
-                
 
 
     #set number of substrates to put kinases in rich/poor class
@@ -266,27 +265,6 @@ class PrepareClusterData:
             else:
                 self.weakKinase.append(names[i])
                 
-
-    def count_substrates(self, kinase, ordered=False):
-        subCount = 0
-        if os.path.exists("./data/pickles/matchDataComplete") == False:
-            for i in range(len(self.phosphositePlusKinaseData)): 
-                if self.phosphositePlusKinaseData[i][0] == kinase:
-                    subCount += 1
-            
-        else:
-            #read in pickle
-            with open("./data/pickles/matchDataComplete", 'rb') as f:
-                kinase_obj = pickle.load(f)
-
-            #search for kinase
-            try:
-                subCount = len(kinase_obj[kinase])
-            #if not found then no substrates in data
-            except:
-                return 0
-
-        return subCount
     
 
     #?grab substrates of kinase passed in
@@ -301,6 +279,8 @@ class PrepareClusterData:
         for i in range(len(self.phosphositePlusKinaseData)):
             #?iterate through whole kinase file
             currentKinase = self.phosphositePlusKinaseData[i][0]
+            if type(currentKinase) == np.ndarray:
+                currentKinase = currentKinase[0]
             #?if match search phosphorylation file for the kinases substrate
             if currentKinase.upper() == kinase.upper():
                 #?logic controllers
@@ -399,9 +379,11 @@ class PrepareClusterData:
         #todo get kinase matrixes and combine similar kinases and finally replace name with alias name
         #!this will make sure every kinase is found in data and combined will make sure no double representation is in the data
         kinases = np.array(self.unique_kinases)
+        
         file_to_write = self.pfile + "_kinase_substrate_associations.txt"
         with open(file_to_write, 'w+') as f:
             for i in range(len(kinases)):
+                print("bucket ", i)
                 substrates = {}
                 names = []
                 

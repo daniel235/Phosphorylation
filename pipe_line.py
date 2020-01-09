@@ -1,5 +1,4 @@
 import protein as pr
-
 import numpy as np
 import pandas as pd
 import network

@@ -29,10 +29,12 @@ cleanData.set_gene_site_column([0,1], True)
 cleanData.omit_columns([16,17,18])
 cleanData.clean_rows()
 
+
 cancer_data = cleanData.data
 im = np.zeros(shape=(12,12))
 
 data_pipeline = cluster_data.PrepareClusterData("./data/KSA_human.txt")
+data_pipeline.pfile = "./data/BreastCancerData.xlsx"
 
 #fix kinases
 #kinase alias name fix here

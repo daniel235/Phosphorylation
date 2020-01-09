@@ -54,7 +54,6 @@ class Hierarchical:
                     s = self.labels[label] + "\n"
                     f.write(s)
 
-
         self.pfile = pfile
 
 
@@ -70,7 +69,7 @@ class Hierarchical:
         #agglomerative
         cluster = AgglomerativeClustering(n_clusters=cluster_len, affinity='precomputed', linkage='complete')
         print(cluster.fit_predict(distMatrix))
-
+        
         #initialize empty arrays for each numbered cluster ex: 1, 2, 3
         for i in range(cluster_len):
             self.clusters.append([])
@@ -147,11 +146,11 @@ class Hierarchical:
                 else:
                     row.append(0)
 
-
             euclidMatr.append(row)
             row = []
 
         return euclidMatr
+
 
     #?getting correlation from projected data
     def correlation(self, kfeatures, filename):
