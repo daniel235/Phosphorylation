@@ -383,7 +383,6 @@ class PrepareClusterData:
         file_to_write = self.pfile + "_kinase_substrate_associations.txt"
         with open(file_to_write, 'w+') as f:
             for i in range(len(kinases)):
-                print("bucket ", i)
                 substrates = {}
                 names = []
                 

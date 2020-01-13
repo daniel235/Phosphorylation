@@ -58,7 +58,7 @@ comparativeClusterGroups.setMainCluster()
 #separate out psite column from numeric data to impute   
 random_data = cancer_data[:,1:]
 
-for indy in range(5):
+for indy in range(50):
     print("run ", indy)
     #impute random data
     #shuffle data in each row
@@ -151,15 +151,14 @@ for indy in range(5):
 
             counter += 1
 
-print("finished run")
     
-#divide scores by 100 
+#divide scores by 50
 for i in range(len(scores)):
-    scores[i] = scores[i] / 5
+    scores[i] = scores[i] / 50
 
 
 #averaging interaction matrix
-im = np.floor_divide(im, 5)
+im = np.floor_divide(im, 50)
 matrix.save_matrix(im, matrix.family)
 
 
