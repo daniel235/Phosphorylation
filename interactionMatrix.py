@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import platform
 import pickle
 
 #import dev files
@@ -98,7 +99,9 @@ for typeNum in range(len(cluster_groups)):
 
     #visualize data 
     fig, ax = plt.subplots()
-    im = ax.imshow(interaction_matrix)
+    if platform.system() == 'Windows':
+        im = ax.imshow(interaction_matrix)
+
 
     ax.set_xticks(np.arange(12))
     ax.set_yticks(np.arange(12))
@@ -114,7 +117,8 @@ for typeNum in range(len(cluster_groups)):
     ax.set_title("Interaction matrix")
     fig.tight_layout()
     plt.savefig(("./results/" + str(typeNum) + "InteractionMatrix.png"))
-    plt.show()
+    if platform.system() == 'Windows':
+        plt.show()
 
 
 #?class used for random interaction matrix
@@ -219,7 +223,8 @@ class InteractionMatrix:
     def save_matrix(self, interactionMatrixFig, family):
         #visualize data 
         fig, ax = plt.subplots()
-        im = ax.imshow(interactionMatrixFig)
+        if platform.system() == 'Windows':
+            im = ax.imshow(interactionMatrixFig)
 
         ax.set_xticks(np.arange(12))
         ax.set_yticks(np.arange(12))
