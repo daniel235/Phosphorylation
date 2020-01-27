@@ -395,7 +395,8 @@ class PrepareClusterData:
                         self.finalKinases.append(kinases[i])
 
                     if platform.system() == 'Windows':
-                        f.write(F'{kinases[i]}\t{len(substrates)}\t{list(substrates.keys())}' + "\n")
+                        pass
+                        #f.write(F'{kinases[i]}\t{len(substrates)}\t{list(substrates.keys())}' + "\n")
                         
             line = "Length of substrates matched to kinases " + str(len(self.finalKinases))
             f.write(line)
