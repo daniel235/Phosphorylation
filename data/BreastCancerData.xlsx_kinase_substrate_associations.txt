@@ -69,4 +69,4 @@ WEE1	2	['CDK1-T14', 'CDK1-Y15']
 ABL1	6	['LDHA-Y10', 'PXN-Y118', 'BCR-Y177', 'STAP2-Y250', 'MPZL1-Y263', 'KRT19-Y391']
 LCK	3	['MAPK3-Y204', 'MAPK7-Y221', 'WAS-Y291']
 HCK	3	['BCR-Y177', 'MAPK14-Y182', 'WAS-Y291']
-Length of substrates matched to kinases 6688
+Length of substrates matched to kinases 7524

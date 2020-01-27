@@ -10,6 +10,7 @@ from scipy.stats import stats
 from astropy import stats
 from sklearn.decomposition import PCA
 import pickle
+import platform
 import os
 
 #import dev files
@@ -392,8 +393,9 @@ class PrepareClusterData:
                         substrates[names[j]] = data[j]
                         kinase_matrixes[kinases[i]] = substrates
                         self.finalKinases.append(kinases[i])
-                                       
-                    f.write(F'{kinases[i]}\t{len(substrates)}\t{list(substrates.keys())}' + "\n")
+
+                    if platform.system() == 'Windows':
+                        f.write(F'{kinases[i]}\t{len(substrates)}\t{list(substrates.keys())}' + "\n")
                         
             line = "Length of substrates matched to kinases " + str(len(self.finalKinases))
             f.write(line)
