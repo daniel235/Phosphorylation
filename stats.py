@@ -3,6 +3,7 @@ import xlwt
 from xlwt import Workbook
 import os
 
+import platform
 #import dev files
 import cluster_data
 
@@ -16,16 +17,19 @@ class Statistics:
         self.finalKinases = []
         self.finalSubstrates = []
 
+
     def set_table(self, pcount, kcount, tcount):
         self.phosphoSitesCount = pcount
         self.kinaseCount = kcount
         self.tumorSample = tcount
 
+
     def plotTable(self):
+
         fig = go.Figure(data=[go.Table(header=dict(values=['psiteCount','kinaseCount', 'tumorSamples']),
         cells=dict(values=[[self.phosphoSitesCount],[self.kinaseCount],[self.tumorSample]]))])
-       
-        fig.show()
+        if platform.system() == 'Windows':
+            fig.show()
 
     #!todo fix dumbass import error
     '''def get_final_data(self):
