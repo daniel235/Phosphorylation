@@ -3,6 +3,7 @@ import scipy.spatial.distance as ssd
 from sklearn.cluster import AgglomerativeClustering
 from matplotlib import pyplot as plt 
 import seaborn as sns
+import platform
 import pickle
 import os
 import numpy as np
@@ -85,14 +86,15 @@ class Hierarchical:
         
 
         #save plot in data folder
-        plt.figure()
-        plot_file = str(self.pfile).replace(".txtls", '')
-        dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + plot_file + methodType + ".png"))
-        if show_plots:
-            plt.show() 
+        if platform.system() == 'Windows':
+            plt.figure()
+            plot_file = str(self.pfile).replace(".txtls", '')
+            dendrogram(arr, labels=self.labels, show_leaf_counts=True, orientation='right', color_threshold=10.0)
+            plt.savefig(("./data/results/" + plot_file + methodType + ".png"))
+            if show_plots:
+                plt.show() 
 
-        plt.close()
+            plt.close()
         #plot poor kinase clustering
         distMatrix = self.correlationMatrix(self.poorKFeats, 'poor')
     
@@ -101,12 +103,13 @@ class Hierarchical:
  
         arr = linkage(distArray, method=methodType, optimal_ordering=True)
         #save poor kinase plots
-        plt.figure()
-        dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + plot_file + methodType + "poor.png"))
-        if show_plots:
-            plt.show() 
-        plt.close()
+        if platform.system() == 'Windows':
+            plt.figure()
+            dendrogram(arr, labels=self.labelsPoor, show_leaf_counts=True, orientation='right', color_threshold=10.0)
+            plt.savefig(("./data/results/" + plot_file + methodType + "poor.png"))
+            if show_plots:
+                plt.show() 
+            plt.close()
         #plot rich kinase clustering
         distMatrix = self.correlationMatrix(self.richKFeats, 'rich')
 
@@ -115,12 +118,13 @@ class Hierarchical:
  
         arr = linkage(distArray, method=methodType, optimal_ordering=True)
         #save rich kinase plots
-        plt.figure()
-        dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
-        plt.savefig(("./data/results/" + plot_file + methodType + "rich.png"))
-        if show_plots:
-            plt.show() 
-        plt.close()
+        if platform.system() == 'Windows':
+            plt.figure()
+            dendrogram(arr, labels=self.labelsRich, show_leaf_counts=True, orientation='right', color_threshold=10.0)
+            plt.savefig(("./data/results/" + plot_file + methodType + "rich.png"))
+            if show_plots:
+                plt.show() 
+            plt.close()
 
 
     def correlationMatrix(self, kfeats, type):
