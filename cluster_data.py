@@ -266,7 +266,15 @@ class PrepareClusterData:
             else:
                 self.weakKinase.append(names[i])
                 
-    
+
+    def duplicate_check(self, kinase):
+        #check for space
+        for i in range(len(kinase)):
+            #return if duplicate
+            if kinase[i] == " ":
+                return True
+
+        return False
 
     #?grab substrates of kinase passed in
     #!make sure everything is upper case*******
@@ -352,8 +360,8 @@ class PrepareClusterData:
                             raise Exception
                             break
 
-                        #found substrate
-                        if substrate == index:
+                        #found substrate and not duplicate
+                        if substrate == index and not self.duplicate_check(substrate):
                             #add name 
                             substrate_names.append(substrate)
                             self.finalSubstrates.append(substrate)

@@ -97,28 +97,29 @@ for typeNum in range(len(cluster_groups)):
         previousFams.append(famDict)
         famDict = {}
 
+    if platform.system() == 'Windows':
     #visualize data 
-    fig, ax = plt.subplots()
-    if platform.system() == 'Windows':
-        im = ax.imshow(interaction_matrix)
+        fig, ax = plt.subplots()
+        if platform.system() == 'Windows':
+            im = ax.imshow(interaction_matrix)
 
 
-    ax.set_xticks(np.arange(12))
-    ax.set_yticks(np.arange(12))
-    ax.set_xticklabels(family)
-    ax.set_yticklabels(family)
+        ax.set_xticks(np.arange(12))
+        ax.set_yticks(np.arange(12))
+        ax.set_xticklabels(family)
+        ax.set_yticklabels(family)
 
-    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-    for i in range(12):
-        for j in range(12):
-            text = ax.text(j, i, interaction_matrix[i, j], ha="center", va="center", color="w")
+        for i in range(12):
+            for j in range(12):
+                text = ax.text(j, i, interaction_matrix[i, j], ha="center", va="center", color="w")
 
-    ax.set_title("Interaction matrix")
-    fig.tight_layout()
-    plt.savefig(("./results/" + str(typeNum) + "InteractionMatrix.png"))
-    if platform.system() == 'Windows':
-        plt.show()
+        ax.set_title("Interaction matrix")
+        fig.tight_layout()
+        plt.savefig(("./results/" + str(typeNum) + "InteractionMatrix.png"))
+        if platform.system() == 'Windows':
+            plt.show()
 
 
 #?class used for random interaction matrix
